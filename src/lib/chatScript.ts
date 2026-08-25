@@ -48,14 +48,19 @@ export type ChatItem =
       tail: Bi;
     };
 
-/** One line of the agent's work log, shown beside the phone. */
-export type TraceLine = {
-  id: string;
-  /** Machine verbs stay in English on purpose — this is a log, not prose. */
-  verb: string;
-  time: string;
-  detail: Bi;
-  tone?: "accent" | "signal";
+/**
+ * The order form filling itself in beside the chat — the row a person would
+ * otherwise have typed into a spreadsheet. Deliberately plain language: the
+ * reader is a wholesale owner, not an engineer.
+ */
+export type FormState = {
+  kunde: Bi | null;
+  varer: Bi | null;
+  levering: Bi | null;
+  ordre: Bi | null;
+  /** An amber aside, e.g. "line 3 unclear — asked the customer". */
+  note: Bi | null;
+  status: Bi | null;
 };
 
 export type Step =
@@ -64,7 +69,7 @@ export type Step =
   | { kind: "push"; ms: number; item: ChatItem }
   | { kind: "typing"; ms: number }
   | { kind: "tick"; ms: number; id: string; to: Tick }
-  | { kind: "trace"; ms: number; line: TraceLine }
+  | { kind: "form"; ms: number; patch: Partial<FormState> }
   | { kind: "ocr"; ms: number }
   | { kind: "wait"; ms: number }
   | { kind: "reset"; ms: number };
@@ -142,8 +147,8 @@ const m6: ChatItem = {
   intro: { no: "Fikk ut dette av tavla:", en: "Here is what I got off the board:" },
   lines: [
     { name: { no: "Jalapeño", en: "Jalapeño" }, qty: { no: "1 pall", en: "1 pallet" } },
-    { name: { no: "Champignon", en: "Champignon" }, qty: { no: "1 PØ", en: "1 PØ" } },
-    { name: { no: "«? Esk – Hvit»", en: "“? Esk – Hvit”" }, qty: { no: "1 PØ", en: "1 PØ" }, flagged: true },
+    { name: { no: "Champignon", en: "Champignon" }, qty: { no: "1 pall", en: "1 pallet" } },
+    { name: { no: "«? Esk – Hvit»", en: "“? Esk – Hvit”" }, qty: { no: "1 pall", en: "1 pallet" }, flagged: true },
     { name: { no: "Serviett", en: "Napkins" }, qty: { no: "1 pall", en: "1 pallet" } },
     { name: { no: "Topping", en: "Topping" }, qty: { no: "2 pall", en: "2 pallets" } },
     { name: { no: "Frityrolje", en: "Frying oil" }, qty: { no: "30 kanner", en: "30 cans" } },
@@ -177,32 +182,15 @@ const m8: ChatItem = {
   },
 };
 
-/* ── The work log beside the chat ─────────────────────────────────── */
+/* ── The form, as it fills ────────────────────────────────────────── */
 
-const T = (
-  id: string, time: string, verb: string, no: string, en: string,
-  tone?: "accent" | "signal",
-): TraceLine => ({ id, time, verb, detail: { no, en }, tone });
+const B = (no: string, en: string): Bi => ({ no, en });
 
-const trace = {
-  /* Act I */
-  inbound1: T("t1", "22:14:03", "inbound", "whatsapp · +47 ••• 41 22", "whatsapp · +47 ••• 41 22"),
-  customer: T("t2", "22:14:03", "customer", "Nordby Kafé AS · 918 273 641", "Nordby Kafé AS · 918 273 641"),
-  search1: T("t3", "22:14:04", "search", "kavli mysost 500g → 3 treff", "kavli mysost 500g → 3 hits"),
-  match1: T("t4", "22:14:05", "match", "art. 40219 · kartong · 0.94", "art. 40219 · case · 0.94"),
-  preview1: T("t5", "22:14:06", "preview", "sendt — venter på svar", "sent — awaiting reply"),
-  confirm1: T("t6", "22:15:02", "confirm", "kunde sa ja", "customer said yes"),
-  draft1: T("t7", "22:15:03", "draft", "#12048 · pending_approval", "#12048 · pending_approval", "accent"),
-  stock1: T("t8", "22:15:03", "stock", "urørt", "untouched"),
-
-  /* Act II */
-  inbound2: T("t9", "22:16:11", "inbound", "whatsapp · bilde (jpeg)", "whatsapp · image (jpeg)"),
-  vision: T("t10", "22:16:14", "vision", "tavle · 6 linjer lest", "whiteboard · 6 lines read"),
-  match2: T("t11", "22:16:16", "match", "5 av 6 · linje 3 tvetydig", "5 of 6 · line 3 ambiguous", "signal"),
-  ask: T("t12", "22:16:17", "ask", "spør — gjetter ikke", "asking — not guessing", "signal"),
-  resolve: T("t13", "22:17:08", "resolve", "eske hvit 1/1 · art. 20841", "white box 1/1 · art. 20841"),
-  draft2: T("t14", "22:17:09", "draft", "#12049 · pending_approval", "#12049 · pending_approval", "accent"),
+const CLEAR: Partial<FormState> = {
+  kunde: null, varer: null, levering: null, ordre: null, note: null, status: null,
 };
+
+const PENDING = B("Venter på din godkjenning", "Waiting for your approval");
 
 /* ── The timeline ─────────────────────────────────────────────────── */
 
@@ -212,43 +200,41 @@ export const script: Step[] = [
   /* — Act I: a plain text order — */
   { kind: "compose", ms: 2600, text: m1.kind === "text" ? m1.text : { no: "", en: "" }, item: m1 },
   { kind: "tick", ms: 300, id: "m1", to: "sent" },
-  { kind: "trace", ms: 260, line: trace.inbound1 },
-  { kind: "tick", ms: 300, id: "m1", to: "delivered" },
-  { kind: "tick", ms: 380, id: "m1", to: "read" },
-  { kind: "trace", ms: 620, line: trace.customer },
+  { kind: "tick", ms: 340, id: "m1", to: "delivered" },
+  { kind: "tick", ms: 420, id: "m1", to: "read" },
+
+  { kind: "form", ms: 780, patch: { kunde: B("Nordby Kafé AS", "Nordby Kafé AS") } },
   { kind: "typing", ms: 700 },
-  { kind: "trace", ms: 620, line: trace.search1 },
-  { kind: "trace", ms: 640, line: trace.match1 },
-  { kind: "trace", ms: 420, line: trace.preview1 },
+  { kind: "form", ms: 820, patch: { varer: B("Kavli mysost 500 g · 20 kartonger", "Kavli mysost 500 g · 20 cases") } },
+  { kind: "form", ms: 700, patch: { levering: B("fredag 29. august", "Friday 29 August") } },
   { kind: "push", ms: 3000, item: m2 },
 
   { kind: "compose", ms: 1300, text: m3.kind === "text" ? m3.text : { no: "", en: "" }, item: m3 },
   { kind: "tick", ms: 300, id: "m3", to: "sent" },
   { kind: "tick", ms: 400, id: "m3", to: "read" },
-  { kind: "trace", ms: 520, line: trace.confirm1 },
-  { kind: "typing", ms: 700 },
-  { kind: "trace", ms: 560, line: trace.draft1 },
-  { kind: "trace", ms: 420, line: trace.stock1 },
-  { kind: "push", ms: 2800, item: m4 },
+  { kind: "typing", ms: 800 },
+  { kind: "form", ms: 900, patch: { ordre: B("#12048", "#12048"), status: PENDING } },
+  { kind: "push", ms: 2900, item: m4 },
 
   /* — Act II: a photo of a handwritten whiteboard — */
   { kind: "attach", ms: 1400, item: m5 },
+  { kind: "form", ms: 500, patch: CLEAR },
   { kind: "tick", ms: 300, id: "m5", to: "sent" },
-  { kind: "trace", ms: 300, line: trace.inbound2 },
   { kind: "tick", ms: 380, id: "m5", to: "read" },
   { kind: "ocr", ms: 3200 },
-  { kind: "trace", ms: 700, line: trace.vision },
+
+  { kind: "form", ms: 700, patch: { kunde: B("Nordby Kafé AS", "Nordby Kafé AS") } },
+  { kind: "form", ms: 800, patch: { varer: B("6 varelinjer fra tavla", "6 lines from the board") } },
   { kind: "typing", ms: 700 },
-  { kind: "trace", ms: 660, line: trace.match2 },
-  { kind: "trace", ms: 520, line: trace.ask },
+  { kind: "form", ms: 800, patch: { note: B("Linje 3 var uklar — spør kunden", "Line 3 was unclear — asking the customer") } },
   { kind: "push", ms: 4800, item: m6 },
 
   { kind: "compose", ms: 1200, text: m7.kind === "text" ? m7.text : { no: "", en: "" }, item: m7 },
   { kind: "tick", ms: 300, id: "m7", to: "sent" },
   { kind: "tick", ms: 380, id: "m7", to: "read" },
-  { kind: "trace", ms: 620, line: trace.resolve },
+  { kind: "form", ms: 820, patch: { note: null, varer: B("6 varelinjer · alle funnet", "6 lines · all found") } },
   { kind: "typing", ms: 700 },
-  { kind: "trace", ms: 560, line: trace.draft2 },
+  { kind: "form", ms: 900, patch: { ordre: B("#12049", "#12049"), status: PENDING } },
   { kind: "push", ms: 3600, item: m8 },
 
   { kind: "wait", ms: 2600 },
@@ -260,7 +246,7 @@ export const script: Step[] = [
 export type ChatView = {
   items: ChatItem[];
   ticks: Record<string, Tick>;
-  trace: TraceLine[];
+  form: FormState;
   typing: boolean;
   ocr: boolean;
   /** The message currently being typed into the composer, if any. */
@@ -270,7 +256,7 @@ export type ChatView = {
 export const emptyView: ChatView = {
   items: [],
   ticks: {},
-  trace: [],
+  form: { kunde: null, varer: null, levering: null, ordre: null, note: null, status: null },
   typing: false,
   ocr: false,
   composing: null,
@@ -284,7 +270,7 @@ export const emptyView: ChatView = {
 export function foldScript(upto: number): ChatView {
   const items: ChatItem[] = [];
   const ticks: Record<string, Tick> = {};
-  const trace: TraceLine[] = [];
+  let form: FormState = { kunde: null, varer: null, levering: null, ordre: null, note: null, status: null };
 
   for (let i = 0; i < upto; i++) {
     const s = script[i];
@@ -297,13 +283,13 @@ export function foldScript(upto: number): ChatView {
       case "tick":
         ticks[s.id] = s.to;
         break;
-      case "trace":
-        if (!trace.some((l) => l.id === s.line.id)) trace.push(s.line);
+      case "form":
+        form = { ...form, ...s.patch };
         break;
       case "reset":
         items.length = 0;
         for (const k of Object.keys(ticks)) delete ticks[k];
-        trace.length = 0;
+        form = { kunde: null, varer: null, levering: null, ordre: null, note: null, status: null };
         break;
       default:
         break;
@@ -314,7 +300,7 @@ export function foldScript(upto: number): ChatView {
   return {
     items,
     ticks,
-    trace,
+    form,
     typing: cur?.kind === "typing",
     ocr: cur?.kind === "ocr",
     composing: cur?.kind === "compose" ? cur.text : null,

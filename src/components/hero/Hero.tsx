@@ -3,7 +3,7 @@
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import { PhoneSim } from "@/components/hero/PhoneSim";
-import { TraceLog } from "@/components/hero/TraceLog";
+import { DraftPanel } from "@/components/hero/DraftPanel";
 import { ButtonGhost, ButtonPrimary, Container } from "@/components/ui";
 import { cta, hero } from "@/lib/content";
 import { useLocale } from "@/lib/i18n";
@@ -40,7 +40,7 @@ export function Hero() {
           into one grid cell.
         */}
         <div className="flex flex-col gap-9 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10 xl:gap-16">
-          <div className="contents lg:block lg:max-w-[32rem] xl:max-w-[29rem]">
+          <div className="contents lg:block lg:max-w-[32rem] xl:max-w-[28rem]">
             {/* ── The claim ──────────────────────────────────────── */}
             <div className="order-1">
               <motion.div
@@ -125,11 +125,11 @@ export function Hero() {
                 <div className="absolute inset-x-10 top-1/3 bottom-0 rounded-full bg-violet/12 blur-[90px]" />
               </div>
 
-              {/* The work log runs alongside the device, not on top of it.
-                  Below xl there is no room for a second column, so it's absent. */}
-              <TraceLog
-                lines={view.trace}
-                className="absolute top-[96px] -left-[348px] hidden w-[320px] xl:block"
+              {/* The order form fills itself in alongside the device. Below xl
+                  there is no room for a second column, so it's absent. */}
+              <DraftPanel
+                form={view.form}
+                className="absolute top-[118px] -left-[330px] hidden w-[300px] xl:block"
               />
 
               <div className="relative z-10 -mb-[159px] origin-top scale-[0.78] sm:-mb-[72px] sm:scale-90 lg:-mb-[101px] lg:scale-[0.86] xl:mb-0 xl:scale-100">
@@ -145,8 +145,8 @@ export function Hero() {
         <div className="flex items-center gap-3 font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase">
           <span className="h-px w-8 bg-line-2" />
           {locale === "no"
-            ? "Kunden ser bare samtalen. Loggen er det Nordre gjør imens."
-            : "The customer only sees the chat. The log is what Nordre is doing meanwhile."}
+            ? "Kunden skriver en melding. Nordre fyller ut ordren."
+            : "The customer writes a message. Nordre fills in the order."}
         </div>
       </Container>
     </section>
