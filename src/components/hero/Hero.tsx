@@ -21,7 +21,7 @@ export function Hero() {
   const t = <T,>(pair: { no: T; en: T }) => pair[locale];
 
   return (
-    <section className="grain relative overflow-hidden pt-32 pb-20 md:pt-40 lg:pt-44 lg:pb-28">
+    <section className="grain relative overflow-hidden pt-24 pb-16 md:pt-32 lg:pt-44 lg:pb-28">
       {/* ── Atmosphere ─────────────────────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="grid-substrate mask-radial absolute inset-0 opacity-70" />
@@ -30,72 +30,88 @@ export function Hero() {
       </div>
 
       <Container>
-        <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-10 xl:gap-16">
-          {/* ── Left: the argument ───────────────────────────────── */}
-          <div className="max-w-[34rem]">
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: EASE }}
-              className="inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-surface/60 py-1.5 pr-4 pl-1.5 backdrop-blur-sm"
-            >
-              <span className="rounded-full bg-accent/12 px-2.5 py-1 font-mono text-[10px] font-medium tracking-[0.14em] text-accent uppercase">
-                Beta
-              </span>
-              <span className="text-[13px] tracking-tight text-fg-2">{t(hero.eyebrow)}</span>
-            </motion.div>
+        {/*
+          Mobile reads heading → device → copy, so the demo is the second thing
+          you see rather than sitting under eight lines of body text. On lg the
+          copy re-collapses into a single left column beside the device.
 
-            <h1 className="display mt-8 text-[clamp(2.75rem,6.4vw,4.75rem)]">
-              <motion.span
-                className="block text-fg"
-                initial={{ opacity: 0, y: 24 }}
+          `contents` lets the two copy blocks become direct flex children on
+          mobile (so `order` applies to them), then `lg:block` puts them back
+          into one grid cell.
+        */}
+        <div className="flex flex-col gap-9 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10 xl:gap-16">
+          <div className="contents lg:block lg:max-w-[34rem]">
+            {/* ── The claim ──────────────────────────────────────── */}
+            <div className="order-1">
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.85, delay: 0.08, ease: EASE }}
+                transition={{ duration: 0.7, ease: EASE }}
+                className="inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-surface/60 py-1.5 pr-4 pl-1.5 backdrop-blur-sm"
               >
-                {t(hero.headline.l1)}
-              </motion.span>
-              <motion.span
-                className="aurora-text block pb-[0.08em]"
-                initial={{ opacity: 0, y: 24 }}
+                <span className="rounded-full bg-accent/12 px-2.5 py-1 font-mono text-[10px] font-medium tracking-[0.14em] text-accent uppercase">
+                  Beta
+                </span>
+                <span className="text-[13px] tracking-tight text-fg-2">{t(hero.eyebrow)}</span>
+              </motion.div>
+
+              <h1 className="display mt-6 text-[clamp(2.5rem,6.4vw,4.75rem)] md:mt-8">
+                <motion.span
+                  className="block text-fg"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.85, delay: 0.08, ease: EASE }}
+                >
+                  {t(hero.headline.l1)}
+                </motion.span>
+                <motion.span
+                  className="aurora-text block pb-[0.08em]"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.85, delay: 0.16, ease: EASE }}
+                >
+                  {t(hero.headline.l2)}
+                </motion.span>
+              </h1>
+            </div>
+
+            {/* ── The explanation, after the proof on mobile ─────── */}
+            <div className="order-3 lg:mt-7">
+              <motion.p
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.85, delay: 0.16, ease: EASE }}
+                transition={{ duration: 0.8, delay: 0.28, ease: EASE }}
+                className="lede text-[1.0625rem] leading-relaxed text-fg-2 md:text-[1.125rem]"
               >
-                {t(hero.headline.l2)}
-              </motion.span>
-            </h1>
+                {t(hero.lede)} <span className="font-medium text-fg">{t(hero.ledeEmphasis)}</span>
+              </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.28, ease: EASE }}
-              className="lede mt-7 text-[1.0625rem] leading-relaxed text-fg-2 md:text-[1.125rem]"
-            >
-              {t(hero.lede)}{" "}
-              <span className="font-medium text-fg">{t(hero.ledeEmphasis)}</span>
-            </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.38, ease: EASE }}
+                className="mt-8 flex flex-wrap items-center gap-3 md:mt-10"
+              >
+                <ButtonPrimary href="#kontakt">{t(cta.primary)}</ButtonPrimary>
+                <ButtonGhost href="#hvordan">{t(cta.secondary)}</ButtonGhost>
+              </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.38, ease: EASE }}
-              className="mt-10 flex flex-wrap items-center gap-3"
-            >
-              <ButtonPrimary href="#kontakt">{t(cta.primary)}</ButtonPrimary>
-              <ButtonGhost href="#hvordan">{t(cta.secondary)}</ButtonGhost>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-6 font-mono text-[11.5px] tracking-tight text-fg-4"
-            >
-              {t(hero.footnote)}
-            </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="mt-6 font-mono text-[11.5px] tracking-tight text-fg-4"
+              >
+                {t(hero.footnote)}
+              </motion.p>
+            </div>
           </div>
 
-          {/* ── Right: the proof ─────────────────────────────────── */}
-          <div ref={stageRef} className="relative flex justify-center lg:justify-end">
+          {/* ── The proof ────────────────────────────────────────── */}
+          <div
+            ref={stageRef}
+            className="relative order-2 flex justify-center lg:order-none lg:justify-end"
+          >
             <motion.div
               initial={{ opacity: 0, y: 40, rotateX: 8, rotateY: -10 }}
               animate={{ opacity: 1, y: 0, rotateX: 0, rotateY: 0 }}
@@ -110,22 +126,18 @@ export function Hero() {
               </div>
 
               {/* Machine view sits BEHIND the device and slides out from under it,
-                  so it never covers the conversation it is annotating. */}
+                  so it never covers the conversation it is annotating. There is
+                  no room for it to do that below xl, so it simply isn't there. */}
               <div className="pointer-events-none absolute inset-0 z-0 hidden xl:block">
                 <SystemCardSlot slot="customer" card={view.cards.customer} className="top-[76px] -left-[200px]" />
                 <SystemCardSlot slot="catalog" card={view.cards.catalog} className="top-[300px] -left-[218px]" />
                 <SystemCardSlot slot="order" card={view.cards.order} className="top-[520px] -left-[196px]" />
               </div>
 
-              <div className="relative z-10 -mb-[130px] origin-top scale-[0.82] sm:-mb-[72px] sm:scale-90 lg:-mb-[101px] lg:scale-[0.86] xl:mb-0 xl:scale-100">
+              <div className="relative z-10 -mb-[159px] origin-top scale-[0.78] sm:-mb-[72px] sm:scale-90 lg:-mb-[101px] lg:scale-[0.86] xl:mb-0 xl:scale-100">
                 <PhoneSim view={view} composerText={composerText} composerDone={composerDone} />
               </div>
             </motion.div>
-
-            {/* Machine view — below xl: stacked under the device */}
-            <div className="pointer-events-none absolute -bottom-4 left-1/2 w-[268px] -translate-x-1/2 xl:hidden">
-              <SystemCardSlot slot="order" card={view.cards.order ?? view.cards.catalog} className="inset-x-0 bottom-0" />
-            </div>
           </div>
         </div>
       </Container>

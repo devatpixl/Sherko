@@ -91,7 +91,7 @@ const m2: ChatItem = {
     no: "Hei! Da har jeg dette klart:",
     en: "Hi! Here is what I have:",
   },
-  lines: [{ name: { no: "Kavli mysost 500 g", en: "Kavli mysost 500 g" }, qty: { no: "20 kartonger", en: "20 cases" } }],
+  lines: [{ name: { no: "Kavli mysost 500 g", en: "Kavli mysost 500 g" }, qty: { no: "20 kartonger", en: "20 cases" } }],
   meta: [
     { label: { no: "Kunde", en: "Customer" }, value: { no: "Nordby Kafé AS", en: "Nordby Kafé AS" } },
     { label: { no: "Levering", en: "Delivery" }, value: { no: "fre. 29. aug", en: "Fri 29 Aug" } },
@@ -141,12 +141,12 @@ const m6: ChatItem = {
   time: "22:16",
   intro: { no: "Fikk ut dette av tavla:", en: "Here is what I got off the board:" },
   lines: [
-    { name: { no: "Jalapeño", en: "Jalapeño" }, qty: { no: "1 pall", en: "1 pallet" } },
-    { name: { no: "Champignon", en: "Champignon" }, qty: { no: "1 PØ", en: "1 PØ" } },
-    { name: { no: "«? Esk – Hvit»", en: "“? Esk – Hvit”" }, qty: { no: "1 PØ", en: "1 PØ" }, flagged: true },
-    { name: { no: "Serviett", en: "Napkins" }, qty: { no: "1 pall", en: "1 pallet" } },
-    { name: { no: "Topping", en: "Topping" }, qty: { no: "2 pall", en: "2 pallets" } },
-    { name: { no: "Frityrolje", en: "Frying oil" }, qty: { no: "30 kanner", en: "30 cans" } },
+    { name: { no: "Jalapeño", en: "Jalapeño" }, qty: { no: "1 pall", en: "1 pallet" } },
+    { name: { no: "Champignon", en: "Champignon" }, qty: { no: "1 PØ", en: "1 PØ" } },
+    { name: { no: "«? Esk – Hvit»", en: "“? Esk – Hvit”" }, qty: { no: "1 PØ", en: "1 PØ" }, flagged: true },
+    { name: { no: "Serviett", en: "Napkins" }, qty: { no: "1 pall", en: "1 pallet" } },
+    { name: { no: "Topping", en: "Topping" }, qty: { no: "2 pall", en: "2 pallets" } },
+    { name: { no: "Frityrolje", en: "Frying oil" }, qty: { no: "30 kanner", en: "30 cans" } },
   ],
   meta: [{ label: { no: "Kunde", en: "Customer" }, value: { no: "Nordby Kafé AS", en: "Nordby Kafé AS" } }],
   question: {
@@ -189,7 +189,7 @@ const cardCustomer: SystemCard = {
 const cardCatalogA: SystemCard = {
   eyebrow: { no: "Katalogtreff", en: "Catalogue match" },
   title: { no: "1 av 1 linje matchet", en: "1 of 1 line matched" },
-  detail: { no: "Art. 40219 · Kavli mysost 500 g · kartong", en: "Art. 40219 · Kavli mysost 500 g · case" },
+  detail: { no: "Art. 40219 · Kavli mysost 500 g · kartong", en: "Art. 40219 · Kavli mysost 500 g · case" },
   tone: "accent",
 };
 
