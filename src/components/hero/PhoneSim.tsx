@@ -346,9 +346,9 @@ function Composer({ text, done }: { text: string; done: boolean }) {
   const empty = text.length === 0;
   return (
     <div className="flex min-h-[62px] shrink-0 items-end gap-[8px] bg-[#111B21] px-[8px] pt-[8px] pb-[10px]">
-      <div className="flex min-h-[44px] min-w-0 flex-1 items-center gap-[10px] rounded-[22px] bg-[#2A3942] px-[12px] py-[10px]">
+      <div className="flex min-h-[44px] min-w-0 flex-1 items-end gap-[8px] rounded-[20px] bg-[#2A3942] px-[11px] py-[10px]">
         <IconEmoji className="shrink-0 text-[#8696A0]" />
-        <p className="min-w-0 flex-1 truncate text-[15px] leading-[20px] text-[#E9EDEF]">
+        <p className="max-h-[100px] min-w-0 flex-1 overflow-y-auto text-[15px] leading-[20px] wrap-break-word whitespace-pre-wrap text-[#E9EDEF] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {empty ? (
             <span className="text-[#8696A0]">{locale === "no" ? "Melding" : "Message"}</span>
           ) : (
@@ -359,7 +359,7 @@ function Composer({ text, done }: { text: string; done: boolean }) {
           )}
         </p>
         <IconClip className="shrink-0 text-[#8696A0]" />
-        <IconCamera className="shrink-0 text-[#8696A0]" />
+        {empty && <IconCamera className="shrink-0 text-[#8696A0]" />}
       </div>
       <div className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full bg-[#00A884] text-white">
         <AnimatePresence mode="wait" initial={false}>
