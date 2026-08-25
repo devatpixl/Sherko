@@ -21,7 +21,7 @@ export function Hero() {
   const t = <T,>(pair: { no: T; en: T }) => pair[locale];
 
   return (
-    <section className="grain relative overflow-hidden pt-24 pb-16 md:pt-32 lg:pt-44 lg:pb-28">
+    <section className="grain relative overflow-hidden pt-24 pb-16 md:pt-28 lg:pt-32 lg:pb-24">
       {/* ── Atmosphere ─────────────────────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="grid-substrate mask-radial absolute inset-0 opacity-70" />
@@ -39,8 +39,8 @@ export function Hero() {
           mobile (so `order` applies to them), then `lg:block` puts them back
           into one grid cell.
         */}
-        <div className="flex flex-col gap-9 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10 xl:gap-16">
-          <div className="contents lg:block lg:max-w-[32rem] xl:max-w-[28rem]">
+        <div className="flex flex-col gap-9 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start lg:gap-10 xl:gap-16">
+          <div className="contents lg:block lg:max-w-[32rem] lg:pt-10 xl:max-w-[28rem] xl:pt-14">
             {/* ── The claim ──────────────────────────────────────── */}
             <div className="order-1">
               <motion.div

@@ -40,7 +40,7 @@ export const hero = {
      and would overflow the column into the panel beside it. */
   headline: {
     l1: { no: "Alt inn.", en: "Anything in." },
-    l2: { no: "Ordre ut.", en: "An order out." },
+    l2: { no: "Ordre ut.", en: "Order out." },
   },
   lede: {
     no: "Melding, PDF, Excel eller et bilde av en lapp. Nordre leser det og fyller ut ordren.",
@@ -48,8 +48,8 @@ export const hero = {
   },
   ledeEmphasis: { no: "Du godkjenner.", en: "You approve." },
   footnote: {
-    no: "Ingen app kunden må laste ned. Ingen mal de må fylle ut.",
-    en: "No app for the customer to install. No template for them to fill in.",
+    no: "Ingen app å laste ned. Ingen mal å fylle ut.",
+    en: "No app to install. No template to fill in.",
   },
 };
 
