@@ -89,6 +89,16 @@ body {
   border-radius: 4px;
 }
 
+/* Form fields opt out of the ring: they carry their own focus treatment (the
+   aurora rule drawing under the field plus the label turning accent), which is
+   a stronger indicator than a box. Declared unlayered so it actually wins —
+   a Tailwind `outline-none` utility sits in a layer and loses to the rule above. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--color-canvas); }

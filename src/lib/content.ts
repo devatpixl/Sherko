@@ -433,6 +433,43 @@ export const closing = {
   },
 };
 
+/* ── Contact form ─────────────────────────────────────────────────── */
+
+export const contact = {
+  fields: {
+    name: {
+      label: { no: "Navn", en: "Name" },
+      error: { no: "Skriv inn navnet ditt", en: "Please enter your name" },
+    },
+    company: {
+      label: { no: "Bedrift", en: "Company" },
+      error: { no: "Skriv inn bedriftsnavnet", en: "Please enter your company" },
+    },
+    phone: {
+      label: { no: "Telefon", en: "Phone" },
+      error: { no: "Skriv inn et gyldig telefonnummer", en: "Please enter a valid phone number" },
+    },
+    email: {
+      label: { no: "E-post", en: "Email" },
+      error: { no: "Skriv inn en gyldig e-postadresse", en: "Please enter a valid email address" },
+    },
+  },
+  submit: { no: "Book en demo", en: "Book a demo" },
+  submitting: { no: "Sender", en: "Sending" },
+  success: {
+    title: { no: "Takk — vi tar kontakt.", en: "Thank you — we'll be in touch." },
+    body: {
+      no: "Vi svarer normalt innen én arbeidsdag. Ha gjerne en ordre klar som vi kan kjøre gjennom.",
+      en: "We normally reply within one working day. Have an order ready for us to run through if you can.",
+    },
+    again: { no: "Send en til", en: "Send another" },
+  },
+  privacy: {
+    no: "Vi bruker opplysningene kun til å ta kontakt om Nordre.",
+    en: "We use these details only to contact you about Nordre.",
+  },
+};
+
 export const footer = {
   tagline: {
     no: "Ordremottak uten regneark.",

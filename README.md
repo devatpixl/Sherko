@@ -80,6 +80,9 @@ there are real numbers to publish.
 
 ## Still open
 
-- `hei@nordre.no` in the CTA is a placeholder — wire to a real inbox or a form.
+- **The contact form does not send anything.** `ContactForm.tsx` fakes the
+  round-trip and shows the success state. Point it at a real endpoint before
+  this goes live — right now the page tells people "we'll be in touch" and
+  drops their details on the floor.
 - Domain, analytics, and OG image are not set up.
 - Nav links are in-page anchors; there are no interior pages yet.
