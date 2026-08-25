@@ -21,7 +21,7 @@ export function Hero() {
   const t = <T,>(pair: { no: T; en: T }) => pair[locale];
 
   return (
-    <section className="grain relative overflow-hidden pt-24 pb-16 md:pt-28 lg:pt-32 lg:pb-24">
+    <section className="grain relative overflow-hidden pt-24 pb-16 md:pt-28 lg:pt-32 lg:pb-24 laptop:pt-[104px] laptop-sm:pt-[84px]">
       {/* ── Atmosphere ─────────────────────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="grid-substrate mask-radial absolute inset-0 opacity-70" />
@@ -55,7 +55,7 @@ export function Hero() {
                 <span className="text-[13px] tracking-tight text-fg-2">{t(hero.eyebrow)}</span>
               </motion.div>
 
-              <h1 className="display mt-6 text-[clamp(2.75rem,6.4vw,4.25rem)] [overflow-wrap:break-word] md:mt-8">
+              <h1 className="display mt-6 text-[clamp(2.25rem,5vw,3.4rem)] [overflow-wrap:break-word] md:mt-8">
                 <motion.span
                   className="block text-fg"
                   initial={{ opacity: 0, y: 24 }}
@@ -132,7 +132,7 @@ export function Hero() {
                 className="absolute top-[118px] -left-[330px] hidden w-[300px] xl:block"
               />
 
-              <div className="relative z-10 -mb-[159px] origin-top scale-[0.78] sm:-mb-[72px] sm:scale-90 lg:-mb-[101px] lg:scale-[0.86] xl:mb-0 xl:scale-100">
+              <div className="relative z-10 -mb-[159px] origin-top scale-[0.78] sm:-mb-[72px] sm:scale-90 lg:-mb-[101px] lg:scale-[0.86] xl:mb-0 xl:scale-100 laptop:-mb-[58px] laptop:scale-[0.92] laptop-sm:-mb-[116px] laptop-sm:scale-[0.84]">
                 <PhoneSim view={view} composerText={composerText} composerDone={composerDone} />
               </div>
             </motion.div>

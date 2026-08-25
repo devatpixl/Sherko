@@ -7,6 +7,12 @@
    lights the name points at.
    ═══════════════════════════════════════════════════════════════════ */
 
+/* Laptop-height variants. The constraint on a 12-14" MacBook is viewport
+   HEIGHT, not width, so the hero device is sized off height. Ranges are
+   mutually exclusive, so there is no ordering ambiguity between them. */
+@custom-variant laptop (@media (min-width: 80rem) and (min-height: 50.0625rem) and (max-height: 56.25rem));
+@custom-variant laptop-sm (@media (min-width: 80rem) and (max-height: 50rem));
+
 @theme {
   /* Canvas + surfaces */
   --color-canvas:     #07080A;

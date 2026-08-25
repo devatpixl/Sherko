@@ -39,8 +39,8 @@ export const hero = {
      Both lines are deliberately short words — a single long word cannot wrap
      and would overflow the column into the panel beside it. */
   headline: {
-    l1: { no: "Alt inn.", en: "Anything in." },
-    l2: { no: "Ordre ut.", en: "Order out." },
+    l1: { no: "Ordrer som", en: "Orders that" },
+    l2: { no: "fyller seg selv.", en: "fill themselves in." },
   },
   lede: {
     no: "Melding, PDF, Excel eller et bilde av en lapp. Nordre leser det og fyller ut ordren.",
