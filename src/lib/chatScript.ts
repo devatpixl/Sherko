@@ -131,7 +131,7 @@ const m5: ChatItem = {
   from: "customer",
   kind: "photo",
   time: "22:16",
-  caption: { no: "Og resten av uka — tok bilde av lappen", en: "And the rest of the week — photo of the note" },
+  caption: { no: "Tok bilde av tavla", en: "Photo of the board" },
 };
 
 const m6: ChatItem = {
@@ -139,16 +139,19 @@ const m6: ChatItem = {
   from: "nordre",
   kind: "order",
   time: "22:16",
-  intro: { no: "Fikk ut dette av lappen:", en: "Here is what I got off the note:" },
+  intro: { no: "Fikk ut dette av tavla:", en: "Here is what I got off the board:" },
   lines: [
-    { name: { no: "Tine lettmelk 1 L", en: "Tine lettmelk 1 L" }, qty: { no: "24 stk", en: "24 units" } },
-    { name: { no: "Gilde kjøttdeig 400 g", en: "Gilde kjøttdeig 400 g" }, qty: { no: "15 stk", en: "15 units" } },
-    { name: { no: "Q Kremfløte", en: "Q Kremfløte" }, qty: { no: "6 stk", en: "6 units" }, flagged: true },
+    { name: { no: "Jalapeño", en: "Jalapeño" }, qty: { no: "1 pall", en: "1 pallet" } },
+    { name: { no: "Champignon", en: "Champignon" }, qty: { no: "1 PØ", en: "1 PØ" } },
+    { name: { no: "«? Esk – Hvit»", en: "“? Esk – Hvit”" }, qty: { no: "1 PØ", en: "1 PØ" }, flagged: true },
+    { name: { no: "Serviett", en: "Napkins" }, qty: { no: "1 pall", en: "1 pallet" } },
+    { name: { no: "Topping", en: "Topping" }, qty: { no: "2 pall", en: "2 pallets" } },
+    { name: { no: "Frityrolje", en: "Frying oil" }, qty: { no: "30 kanner", en: "30 cans" } },
   ],
   meta: [{ label: { no: "Kunde", en: "Customer" }, value: { no: "Nordby Kafé AS", en: "Nordby Kafé AS" } }],
   question: {
-    no: "Linje 3 var utydelig — mente du 1/2 L eller 3 dl?",
-    en: "Line 3 was unclear — did you mean 1/2 L or 3 dl?",
+    no: "Linje 3 står det «? Esk – Hvit» på tavla. Mente du hvite esker 1/1 eller 1/2?",
+    en: "Line 3 just says “? Esk – Hvit” on the board. Did you mean white boxes 1/1 or 1/2?",
   },
 };
 
@@ -157,7 +160,7 @@ const m7: ChatItem = {
   from: "customer",
   kind: "text",
   time: "22:17",
-  text: { no: "1/2 liter", en: "1/2 litre" },
+  text: { no: "1/1, takk", en: "1/1, thanks" },
 };
 
 const m8: ChatItem = {
@@ -165,7 +168,7 @@ const m8: ChatItem = {
   from: "nordre",
   kind: "receipt",
   time: "22:17",
-  intro: { no: "Perfekt — alle tre linjene er inne.", en: "Perfect — all three lines are in." },
+  intro: { no: "Perfekt — alle seks linjene er inne.", en: "Perfect — all six lines are in." },
   orderNo: "12049",
   status: { no: "Venter på godkjenning", en: "Pending approval" },
   tail: {
@@ -192,15 +195,15 @@ const cardCatalogA: SystemCard = {
 
 const cardCatalogB: SystemCard = {
   eyebrow: { no: "Katalogtreff", en: "Catalogue match" },
-  title: { no: "2 av 3 linjer matchet", en: "2 of 3 lines matched" },
-  detail: { no: "Linje 3 tvetydig — spør heller enn å gjette", en: "Line 3 ambiguous — asking rather than guessing" },
+  title: { no: "5 av 6 linjer matchet", en: "5 of 6 lines matched" },
+  detail: { no: "Linje 3 tvetydig — spør heller enn å gjette", en: "Line 3 ambiguous — asks rather than guesses" },
   tone: "signal",
 };
 
 const cardCatalogC: SystemCard = {
   eyebrow: { no: "Katalogtreff", en: "Catalogue match" },
-  title: { no: "3 av 3 linjer matchet", en: "3 of 3 lines matched" },
-  detail: { no: "Art. 20841 · Q Kremfløte 1/2 L", en: "Art. 20841 · Q Kremfløte 1/2 L" },
+  title: { no: "6 av 6 linjer matchet", en: "6 of 6 lines matched" },
+  detail: { no: "Art. 20841 · Eske hvit 1/1", en: "Art. 20841 · White box 1/1" },
   tone: "accent",
 };
 
@@ -220,7 +223,7 @@ const cardOrderB: SystemCard = {
 
 const cardReading: SystemCard = {
   eyebrow: { no: "Leser vedlegg", en: "Reading attachment" },
-  title: { no: "Håndskrevet lapp", en: "Handwritten note" },
+  title: { no: "Bilde av tavle", en: "Photo of a whiteboard" },
   detail: { no: "Bildet leses direkte — ingen mal", en: "Image read directly — no template" },
   tone: "ice",
 };
@@ -255,11 +258,11 @@ export const script: Step[] = [
   { kind: "tick", ms: 420, id: "m5", to: "read" },
 
   { kind: "card", ms: 400, slot: "customer", card: cardReading },
-  { kind: "ocr", ms: 2600 },
+  { kind: "ocr", ms: 3200 },
   { kind: "card", ms: 500, slot: "customer", card: cardCustomer },
   { kind: "typing", ms: 900 },
   { kind: "card", ms: 700, slot: "catalog", card: cardCatalogB },
-  { kind: "push", ms: 3800, item: m6 },
+  { kind: "push", ms: 4800, item: m6 },
 
   { kind: "compose", ms: 1200, text: m7.kind === "text" ? m7.text : { no: "", en: "" }, item: m7 },
   { kind: "tick", ms: 320, id: "m7", to: "sent" },

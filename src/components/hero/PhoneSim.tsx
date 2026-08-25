@@ -141,7 +141,7 @@ function PhotoMessage({
   const { locale } = useLocale();
   return (
     <Bubble from={item.from} padded={false}>
-      <div className="w-[196px]">
+      <div className="w-[214px]">
         <div className="relative overflow-hidden rounded-[6px]">
           <HandwrittenNote ocr={ocr} />
         </div>
@@ -160,7 +160,7 @@ function OrderMessage({ item }: { item: Extract<ChatItem, { kind: "order" }> }) 
   const { locale } = useLocale();
   return (
     <Bubble from={item.from}>
-      <div className="w-[236px]">
+      <div className="w-[250px]">
         <p className="text-[15px] leading-[20px]">{item.intro[locale]}</p>
 
         <ul className="mt-[7px] space-y-[3px]">
@@ -346,7 +346,7 @@ function Composer({ text, done }: { text: string; done: boolean }) {
   const empty = text.length === 0;
   return (
     <div className="flex min-h-[62px] shrink-0 items-end gap-[8px] bg-[#111B21] px-[8px] pt-[8px] pb-[10px]">
-      <div className="flex min-h-[44px] flex-1 items-center gap-[10px] rounded-[22px] bg-[#2A3942] px-[12px] py-[10px]">
+      <div className="flex min-h-[44px] min-w-0 flex-1 items-center gap-[10px] rounded-[22px] bg-[#2A3942] px-[12px] py-[10px]">
         <IconEmoji className="shrink-0 text-[#8696A0]" />
         <p className="min-w-0 flex-1 truncate text-[15px] leading-[20px] text-[#E9EDEF]">
           {empty ? (

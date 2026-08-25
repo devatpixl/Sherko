@@ -1,103 +1,92 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useLocale } from "@/lib/i18n";
 
-/* The "photo" the customer sends in Act II. Built in DOM rather than shipped
-   as a bitmap so the OCR pass can draw real detection boxes over real text
-   nodes — and so it stays crisp on any display. */
+/* The "photo" the customer sends in Act II: a real Moen Engros order, written
+   in marker on a whiteboard and photographed. Built in DOM rather than shipped
+   as a bitmap so the OCR pass can draw detection boxes over real text nodes,
+   and so it stays crisp on any display.
 
-const LINES = {
-  no: [
-    { item: "Lettmelk 1L", qty: "24" },
-    { item: "Kjøttdeig 400g", qty: "15" },
-    { item: "Q kremfløte", qty: "6" },
-  ],
-  en: [
-    { item: "Lettmelk 1L", qty: "24" },
-    { item: "Kjøttdeig 400g", qty: "15" },
-    { item: "Q kremfløte", qty: "6" },
-  ],
-};
+   Note line 3 — the writer put a question mark on the board themselves. That is
+   the line Nordre refuses to guess, and it is why this photo is the right demo:
+   the ambiguity is genuine, not invented for the animation. */
+
+const ROWS = [
+  { item: "Jalapeno", qty: "1 Pal." },
+  { item: "Champion", qty: "1 PØ" },
+  { item: "? Esk - Hvit", qty: "1 PØ" },
+  { item: "Serviett", qty: "1 Pal." },
+  { item: "Topping", qty: "2 Pal." },
+  { item: "Frityr oil", qty: "30 Kn." },
+];
+
+/* Row geometry, shared by the handwriting and the OCR boxes so they can never
+   drift apart. Percentages of the photo's height. */
+const ROW_TOP = 30;
+const ROW_STEP = 11.2;
+const ROW_H = 9.4;
+
+/* Nobody writes straight. */
+const TILT = [-0.9, 0.4, -0.5, 0.7, -0.3, 0.5];
 
 export function HandwrittenNote({ ocr = false }: { ocr?: boolean }) {
-  const { locale } = useLocale();
-  const lines = LINES[locale];
-
   return (
-    <div className="relative aspect-4/5 w-full overflow-hidden rounded-[6px] bg-[#171310]">
-      {/* Photographed paper: warm, slightly off-axis, lit from the top-left */}
+    <div className="relative aspect-6/5 w-full overflow-hidden rounded-[6px] bg-[#14161A]">
+      {/* The board, shot slightly off-axis and lit from the upper left */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 90% at 25% 8%, #FBF4E4 0%, #EFE4CC 46%, #DCCDAF 78%, #C6B492 100%)",
-          transform: "rotate(-1.6deg) scale(1.1)",
+            "radial-gradient(115% 85% at 22% 6%, #FCFCFA 0%, #F0F1ED 38%, #DFE1DC 70%, #C7CAC4 100%)",
+          transform: "rotate(-0.8deg) scale(1.08)",
         }}
       >
-        {/* Ruled lines */}
+        {/* Aluminium frame catching light along the top edge */}
+        <div className="absolute inset-x-0 top-0 h-[4%] bg-linear-to-b from-[#A8ACA6] to-[#CACEC7]" />
+        {/* Ghosting from whatever was wiped off last week */}
         <div
-          className="absolute inset-0 opacity-45"
+          className="absolute inset-0 opacity-[0.045] mix-blend-multiply"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent 0 21px, rgba(90,110,140,0.30) 21px 22px)",
-            backgroundPosition: "0 34px",
-          }}
-        />
-        {/* Left margin rule */}
-        <div className="absolute inset-y-0 left-[13%] w-px bg-[rgba(190,90,90,0.35)]" />
-
-        {/* Paper fibre */}
-        <div
-          className="absolute inset-0 opacity-[0.16] mix-blend-multiply"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E\")",
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E\")",
           }}
         />
       </div>
 
-      {/* The handwriting itself */}
+      {/* The marker writing */}
       <div
-        className="absolute inset-0 px-[15%] py-[9%] text-[#1E3A5F]"
-        style={{
-          fontFamily: "var(--font-caveat), cursive",
-          transform: "rotate(-1.6deg)",
-        }}
+        className="absolute inset-0 text-[#B23A2E]"
+        style={{ fontFamily: "var(--font-caveat), cursive", transform: "rotate(-0.8deg)" }}
       >
-        <div className="text-[13px] leading-tight font-bold tracking-wide">Nordby Kafé</div>
-        <div className="mt-[1px] text-[10px] leading-tight text-[#2E4A6B]/80">resten av uka</div>
-        <div className="mt-[3px] h-px w-[62%] bg-[#1E3A5F]/45" />
+        {/* Heading — the customer's own shorthand for who it's for */}
+        <div className="absolute top-[8%] left-1/2 -translate-x-1/2 text-center">
+          <span className="text-[15px] leading-none font-bold tracking-wide">Moen</span>
+          <span className="mt-[2px] block h-[1.5px] w-full rounded bg-[#B23A2E]/75" />
+        </div>
 
-        <ul className="mt-[9%] space-y-[9%]">
-          {lines.map((l, i) => (
-            <li
-              key={l.item}
-              data-ocr-line={i}
-              className="flex items-baseline justify-between gap-2 text-[11.5px] leading-none"
-              /* Each line sits at a slightly different angle — nobody writes straight */
-              style={{ transform: `rotate(${[-0.7, 0.5, -0.3][i]}deg)` }}
-            >
-              <span>{l.item}</span>
-              <span className="grow border-b border-dotted border-[#1E3A5F]/35" />
-              <span className="font-bold">{l.qty}</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* A smudge on the last line — this is the one Nordre refuses to guess */}
-        <div className="pointer-events-none absolute right-[16%] bottom-[27%] h-[13px] w-[34%] rounded-full bg-[#5B6B80]/20 blur-[3px]" />
+        {ROWS.map((r, i) => (
+          <div
+            key={r.item}
+            className="absolute right-[9%] left-[8%] flex items-baseline gap-[4px] text-[11.5px] leading-none"
+            style={{ top: `${ROW_TOP + i * ROW_STEP}%`, transform: `rotate(${TILT[i]}deg)` }}
+          >
+            <span className="shrink-0 font-bold whitespace-nowrap">{r.item}</span>
+            {/* The long marker dash the writer used instead of a column */}
+            <span className="mx-[2px] h-[1.5px] grow rounded bg-[#B23A2E]/70" />
+            <span className="shrink-0 font-bold whitespace-nowrap">{r.qty}</span>
+          </div>
+        ))}
       </div>
 
-      {/* Photo grade: vignette + a cool shadow across the lower right */}
+      {/* Photo grade: glare off the gloss, then a cool falloff bottom-right */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(130% 100% at 20% 5%, rgba(255,250,235,0.16) 0%, transparent 42%), linear-gradient(145deg, transparent 40%, rgba(20,26,34,0.34) 100%)",
+            "linear-gradient(118deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.10) 16%, transparent 34%), linear-gradient(150deg, transparent 46%, rgba(22,28,36,0.30) 100%)",
         }}
       />
-      <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_40px_rgba(20,16,10,0.45)]" />
+      <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_36px_rgba(18,20,24,0.38)]" />
 
       {/* ── OCR pass ─────────────────────────────────────────────── */}
       <AnimatePresence>
@@ -110,41 +99,41 @@ export function HandwrittenNote({ ocr = false }: { ocr?: boolean }) {
             transition={{ duration: 0.25 }}
             className="pointer-events-none absolute inset-0"
           >
-            {/* Cool wash so the scan reads as "machine looking at it" */}
-            <div className="absolute inset-0 bg-[#5CE1B0]/8" />
+            <div className="absolute inset-0 bg-[#5CE1B0]/10" />
 
-            {/* Detection boxes, landing one after another */}
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.45 + i * 0.42, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute rounded-[2px] border border-accent/80 bg-accent/10"
-                style={{
-                  left: "12%",
-                  right: "11%",
-                  top: `${47 + i * 13.5}%`,
-                  height: "11%",
-                }}
-              >
-                <span className="absolute -top-[1px] -left-[1px] h-[5px] w-[5px] border-t border-l border-accent" />
-                <span className="absolute -top-[1px] -right-[1px] h-[5px] w-[5px] border-t border-r border-accent" />
-                <span className="absolute -bottom-[1px] -left-[1px] h-[5px] w-[5px] border-b border-l border-accent" />
-                <span className="absolute -right-[1px] -bottom-[1px] h-[5px] w-[5px] border-r border-b border-accent" />
-              </motion.div>
-            ))}
+            {/* One box per line, landing in reading order. Line 3 lands amber —
+                the machine flagging the question mark the human wrote. */}
+            {ROWS.map((r, i) => {
+              const unsure = i === 2;
+              return (
+                <motion.div
+                  key={r.item}
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.35 + i * 0.22, duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  className={`absolute rounded-[2px] border ${
+                    unsure ? "border-signal/90 bg-signal/15" : "border-accent/80 bg-accent/10"
+                  }`}
+                  style={{
+                    left: "6%",
+                    right: "6%",
+                    top: `${ROW_TOP + i * ROW_STEP - 1.4}%`,
+                    height: `${ROW_H}%`,
+                  }}
+                />
+              );
+            })}
 
             {/* The sweep */}
             <div className="absolute inset-x-0 top-0 h-full overflow-hidden">
-              <div className="ocr-sweep absolute inset-x-0 h-[22%]">
+              <div className="ocr-sweep absolute inset-x-0 h-[20%]">
                 <div className="h-full w-full bg-linear-to-b from-transparent via-accent/22 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 h-px bg-accent shadow-[0_0_12px_2px_rgba(92,225,176,0.75)]" />
               </div>
             </div>
 
             {/* Corner reticle */}
-            <div className="absolute inset-[6%]">
+            <div className="absolute inset-[5%]">
               {(
                 [
                   "top-0 left-0 border-t-2 border-l-2",
