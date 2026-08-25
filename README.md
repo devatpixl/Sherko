@@ -34,7 +34,7 @@ src/
     chatScript.ts     the hero conversation timeline
     useSimulation.ts  the driver that plays it
   components/
-    hero/             Hero, PhoneSim, SystemCards, HandwrittenNote, WhatsAppIcons
+    hero/             Hero, PhoneSim, TraceLog, HandwrittenNote, WhatsAppIcons
     sections/         one file per page section
     site/             Nav, Footer, Wordmark
     ui/               Container, Section, Reveal, SectionHead, buttons
@@ -50,9 +50,10 @@ To change what the demo says, edit `chatScript.ts`. Two acts:
 1. A plain text order → preview → customer confirms → draft filed.
 2. A photo of a handwritten note → read directly → one line is ambiguous → Nordre asks.
 
-The floating cards beside the phone are the "machine view" — what Nordre is doing while
-the customer only sees a chat. They sit *behind* the device on purpose so they never
-cover the conversation.
+The trace log beside the phone is the "machine view" — the agent's work log, streaming
+the steps it takes while the customer only sees a chat. It is deliberately frameless (no
+card, no border, no glow) so it supports the device instead of competing with it, and it
+only renders at xl where there is a third column to put it in.
 
 The WhatsApp UI is rebuilt to spec (real bubble tails, tick glyphs, palette) rather than
 approximated — see `WhatsAppIcons.tsx`.

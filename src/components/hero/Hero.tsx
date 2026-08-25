@@ -3,7 +3,7 @@
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import { PhoneSim } from "@/components/hero/PhoneSim";
-import { SystemCardSlot } from "@/components/hero/SystemCards";
+import { TraceLog } from "@/components/hero/TraceLog";
 import { ButtonGhost, ButtonPrimary, Container } from "@/components/ui";
 import { cta, hero } from "@/lib/content";
 import { useLocale } from "@/lib/i18n";
@@ -40,7 +40,7 @@ export function Hero() {
           into one grid cell.
         */}
         <div className="flex flex-col gap-9 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10 xl:gap-16">
-          <div className="contents lg:block lg:max-w-[34rem]">
+          <div className="contents lg:block lg:max-w-[32rem] xl:max-w-[29rem]">
             {/* ── The claim ──────────────────────────────────────── */}
             <div className="order-1">
               <motion.div
@@ -125,14 +125,12 @@ export function Hero() {
                 <div className="absolute inset-x-10 top-1/3 bottom-0 rounded-full bg-violet/12 blur-[90px]" />
               </div>
 
-              {/* Machine view sits BEHIND the device and slides out from under it,
-                  so it never covers the conversation it is annotating. There is
-                  no room for it to do that below xl, so it simply isn't there. */}
-              <div className="pointer-events-none absolute inset-0 z-0 hidden xl:block">
-                <SystemCardSlot slot="customer" card={view.cards.customer} className="top-[76px] -left-[200px]" />
-                <SystemCardSlot slot="catalog" card={view.cards.catalog} className="top-[300px] -left-[218px]" />
-                <SystemCardSlot slot="order" card={view.cards.order} className="top-[520px] -left-[196px]" />
-              </div>
+              {/* The work log runs alongside the device, not on top of it.
+                  Below xl there is no room for a second column, so it's absent. */}
+              <TraceLog
+                lines={view.trace}
+                className="absolute top-[96px] -left-[348px] hidden w-[320px] xl:block"
+              />
 
               <div className="relative z-10 -mb-[159px] origin-top scale-[0.78] sm:-mb-[72px] sm:scale-90 lg:-mb-[101px] lg:scale-[0.86] xl:mb-0 xl:scale-100">
                 <PhoneSim view={view} composerText={composerText} composerDone={composerDone} />
@@ -147,8 +145,8 @@ export function Hero() {
         <div className="flex items-center gap-3 font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase">
           <span className="h-px w-8 bg-line-2" />
           {locale === "no"
-            ? "Kunden ser bare samtalen. Kortene er det Nordre gjør imens."
-            : "The customer only sees the chat. The cards are what Nordre is doing meanwhile."}
+            ? "Kunden ser bare samtalen. Loggen er det Nordre gjør imens."
+            : "The customer only sees the chat. The log is what Nordre is doing meanwhile."}
         </div>
       </Container>
     </section>

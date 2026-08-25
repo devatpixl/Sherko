@@ -172,12 +172,16 @@ function OrderMessage({ item }: { item: Extract<ChatItem, { kind: "order" }> }) 
               transition={{ delay: 0.22 + i * 0.14, ...spring }}
               className="flex gap-[6px] text-[15px] leading-[20px]"
             >
-              <span className="text-[#E9EDEF]/50 tabular-nums">{i + 1}.</span>
-              <span className="min-w-0 flex-1">
+              <span className="shrink-0 text-[#E9EDEF]/50 tabular-nums">{i + 1}.</span>
+              {/* One wrapping run — "name — qty" — which is exactly how the
+                  real bot composes an order line, and it wraps like prose
+                  instead of stranding the quantity on its own line. */}
+              <span className="min-w-0">
                 {l.name[locale]}
-                {l.flagged && <span className="ml-1 text-[#F0B849]">(?)</span>}
+                {l.flagged && <span className="text-[#F0B849]"> (?)</span>}
+                <span className="text-[#E9EDEF]/45"> — </span>
+                <span className="font-medium">{l.qty[locale]}</span>
               </span>
-              <span className="shrink-0 pl-1 font-medium">{l.qty[locale]}</span>
             </motion.li>
           ))}
         </ul>

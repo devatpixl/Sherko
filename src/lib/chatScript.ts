@@ -48,14 +48,14 @@ export type ChatItem =
       tail: Bi;
     };
 
-export type CardSlot = "customer" | "catalog" | "order";
-
-export type SystemCard = {
-  eyebrow: Bi;
-  title: Bi;
+/** One line of the agent's work log, shown beside the phone. */
+export type TraceLine = {
+  id: string;
+  /** Machine verbs stay in English on purpose — this is a log, not prose. */
+  verb: string;
+  time: string;
   detail: Bi;
-  /** Drives the left accent bar + icon tint. */
-  tone: "accent" | "ice" | "violet" | "signal";
+  tone?: "accent" | "signal";
 };
 
 export type Step =
@@ -64,7 +64,7 @@ export type Step =
   | { kind: "push"; ms: number; item: ChatItem }
   | { kind: "typing"; ms: number }
   | { kind: "tick"; ms: number; id: string; to: Tick }
-  | { kind: "card"; ms: number; slot: CardSlot; card: SystemCard | null }
+  | { kind: "trace"; ms: number; line: TraceLine }
   | { kind: "ocr"; ms: number }
   | { kind: "wait"; ms: number }
   | { kind: "reset"; ms: number };
@@ -177,55 +177,31 @@ const m8: ChatItem = {
   },
 };
 
-/* ── Side cards: the machine view next to the chat ────────────────── */
+/* ── The work log beside the chat ─────────────────────────────────── */
 
-const cardCustomer: SystemCard = {
-  eyebrow: { no: "Kunde slått opp", en: "Customer resolved" },
-  title: { no: "Nordby Kafé AS", en: "Nordby Kafé AS" },
-  detail: { no: "Org. 918 273 641 · Kunde siden 2021", en: "Org. 918 273 641 · Customer since 2021" },
-  tone: "ice",
-};
+const T = (
+  id: string, time: string, verb: string, no: string, en: string,
+  tone?: "accent" | "signal",
+): TraceLine => ({ id, time, verb, detail: { no, en }, tone });
 
-const cardCatalogA: SystemCard = {
-  eyebrow: { no: "Katalogtreff", en: "Catalogue match" },
-  title: { no: "1 av 1 linje matchet", en: "1 of 1 line matched" },
-  detail: { no: "Art. 40219 · Kavli mysost 500 g · kartong", en: "Art. 40219 · Kavli mysost 500 g · case" },
-  tone: "accent",
-};
+const trace = {
+  /* Act I */
+  inbound1: T("t1", "22:14:03", "inbound", "whatsapp · +47 ••• 41 22", "whatsapp · +47 ••• 41 22"),
+  customer: T("t2", "22:14:03", "customer", "Nordby Kafé AS · 918 273 641", "Nordby Kafé AS · 918 273 641"),
+  search1: T("t3", "22:14:04", "search", "kavli mysost 500g → 3 treff", "kavli mysost 500g → 3 hits"),
+  match1: T("t4", "22:14:05", "match", "art. 40219 · kartong · 0.94", "art. 40219 · case · 0.94"),
+  preview1: T("t5", "22:14:06", "preview", "sendt — venter på svar", "sent — awaiting reply"),
+  confirm1: T("t6", "22:15:02", "confirm", "kunde sa ja", "customer said yes"),
+  draft1: T("t7", "22:15:03", "draft", "#12048 · pending_approval", "#12048 · pending_approval", "accent"),
+  stock1: T("t8", "22:15:03", "stock", "urørt", "untouched"),
 
-const cardCatalogB: SystemCard = {
-  eyebrow: { no: "Katalogtreff", en: "Catalogue match" },
-  title: { no: "5 av 6 linjer matchet", en: "5 of 6 lines matched" },
-  detail: { no: "Linje 3 tvetydig — spør heller enn å gjette", en: "Line 3 ambiguous — asks rather than guesses" },
-  tone: "signal",
-};
-
-const cardCatalogC: SystemCard = {
-  eyebrow: { no: "Katalogtreff", en: "Catalogue match" },
-  title: { no: "6 av 6 linjer matchet", en: "6 of 6 lines matched" },
-  detail: { no: "Art. 20841 · Eske hvit 1/1", en: "Art. 20841 · White box 1/1" },
-  tone: "accent",
-};
-
-const cardOrderA: SystemCard = {
-  eyebrow: { no: "Ordre opprettet", en: "Order created" },
-  title: { no: "#12048 · Utkast", en: "#12048 · Draft" },
-  detail: { no: "Venter på godkjenning · Lager urørt", en: "Pending approval · Stock untouched" },
-  tone: "violet",
-};
-
-const cardOrderB: SystemCard = {
-  eyebrow: { no: "Ordre opprettet", en: "Order created" },
-  title: { no: "#12049 · Utkast", en: "#12049 · Draft" },
-  detail: { no: "Venter på godkjenning · Lager urørt", en: "Pending approval · Stock untouched" },
-  tone: "violet",
-};
-
-const cardReading: SystemCard = {
-  eyebrow: { no: "Leser vedlegg", en: "Reading attachment" },
-  title: { no: "Bilde av tavle", en: "Photo of a whiteboard" },
-  detail: { no: "Bildet leses direkte — ingen mal", en: "Image read directly — no template" },
-  tone: "ice",
+  /* Act II */
+  inbound2: T("t9", "22:16:11", "inbound", "whatsapp · bilde (jpeg)", "whatsapp · image (jpeg)"),
+  vision: T("t10", "22:16:14", "vision", "tavle · 6 linjer lest", "whiteboard · 6 lines read"),
+  match2: T("t11", "22:16:16", "match", "5 av 6 · linje 3 tvetydig", "5 of 6 · line 3 ambiguous", "signal"),
+  ask: T("t12", "22:16:17", "ask", "spør — gjetter ikke", "asking — not guessing", "signal"),
+  resolve: T("t13", "22:17:08", "resolve", "eske hvit 1/1 · art. 20841", "white box 1/1 · art. 20841"),
+  draft2: T("t14", "22:17:09", "draft", "#12049 · pending_approval", "#12049 · pending_approval", "accent"),
 };
 
 /* ── The timeline ─────────────────────────────────────────────────── */
@@ -235,42 +211,44 @@ export const script: Step[] = [
 
   /* — Act I: a plain text order — */
   { kind: "compose", ms: 2600, text: m1.kind === "text" ? m1.text : { no: "", en: "" }, item: m1 },
-  { kind: "tick", ms: 320, id: "m1", to: "sent" },
-  { kind: "tick", ms: 360, id: "m1", to: "delivered" },
-  { kind: "tick", ms: 500, id: "m1", to: "read" },
-
-  { kind: "card", ms: 700, slot: "customer", card: cardCustomer },
-  { kind: "typing", ms: 1100 },
-  { kind: "card", ms: 800, slot: "catalog", card: cardCatalogA },
+  { kind: "tick", ms: 300, id: "m1", to: "sent" },
+  { kind: "trace", ms: 260, line: trace.inbound1 },
+  { kind: "tick", ms: 300, id: "m1", to: "delivered" },
+  { kind: "tick", ms: 380, id: "m1", to: "read" },
+  { kind: "trace", ms: 620, line: trace.customer },
+  { kind: "typing", ms: 700 },
+  { kind: "trace", ms: 620, line: trace.search1 },
+  { kind: "trace", ms: 640, line: trace.match1 },
+  { kind: "trace", ms: 420, line: trace.preview1 },
   { kind: "push", ms: 3000, item: m2 },
 
   { kind: "compose", ms: 1300, text: m3.kind === "text" ? m3.text : { no: "", en: "" }, item: m3 },
   { kind: "tick", ms: 300, id: "m3", to: "sent" },
-  { kind: "tick", ms: 450, id: "m3", to: "read" },
-
-  { kind: "typing", ms: 900 },
-  { kind: "card", ms: 600, slot: "order", card: cardOrderA },
+  { kind: "tick", ms: 400, id: "m3", to: "read" },
+  { kind: "trace", ms: 520, line: trace.confirm1 },
+  { kind: "typing", ms: 700 },
+  { kind: "trace", ms: 560, line: trace.draft1 },
+  { kind: "trace", ms: 420, line: trace.stock1 },
   { kind: "push", ms: 2800, item: m4 },
 
-  /* — Act II: a photo of a handwritten note — */
-  { kind: "attach", ms: 1500, item: m5 },
-  { kind: "tick", ms: 320, id: "m5", to: "sent" },
-  { kind: "tick", ms: 420, id: "m5", to: "read" },
-
-  { kind: "card", ms: 400, slot: "customer", card: cardReading },
+  /* — Act II: a photo of a handwritten whiteboard — */
+  { kind: "attach", ms: 1400, item: m5 },
+  { kind: "tick", ms: 300, id: "m5", to: "sent" },
+  { kind: "trace", ms: 300, line: trace.inbound2 },
+  { kind: "tick", ms: 380, id: "m5", to: "read" },
   { kind: "ocr", ms: 3200 },
-  { kind: "card", ms: 500, slot: "customer", card: cardCustomer },
-  { kind: "typing", ms: 900 },
-  { kind: "card", ms: 700, slot: "catalog", card: cardCatalogB },
+  { kind: "trace", ms: 700, line: trace.vision },
+  { kind: "typing", ms: 700 },
+  { kind: "trace", ms: 660, line: trace.match2 },
+  { kind: "trace", ms: 520, line: trace.ask },
   { kind: "push", ms: 4800, item: m6 },
 
   { kind: "compose", ms: 1200, text: m7.kind === "text" ? m7.text : { no: "", en: "" }, item: m7 },
-  { kind: "tick", ms: 320, id: "m7", to: "sent" },
-  { kind: "tick", ms: 420, id: "m7", to: "read" },
-
-  { kind: "card", ms: 600, slot: "catalog", card: cardCatalogC },
-  { kind: "typing", ms: 900 },
-  { kind: "card", ms: 600, slot: "order", card: cardOrderB },
+  { kind: "tick", ms: 300, id: "m7", to: "sent" },
+  { kind: "tick", ms: 380, id: "m7", to: "read" },
+  { kind: "trace", ms: 620, line: trace.resolve },
+  { kind: "typing", ms: 700 },
+  { kind: "trace", ms: 560, line: trace.draft2 },
   { kind: "push", ms: 3600, item: m8 },
 
   { kind: "wait", ms: 2600 },
@@ -282,7 +260,7 @@ export const script: Step[] = [
 export type ChatView = {
   items: ChatItem[];
   ticks: Record<string, Tick>;
-  cards: Record<CardSlot, SystemCard | null>;
+  trace: TraceLine[];
   typing: boolean;
   ocr: boolean;
   /** The message currently being typed into the composer, if any. */
@@ -292,7 +270,7 @@ export type ChatView = {
 export const emptyView: ChatView = {
   items: [],
   ticks: {},
-  cards: { customer: null, catalog: null, order: null },
+  trace: [],
   typing: false,
   ocr: false,
   composing: null,
@@ -306,7 +284,7 @@ export const emptyView: ChatView = {
 export function foldScript(upto: number): ChatView {
   const items: ChatItem[] = [];
   const ticks: Record<string, Tick> = {};
-  const cards: ChatView["cards"] = { customer: null, catalog: null, order: null };
+  const trace: TraceLine[] = [];
 
   for (let i = 0; i < upto; i++) {
     const s = script[i];
@@ -319,15 +297,13 @@ export function foldScript(upto: number): ChatView {
       case "tick":
         ticks[s.id] = s.to;
         break;
-      case "card":
-        cards[s.slot] = s.card;
+      case "trace":
+        if (!trace.some((l) => l.id === s.line.id)) trace.push(s.line);
         break;
       case "reset":
         items.length = 0;
         for (const k of Object.keys(ticks)) delete ticks[k];
-        cards.customer = null;
-        cards.catalog = null;
-        cards.order = null;
+        trace.length = 0;
         break;
       default:
         break;
@@ -338,7 +314,7 @@ export function foldScript(upto: number): ChatView {
   return {
     items,
     ticks,
-    cards,
+    trace,
     typing: cur?.kind === "typing",
     ocr: cur?.kind === "ocr",
     composing: cur?.kind === "compose" ? cur.text : null,
