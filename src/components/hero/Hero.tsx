@@ -55,7 +55,7 @@ export function Hero() {
                 <span className="text-[13px] tracking-tight text-fg-2">{t(hero.eyebrow)}</span>
               </motion.div>
 
-              <h1 className="display mt-6 text-[clamp(2.5rem,6.4vw,4.75rem)] md:mt-8">
+              <h1 className="display mt-6 text-[clamp(2.75rem,6.4vw,4.25rem)] [overflow-wrap:break-word] md:mt-8">
                 <motion.span
                   className="block text-fg"
                   initial={{ opacity: 0, y: 24 }}

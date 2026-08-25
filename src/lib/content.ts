@@ -35,14 +35,16 @@ export const hero = {
     no: "AI-ordredesk for grossister",
     en: "AI order desk for wholesalers",
   },
-  /* Line 2 carries the aurora gradient. */
+  /* Line 2 carries the aurora gradient.
+     Both lines are deliberately short words — a single long word cannot wrap
+     and would overflow the column into the panel beside it. */
   headline: {
-    l1: { no: "Ordremottak", en: "Order intake" },
-    l2: { no: "uten regneark.", en: "without spreadsheets." },
+    l1: { no: "Alt inn.", en: "Anything in." },
+    l2: { no: "Ordre ut.", en: "An order out." },
   },
   lede: {
-    no: "Kundene sender bestillingen der de allerede er — på WhatsApp eller e-post, som fritekst, PDF, Excel eller et bilde av en håndskrevet lapp. Nordre leser den, finner kunden og hver eneste varelinje i katalogen din, og legger inn ordreutkastet.",
-    en: "Customers send the order where they already are — on WhatsApp or by email, as free text, a PDF, an Excel sheet or a photo of a handwritten note. Nordre reads it, resolves the customer and every single line against your catalogue, and files the draft order.",
+    no: "Melding, PDF, Excel eller et bilde av en lapp. Nordre leser det og fyller ut ordren.",
+    en: "A message, a PDF, an Excel sheet or a photo of a note. Nordre reads it and fills in the order.",
   },
   ledeEmphasis: { no: "Du godkjenner.", en: "You approve." },
   footnote: {
