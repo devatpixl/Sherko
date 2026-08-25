@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nordre — marketing site
 
-## Getting Started
+Product site for **Nordre**, an AI order desk for wholesalers: customers send orders
+on WhatsApp or by email (free text, PDF, Excel, or a photo of a handwritten note),
+Nordre reads them, resolves the customer and every line against the client's real
+catalogue, and files a **draft order pending human approval**.
 
-First, run the development server:
+Built for Pixl Media. The underlying product is the Sherko agent running for Moen Engros.
+
+## Stack
+
+Next.js 16 (App Router, static export) · React 19 · Tailwind v4 · `motion` v13 · TypeScript strict.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # fully static, no server needed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Never run `npm run build` while `next dev` is up — they fight over `.next`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/
+    layout.tsx        fonts (Schibsted Grotesk / JetBrains Mono / Caveat), metadata, JSON-LD
+    page.tsx          section order — this is the argument the page makes, in order
+    globals.css       ALL design tokens + utility classes. Change colours here, nowhere else.
+    icon.svg          favicon
+  lib/
+    content.ts        every string on the site, bilingual. Copy changes happen here.
+    i18n.tsx          locale store (localStorage as an external store), NO default
+    chatScript.ts     the hero conversation timeline
+    useSimulation.ts  the driver that plays it
+  components/
+    hero/             Hero, PhoneSim, SystemCards, HandwrittenNote, WhatsAppIcons
+    sections/         one file per page section
+    site/             Nav, Footer, Wordmark
+    ui/               Container, Section, Reveal, SectionHead, buttons
+```
 
-## Learn More
+## The hero simulation
 
-To learn more about Next.js, take a look at the following resources:
+`chatScript.ts` holds a flat list of timed steps. `useSimulation` advances an index and
+**folds** `script.slice(0, i)` into view state — the view is a pure function of the index,
+so StrictMode double-invocation can't corrupt it and the loop restarts with no teardown.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To change what the demo says, edit `chatScript.ts`. Two acts:
+1. A plain text order → preview → customer confirms → draft filed.
+2. A photo of a handwritten note → read directly → one line is ambiguous → Nordre asks.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The floating cards beside the phone are the "machine view" — what Nordre is doing while
+the customer only sees a chat. They sit *behind* the device on purpose so they never
+cover the conversation.
 
-## Deploy on Vercel
+The WhatsApp UI is rebuilt to spec (real bubble tails, tick glyphs, palette) rather than
+approximated — see `WhatsAppIcons.tsx`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Conventions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **No hardcoded strings in components.** Everything is a `{ no, en }` pair from
+  `content.ts`, or a local `Bi` object if it's component-specific.
+- **No raw hex in components.** Use the token classes (`text-fg-2`, `border-line`,
+  `text-accent`…) defined in `globals.css`. The only exception is `PhoneSim`, which
+  deliberately uses WhatsApp's own palette.
+- Accent (aurora mint/ice/violet) is for **one focal element per section**. The rest is
+  near-black, off-white and hairlines.
+- `.card` is unlayered CSS, so its `border` shorthand beats Tailwind `border-*` utilities.
+  To recolour a card border, use the gradient utilities directly instead of `.card`.
+
+## Claims policy
+
+Nothing on this site asserts a customer result, percentage, or time saving that we have
+not measured. The `facts` block is deliberately capability facts (`24/7`, `0` auto-approved
+orders, `6` inbound formats, `2` languages), not invented ROI. Keep it that way until
+there are real numbers to publish.
+
+## Still open
+
+- `hei@nordre.no` in the CTA is a placeholder — wire to a real inbox or a form.
+- Domain, analytics, and OG image are not set up.
+- Nav links are in-page anchors; there are no interior pages yet.

@@ -1,0 +1,163 @@
+"use client";
+
+import { motion, useInView } from "motion/react";
+import { useRef, type ReactNode } from "react";
+
+/* ── Layout ───────────────────────────────────────────────────────── */
+
+export function Container({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={`mx-auto w-full max-w-[1240px] px-6 md:px-10 ${className}`}>{children}</div>;
+}
+
+export function Section({
+  id,
+  children,
+  className = "",
+}: {
+  id?: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section id={id} className={`relative scroll-mt-24 py-24 md:py-32 lg:py-40 ${className}`}>
+      {children}
+    </section>
+  );
+}
+
+/* ── Reveal on scroll ─────────────────────────────────────────────── */
+
+export function Reveal({
+  children,
+  delay = 0,
+  y = 22,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  y?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-12% 0px -12% 0px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ── Type ─────────────────────────────────────────────────────────── */
+
+export function Eyebrow({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <p className={`eyebrow flex items-center gap-2.5 ${className}`}>
+      <span className="h-px w-6 bg-line-2" aria-hidden />
+      {children}
+    </p>
+  );
+}
+
+export function SectionHead({
+  eyebrow,
+  title,
+  body,
+  align = "left",
+  className = "",
+}: {
+  eyebrow: ReactNode;
+  title: ReactNode;
+  body?: ReactNode;
+  align?: "left" | "center";
+  className?: string;
+}) {
+  const centered = align === "center";
+  return (
+    <div className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-3xl"} ${className}`}>
+      <Reveal>
+        <div className={centered ? "flex justify-center" : ""}>
+          <Eyebrow>{eyebrow}</Eyebrow>
+        </div>
+      </Reveal>
+      <Reveal delay={0.06}>
+        <h2 className="display mt-6 text-[clamp(2rem,4.4vw,3.4rem)] text-fg">{title}</h2>
+      </Reveal>
+      {body && (
+        <Reveal delay={0.12}>
+          <p className="lede mt-6 text-[1.0625rem] leading-relaxed text-fg-2 md:text-lg">{body}</p>
+        </Reveal>
+      )}
+    </div>
+  );
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────── */
+
+export function ButtonPrimary({
+  children,
+  href = "#kontakt",
+  className = "",
+}: {
+  children: ReactNode;
+  href?: string;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      className={`group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-fg px-6 py-3.5 text-[0.9375rem] font-medium tracking-tight text-canvas transition-transform duration-300 hover:scale-[1.02] active:scale-[0.99] ${className}`}
+    >
+      {/* Aurora wash sweeps in on hover */}
+      <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-accent via-ice to-violet transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+      <span className="relative">{children}</span>
+      <svg viewBox="0 0 16 16" className="relative h-3.5 w-3.5" aria-hidden>
+        <path
+          d="M2 8h11M9 4l4 4-4 4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="transition-transform duration-300 group-hover:translate-x-[2px]"
+        />
+      </svg>
+    </a>
+  );
+}
+
+export function ButtonGhost({
+  children,
+  href = "#hvordan",
+  className = "",
+}: {
+  children: ReactNode;
+  href?: string;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      className={`inline-flex items-center gap-2.5 rounded-full border border-line-2 px-6 py-3.5 text-[0.9375rem] font-medium tracking-tight text-fg-2 transition-colors duration-300 hover:border-fg-4 hover:bg-surface hover:text-fg ${className}`}
+    >
+      {children}
+    </a>
+  );
+}
+
+/* ── Misc ─────────────────────────────────────────────────────────── */
+
+export function Rule({ className = "" }: { className?: string }) {
+  return <div className={`rule-x ${className}`} />;
+}
