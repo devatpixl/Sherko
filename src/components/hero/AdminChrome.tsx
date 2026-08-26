@@ -43,7 +43,7 @@ export function Sidebar() {
           <span className="text-[15px] font-semibold text-[#041710]">N</span>
         </div>
         <div className="leading-tight">
-          <p className="font-mono text-[11px] tracking-[0.18em] text-adm-ink">NORDRE</p>
+          <p className="font-mono text-[11px] tracking-[0.18em] text-adm-ink">SHERKO</p>
           <p className="font-mono text-[11px] tracking-[0.18em] text-adm-ink-3">ADMIN</p>
         </div>
       </div>

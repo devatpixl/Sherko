@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
    and so it stays crisp on any display.
 
    Note line 3 — the writer put a question mark on the board themselves. That is
-   the line Nordre refuses to guess, and it is why this photo is the right demo:
+   the line Sherko refuses to guess, and it is why this photo is the right demo:
    the ambiguity is genuine, not invented for the animation. */
 
 const ROWS = [

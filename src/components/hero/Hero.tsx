@@ -145,8 +145,8 @@ export function Hero() {
         <div className="flex items-center gap-3 font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase">
           <span className="h-px w-8 bg-line-2" />
           {locale === "no"
-            ? "Kunden skriver en melding. Nordre fyller ut ordren."
-            : "The customer writes a message. Nordre fills in the order."}
+            ? "Kunden skriver en melding. Sherko fyller ut ordren."
+            : "The customer writes a message. Sherko fills in the order."}
         </div>
       </Container>
     </section>

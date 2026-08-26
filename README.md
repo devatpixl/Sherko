@@ -1,8 +1,8 @@
-# Nordre — marketing site
+# Sherko — marketing site
 
-Product site for **Nordre**, an AI order desk for wholesalers: customers send orders
+Product site for **Sherko**, an AI order desk for wholesalers: customers send orders
 on WhatsApp or by email (free text, PDF, Excel, or a photo of a handwritten note),
-Nordre reads them, resolves the customer and every line against the client's real
+Sherko reads them, resolves the customer and every line against the client's real
 catalogue, and files a **draft order pending human approval**.
 
 Built for Pixl Media. The underlying product is the Sherko agent running for Moen Engros.
@@ -50,7 +50,7 @@ so StrictMode double-invocation can't corrupt it and the loop restarts with no t
 
 To change what the demo says, edit `chatScript.ts`. Two acts:
 1. A plain text order → preview → customer confirms → draft filed.
-2. A photo of a handwritten note → read directly → one line is ambiguous → Nordre asks.
+2. A photo of a handwritten note → read directly → one line is ambiguous → Sherko asks.
 
 The panel beside the phone is the order form filling itself in — the row a person
 would otherwise have typed into a spreadsheet. It is deliberately in plain language
@@ -76,7 +76,7 @@ approximated — see `WhatsAppIcons.tsx`.
 ## Privacy in the portal simulation
 
 `AdminSim` and `StockSim` are modelled on a real client's admin portal. **Every name
-and figure in them is invented**: the portal brands as "Nordre Admin", the tenant is the
+and figure in them is invented**: the portal brands as "Sherko Admin", the tenant is the
 fictional "Fjordvik Engros" (order prefix `FE-`), and every customer, product, contact
 and amount is made up. `adminScript.ts` carries the same warning at the top. If you edit
 either component, keep it that way — and note the hero whiteboard photo is anonymised

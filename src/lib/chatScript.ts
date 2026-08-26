@@ -6,7 +6,7 @@ import type { Bi } from "@/lib/i18n";
    Two acts, one continuous loop:
      Act I  — a plain-text order: preview → customer confirms → draft filed.
      Act II — a photo of a handwritten note: read directly, one line is
-              genuinely ambiguous, Nordre asks instead of guessing.
+              genuinely ambiguous, Sherko asks instead of guessing.
 
    Act II is the one that sells the product, so Act I is kept tight.
 
@@ -26,10 +26,10 @@ export type OrderLine = {
 export type ChatItem =
   | { id: string; from: "customer"; kind: "text"; text: Bi; time: string }
   | { id: string; from: "customer"; kind: "photo"; caption: Bi; time: string }
-  | { id: string; from: "nordre"; kind: "text"; text: Bi; time: string }
+  | { id: string; from: "sherko"; kind: "text"; text: Bi; time: string }
   | {
       id: string;
-      from: "nordre";
+      from: "sherko";
       kind: "order";
       time: string;
       intro: Bi;
@@ -39,7 +39,7 @@ export type ChatItem =
     }
   | {
       id: string;
-      from: "nordre";
+      from: "sherko";
       kind: "receipt";
       time: string;
       intro: Bi;
@@ -89,7 +89,7 @@ const m1: ChatItem = {
 
 const m2: ChatItem = {
   id: "m2",
-  from: "nordre",
+  from: "sherko",
   kind: "order",
   time: "22:14",
   intro: {
@@ -117,7 +117,7 @@ const m3: ChatItem = {
 
 const m4: ChatItem = {
   id: "m4",
-  from: "nordre",
+  from: "sherko",
   kind: "receipt",
   time: "22:15",
   intro: { no: "Lagt inn.", en: "Filed." },
@@ -141,7 +141,7 @@ const m5: ChatItem = {
 
 const m6: ChatItem = {
   id: "m6",
-  from: "nordre",
+  from: "sherko",
   kind: "order",
   time: "22:16",
   intro: { no: "Fikk ut dette av tavla:", en: "Here is what I got off the board:" },
@@ -170,7 +170,7 @@ const m7: ChatItem = {
 
 const m8: ChatItem = {
   id: "m8",
-  from: "nordre",
+  from: "sherko",
   kind: "receipt",
   time: "22:17",
   intro: { no: "Perfekt — alle seks linjene er inne.", en: "Perfect — all six lines are in." },

@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hero/Hero";
 import { AdminSim } from "@/components/sections/AdminSim";
+import { BuiltFor } from "@/components/sections/BuiltFor";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { ChannelStrip } from "@/components/sections/ChannelStrip";
 import { Closing } from "@/components/sections/Closing";
@@ -20,6 +21,8 @@ export default function Home() {
       <main id="top" className="relative">
         {/* The pitch */}
         <Hero />
+        {/* Who this is for — said out loud */}
+        <BuiltFor />
         {/* Where orders come from */}
         <ChannelStrip />
         {/* The system the order lands in */}

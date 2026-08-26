@@ -14,8 +14,8 @@ const HUMAN_BADGE: Bi = {
 };
 
 const PROMISE: Bi = {
-  no: "Nordre skriver aldri en ordre du ikke har sett først.",
-  en: "Nordre never writes an order you have not seen first.",
+  no: "Sherko skriver aldri en ordre du ikke har sett først.",
+  en: "Sherko never writes an order you have not seen first.",
 };
 
 /* The pipeline draws itself from 0 → 1 as the section crosses the viewport.
@@ -77,7 +77,7 @@ export function HowItWorks() {
             className="pointer-events-none absolute top-[21px] left-[22px] hidden lg:block"
           >
             <defs>
-              <linearGradient id="nordre-pipeline" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+              <linearGradient id="sherko-pipeline" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="var(--color-accent)" />
                 <stop offset="50%" stopColor="var(--color-ice)" />
                 <stop offset="100%" stopColor="var(--color-violet)" />
@@ -86,7 +86,7 @@ export function HowItWorks() {
             <path d="M0 1H100" stroke="var(--color-line-2)" strokeWidth={1} />
             <motion.path
               d="M0 1H100"
-              stroke="url(#nordre-pipeline)"
+              stroke="url(#sherko-pipeline)"
               strokeWidth={1.5}
               style={{ pathLength: scrollYProgress }}
             />

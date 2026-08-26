@@ -79,7 +79,7 @@ function Bubble({
   className = "",
   padded = true,
 }: {
-  from: "customer" | "nordre";
+  from: "customer" | "sherko";
   children: React.ReactNode;
   className?: string;
   padded?: boolean;
@@ -331,7 +331,7 @@ function ChatHeader() {
         <span className="absolute right-0 bottom-0 h-[10px] w-[10px] rounded-full border-2 border-[#1F2C34] bg-[#25D366]" />
       </div>
       <div className="ml-[12px] min-w-0 flex-1">
-        <p className="truncate text-[16px] leading-[21px] font-medium text-[#E9EDEF]">Nordre</p>
+        <p className="truncate text-[16px] leading-[21px] font-medium text-[#E9EDEF]">Sherko</p>
         <p className="truncate text-[12.5px] leading-[16px] text-[#8696A0]">
           {locale === "no" ? "ordredesk · på nett" : "order desk · online"}
         </p>

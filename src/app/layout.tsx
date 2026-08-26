@@ -29,13 +29,13 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nordre.no"),
+  metadataBase: new URL("https://sherko.no"),
   title: {
-    default: "Nordre — Ordremottak uten regneark",
-    template: "%s · Nordre",
+    default: "Sherko — AI-ordredesk for grossister",
+    template: "%s · Sherko",
   },
   description:
-    "Nordre tar imot ordrer på WhatsApp og e-post — fritekst, PDF, Excel eller et bilde av en håndskrevet lapp — matcher dem mot katalogen din og legger inn ordreutkast til godkjenning.",
+    "Sherko tar imot ordrer på WhatsApp og e-post — fritekst, PDF, Excel eller et bilde av en håndskrevet lapp — matcher dem mot katalogen din og legger inn ordreutkast til godkjenning.",
   keywords: [
     "ordremottak",
     "AI ordredesk",
@@ -48,16 +48,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "nb_NO",
     alternateLocale: ["en_US"],
-    siteName: "Nordre",
-    title: "Nordre — Ordremottak uten regneark",
+    siteName: "Sherko",
+    title: "Sherko — AI-ordredesk for grossister",
     description:
-      "Kundene sender ordren der de allerede er. Nordre leser den, matcher katalogen og legger inn utkastet. Du godkjenner.",
+      "Kundene sender ordren der de allerede er. Sherko leser den, matcher katalogen og legger inn utkastet. Du godkjenner.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nordre — Ordremottak uten regneark",
+    title: "Sherko — AI-ordredesk for grossister",
     description:
-      "AI-ordredesk for grossister. WhatsApp, e-post, PDF, Excel og håndskrevne lapper inn — ordreutkast ut.",
+      "Bygget for grossister, ikke for alle. WhatsApp, e-post, PDF, Excel og håndskrevne lapper inn — ordreutkast ut.",
   },
   robots: { index: true, follow: true },
 };
@@ -72,7 +72,7 @@ export const viewport: Viewport = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Nordre",
+  name: "Sherko",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, WhatsApp, Email",
   description:

@@ -7,12 +7,11 @@ import type { Bi } from "@/lib/i18n";
    ═══════════════════════════════════════════════════════════════════ */
 
 export const brand = {
-  name: "Nordre",
-  /* The logotype splits so the word ORDRE hiding inside the name is
-     visible: N·ORDRE. That is the whole brand idea in one glyph. */
-  markPrefix: "N",
-  markStem: "ordre",
+  name: "Sherko",
   parent: "Pixl Media",
+  /* Who this is for. Stated on the site rather than implied — Sherko is a
+     vertical product, and the narrowness is the selling point. */
+  audience: { no: "grossister", en: "wholesalers" },
 };
 
 export const nav: { id: string; label: Bi }[] = [
@@ -43,8 +42,8 @@ export const hero = {
     l2: { no: "fyller seg selv.", en: "fill themselves in." },
   },
   lede: {
-    no: "Melding, PDF, Excel eller et bilde av en lapp. Nordre leser det og fyller ut ordren.",
-    en: "A message, a PDF, an Excel sheet or a photo of a note. Nordre reads it and fills in the order.",
+    no: "Melding, PDF, Excel eller et bilde av en lapp. Sherko leser det og fyller ut ordren.",
+    en: "A message, a PDF, an Excel sheet or a photo of a note. Sherko reads it and fills in the order.",
   },
   ledeEmphasis: { no: "Du godkjenner.", en: "You approve." },
   footnote: {
@@ -62,8 +61,8 @@ export const channels = {
     en: "The order arrives however the customer wants to send it",
   },
   body: {
-    no: "Grossistkunder bestiller ikke i et skjema. De sender en melding klokka 22, videresender en e-post fra kjøkkensjefen, eller knipser et bilde av lappen på oppslagstavla. Nordre tar imot alt sammen.",
-    en: "Wholesale customers do not order through a form. They fire off a message at 10pm, forward an email from the head chef, or snap a photo of the note on the noticeboard. Nordre takes all of it.",
+    no: "Grossistkunder bestiller ikke i et skjema. De sender en melding klokka 22, videresender en e-post fra kjøkkensjefen, eller knipser et bilde av lappen på oppslagstavla. Sherko tar imot alt sammen.",
+    en: "Wholesale customers do not order through a form. They fire off a message at 10pm, forward an email from the head chef, or snap a photo of the note on the noticeboard. Sherko takes all of it.",
   },
   items: [
     {
@@ -123,12 +122,12 @@ export const problem = {
     ],
   },
   after: {
-    label: { no: "Med Nordre", en: "With Nordre" },
+    label: { no: "Med Sherko", en: "With Sherko" },
     rows: [
       { no: "Melding kommer 22:14 på en søndag", en: "Message lands 22:14 on a Sunday" },
       { no: "Lest og forstått på sekunder", en: "Read and understood in seconds" },
       { no: "Kunde og varelinjer slått opp i katalogen", en: "Customer and lines resolved against the catalogue" },
-      { no: "Uklar linje? Nordre spør kunden med én gang", en: "Line unclear? Nordre asks the customer right away" },
+      { no: "Uklar linje? Sherko spør kunden med én gang", en: "Line unclear? Sherko asks the customer right away" },
       { no: "Ordreutkast ligger klart", en: "Draft order waiting" },
       { no: "Du godkjenner mandag. Ett klikk.", en: "You approve Monday. One click." },
     ],
@@ -149,8 +148,8 @@ export const how = {
       key: "mottar",
       title: { no: "Tar imot", en: "Receives" },
       body: {
-        no: "Nordre lytter på WhatsApp-nummeret og ordre-innboksen din. Døgnet rundt — også når bestillingen kommer klokka 22 på en søndag.",
-        en: "Nordre listens on your WhatsApp number and your order inbox. Around the clock — including when the order comes in at 10pm on a Sunday.",
+        no: "Sherko lytter på WhatsApp-nummeret og ordre-innboksen din. Døgnet rundt — også når bestillingen kommer klokka 22 på en søndag.",
+        en: "Sherko listens on your WhatsApp number and your order inbox. Around the clock — including when the order comes in at 10pm on a Sunday.",
       },
     },
     {
@@ -192,8 +191,8 @@ export const capabilities = {
     en: "A colleague on the order desk, not a chatbot",
   },
   body: {
-    no: "Nordre er bygget rundt én jobb — å få ordren riktig inn i systemet — og alt den kan, tjener den jobben.",
-    en: "Nordre is built around one job — getting the order into the system correctly — and everything it does serves that job.",
+    no: "Sherko er bygget rundt én jobb — å få ordren riktig inn i systemet — og alt den kan, tjener den jobben.",
+    en: "Sherko is built around one job — getting the order into the system correctly — and everything it does serves that job.",
   },
   tiles: [
     {
@@ -201,8 +200,8 @@ export const capabilities = {
       span: "lg",
       title: { no: "Ordremottak", en: "Order intake" },
       body: {
-        no: "Fra melding til ordreutkast uten et eneste tastetrykk. Nordre viser alltid hva den har forstått og venter på et ja før den legger noe inn.",
-        en: "From message to draft order without a single keystroke. Nordre always shows what it understood and waits for a yes before filing anything.",
+        no: "Fra melding til ordreutkast uten et eneste tastetrykk. Sherko viser alltid hva den har forstått og venter på et ja før den legger noe inn.",
+        en: "From message to draft order without a single keystroke. Sherko always shows what it understood and waits for a yes before filing anything.",
       },
     },
     {
@@ -246,8 +245,8 @@ export const capabilities = {
       span: "md",
       title: { no: "Norsk og engelsk", en: "Norwegian and English" },
       body: {
-        no: "Språket oppdages fra meldingen og holdes gjennom hele samtalen. Skriver kunden på engelsk, svarer Nordre på engelsk.",
-        en: "The language is detected from the message and held for the whole conversation. If the customer writes in English, Nordre answers in English.",
+        no: "Språket oppdages fra meldingen og holdes gjennom hele samtalen. Skriver kunden på engelsk, svarer Sherko på engelsk.",
+        en: "The language is detected from the message and held for the whole conversation. If the customer writes in English, Sherko answers in English.",
       },
     },
   ],
@@ -258,8 +257,8 @@ export const capabilities = {
 export const control = {
   eyebrow: { no: "Kontroll", en: "Control" },
   title: {
-    no: "Nordre godkjenner aldri en ordre",
-    en: "Nordre never approves an order",
+    no: "Sherko godkjenner aldri en ordre",
+    en: "Sherko never approves an order",
   },
   body: {
     no: "Det er ikke en innstilling du kan skru av. Det er slik systemet er bygget — fordi en feilsendt pall koster mer enn de minuttene den skulle spare.",
@@ -278,8 +277,8 @@ export const control = {
       key: "stock",
       title: { no: "Rører aldri lager", en: "Never touches stock" },
       body: {
-        no: "Nordre kan ikke reservere, plukke eller sende. Den skriver et utkast, ingenting mer.",
-        en: "Nordre cannot reserve, pick or ship. It writes a draft, nothing more.",
+        no: "Sherko kan ikke reservere, plukke eller sende. Den skriver et utkast, ingenting mer.",
+        en: "Sherko cannot reserve, pick or ship. It writes a draft, nothing more.",
       },
     },
     {
@@ -302,8 +301,8 @@ export const control = {
       key: "honest",
       title: { no: "Ærlig om hva den er", en: "Honest about what it is" },
       body: {
-        no: "Spør kunden om de snakker med en robot, svarer Nordre ja. Hver gang.",
-        en: "If a customer asks whether they are talking to a bot, Nordre says yes. Every time.",
+        no: "Spør kunden om de snakker med en robot, svarer Sherko ja. Hver gang.",
+        en: "If a customer asks whether they are talking to a bot, Sherko says yes. Every time.",
       },
     },
     {
@@ -351,8 +350,8 @@ export const integrations = {
     en: "Sits on top of the system you already run",
   },
   body: {
-    no: "Nordre er ikke et nytt ERP. Den er laget for å snakke med det du kjører i dag, over API — og skrive ordreutkast rett inn der ordrene dine allerede bor.",
-    en: "Nordre is not another ERP. It is built to talk to what you run today, over an API — and to write draft orders straight into wherever your orders already live.",
+    no: "Sherko er ikke et nytt ERP. Den er laget for å snakke med det du kjører i dag, over API — og skrive ordreutkast rett inn der ordrene dine allerede bor.",
+    en: "Sherko is not another ERP. It is built to talk to what you run today, over an API — and to write draft orders straight into wherever your orders already live.",
   },
   items: [
     { key: "whatsapp", name: { no: "WhatsApp Business", en: "WhatsApp Business" }, note: { no: "Ditt eget nummer", en: "Your own number" } },
@@ -373,8 +372,8 @@ export const faq = {
     {
       q: { no: "Hva om den forstår ordren feil?", en: "What if it misreads the order?" },
       a: {
-        no: "Da fanger du det opp før noe skjer. Nordre viser alltid kunden hva den har forstått — linje for linje, med antall og enhet — og legger ingenting inn før kunden sier ja. Deretter ligger ordren som utkast til du godkjenner den. Det er to menneskelige sjekkpunkter før noe blir reelt.",
-        en: "You catch it before anything happens. Nordre always shows the customer what it understood — line by line, with quantity and unit — and files nothing until the customer says yes. After that the order sits as a draft until you approve it. That is two human checkpoints before anything becomes real.",
+        no: "Da fanger du det opp før noe skjer. Sherko viser alltid kunden hva den har forstått — linje for linje, med antall og enhet — og legger ingenting inn før kunden sier ja. Deretter ligger ordren som utkast til du godkjenner den. Det er to menneskelige sjekkpunkter før noe blir reelt.",
+        en: "You catch it before anything happens. Sherko always shows the customer what it understood — line by line, with quantity and unit — and files nothing until the customer says yes. After that the order sits as a draft until you approve it. That is two human checkpoints before anything becomes real.",
       },
     },
     {
@@ -394,8 +393,8 @@ export const faq = {
     {
       q: { no: "Hvor havner dataene våre?", en: "Where does our data go?" },
       a: {
-        no: "Ordrene skrives inn i ditt eget system over API. Nordre holder sin egen samtaletilstand i din database, i et eget skjema. Vi setter opp tjenesten på infrastruktur du er komfortabel med, og går gjennom databehandleravtale og oppbevaring før noe settes i drift.",
-        en: "Orders are written into your own system over an API. Nordre keeps its own conversation state in your database, in a schema of its own. We deploy on infrastructure you are comfortable with, and we work through the data processing agreement and retention rules before anything goes live.",
+        no: "Ordrene skrives inn i ditt eget system over API. Sherko holder sin egen samtaletilstand i din database, i et eget skjema. Vi setter opp tjenesten på infrastruktur du er komfortabel med, og går gjennom databehandleravtale og oppbevaring før noe settes i drift.",
+        en: "Orders are written into your own system over an API. Sherko keeps its own conversation state in your database, in a schema of its own. We deploy on infrastructure you are comfortable with, and we work through the data processing agreement and retention rules before anything goes live.",
       },
     },
     {
@@ -408,8 +407,8 @@ export const faq = {
     {
       q: { no: "Hvor lang tid tar det å komme i gang?", en: "How long does it take to get going?" },
       a: {
-        no: "Det avhenger av hvor tilgjengelig vare- og kunderegisteret ditt er. Har du et API vi kan lese fra, snakker vi uker, ikke måneder. Vi starter alltid med å kjøre Nordre i skyggen på ekte innkommende ordrer, så du ser treffsikkerheten før den svarer en eneste kunde.",
-        en: "It depends on how reachable your product and customer registry is. If there is an API we can read, we are talking weeks rather than months. We always start by running Nordre in shadow mode on real incoming orders, so you see its accuracy before it replies to a single customer.",
+        no: "Det avhenger av hvor tilgjengelig vare- og kunderegisteret ditt er. Har du et API vi kan lese fra, snakker vi uker, ikke måneder. Vi starter alltid med å kjøre Sherko i skyggen på ekte innkommende ordrer, så du ser treffsikkerheten før den svarer en eneste kunde.",
+        en: "It depends on how reachable your product and customer registry is. If there is an API we can read, we are talking weeks rather than months. We always start by running Sherko in shadow mode on real incoming orders, so you see its accuracy before it replies to a single customer.",
       },
     },
   ],
@@ -424,8 +423,8 @@ export const closing = {
     en: "Send us an order you got yesterday",
   },
   body: {
-    no: "Den rotete meldingen, den uskarpe lappen, det Excel-arket ingen klarer å lese. Vi kjører den gjennom Nordre og viser deg nøyaktig hva den fikk ut av den — på et tjue minutters møte, uten at du har koblet opp noe som helst.",
-    en: "The messy message, the blurry note, the Excel sheet nobody can read. We run it through Nordre and show you exactly what it made of it — in a twenty minute call, with nothing connected on your side.",
+    no: "Den rotete meldingen, den uskarpe lappen, det Excel-arket ingen klarer å lese. Vi kjører den gjennom Sherko og viser deg nøyaktig hva den fikk ut av den — på et tjue minutters møte, uten at du har koblet opp noe som helst.",
+    en: "The messy message, the blurry note, the Excel sheet nobody can read. We run it through Sherko and show you exactly what it made of it — in a twenty minute call, with nothing connected on your side.",
   },
   reassure: {
     no: "Tjue minutter. Ingen integrasjon. Din egen ordre.",
@@ -465,8 +464,8 @@ export const contact = {
     again: { no: "Send en til", en: "Send another" },
   },
   privacy: {
-    no: "Vi bruker opplysningene kun til å ta kontakt om Nordre.",
-    en: "We use these details only to contact you about Nordre.",
+    no: "Vi bruker opplysningene kun til å ta kontakt om Sherko.",
+    en: "We use these details only to contact you about Sherko.",
   },
 };
 

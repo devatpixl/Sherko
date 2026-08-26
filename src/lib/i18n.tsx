@@ -19,9 +19,9 @@ type Ctx = {
 
 const LocaleContext = createContext<Ctx | null>(null);
 
-const STORAGE_KEY = "nordre.locale";
+const STORAGE_KEY = "sherko.locale";
 /* localStorage fires no event in the tab that wrote it, so we raise our own. */
-const CHANGE_EVENT = "nordre:locale";
+const CHANGE_EVENT = "sherko:locale";
 
 /* Norwegian is the default — the buyer is a Norwegian wholesaler. */
 const DEFAULT: Locale = "no";

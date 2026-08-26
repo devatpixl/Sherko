@@ -28,12 +28,12 @@ const copy = {
     en: "And the whole order desk behind it",
   } as Bi,
   body: {
-    no: "Nordre er ikke bare en bot. Ordren lander i et ekte system — med kunderegister, katalog, priser, lager og godkjenning. Her er en ordre som blir lagt inn.",
-    en: "Nordre is not just a bot. The order lands in a real system — customer registry, catalogue, prices, stock and approval. Here is an order being placed.",
+    no: "Sherko er ikke bare en bot. Ordren lander i et ekte system — med kunderegister, katalog, priser, lager og godkjenning. Her er en ordre som blir lagt inn.",
+    en: "Sherko is not just a bot. The order lands in a real system — customer registry, catalogue, prices, stock and approval. Here is an order being placed.",
   } as Bi,
   caption: {
-    no: "Nordre Admin · demodata",
-    en: "Nordre Admin · demo data",
+    no: "Sherko Admin · demodata",
+    en: "Sherko Admin · demo data",
   } as Bi,
 };
 
@@ -161,7 +161,7 @@ export function AdminSim() {
                       <rect x="2.5" y="5.2" width="7" height="5" rx="1.2" fill="none" stroke="currentColor" strokeWidth="1.1" />
                       <path d="M4.3 5.2V3.9a1.7 1.7 0 0 1 3.4 0v1.3" fill="none" stroke="currentColor" strokeWidth="1.1" />
                     </svg>
-                    <span className="font-mono text-[11px] text-[#8A93A3]">app.nordre.no/salg/ordre</span>
+                    <span className="font-mono text-[11px] text-[#8A93A3]">app.sherko.no/salg/ordre</span>
                   </div>
                 </div>
 

@@ -1,12 +1,12 @@
-# Nordre — build contract (READ FULLY BEFORE WRITING CODE)
+# Sherko — build contract (READ FULLY BEFORE WRITING CODE)
 
-Marketing site for **Nordre**, an AI order-desk agent for Norwegian wholesalers.
+Marketing site for **Sherko**, an AI order-desk agent for Norwegian wholesalers.
 Next.js 16 (App Router) · React 19 · Tailwind **v4** · `motion` v13 · TypeScript strict.
 
 ## The product, so your copy and visuals are true
 
 Orders arrive on **WhatsApp or email** as free text, PDF, Excel, or **a photo of a
-handwritten note**. Nordre reads the attachment natively, resolves the customer and
+handwritten note**. Sherko reads the attachment natively, resolves the customer and
 every line against the client's **real catalogue** (article number, brand, supplier,
 pack size), shows the customer a **preview** of what it understood, waits for a yes,
 then files a **draft order marked "pending approval"**. It never auto-approves, never

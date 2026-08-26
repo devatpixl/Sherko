@@ -5,7 +5,7 @@ import type { Bi } from "@/lib/i18n";
    cursor doing the work.
 
    ⚠️  PRIVACY — every name in this file is invented. The portal brands
-   as "Nordre Admin", the tenant is the fictional "Fjordvik Engros"
+   as "Sherko Admin", the tenant is the fictional "Fjordvik Engros"
    (order prefix FE-), and no customer, product, contact or figure is
    traceable to a real client. Keep it that way if you edit this.
    ═══════════════════════════════════════════════════════════════════ */

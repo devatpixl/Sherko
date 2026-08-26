@@ -38,7 +38,7 @@ const copy = {
     no: "Samme system holder styr på beholdningen. Ingen telling i regneark, ingen tall som er en uke gamle.",
     en: "The same system keeps track of the stock. No counting in spreadsheets, no numbers that are a week old.",
   } as Bi,
-  caption: { no: "Nordre Admin · demodata", en: "Nordre Admin · demo data" } as Bi,
+  caption: { no: "Sherko Admin · demodata", en: "Sherko Admin · demo data" } as Bi,
 };
 
 const TONE = {
@@ -375,7 +375,7 @@ export function StockSim() {
                   <span className="h-3 w-3 rounded-full bg-[#28C840]" />
                   <div className="mx-auto rounded-md bg-white px-3 py-1">
                     <span className="font-mono text-[11px] text-[#8A93A3]">
-                      app.nordre.no/lager/{state.view === "lager" ? "produkter" : "oversikt"}
+                      app.sherko.no/lager/{state.view === "lager" ? "produkter" : "oversikt"}
                     </span>
                   </div>
                 </div>

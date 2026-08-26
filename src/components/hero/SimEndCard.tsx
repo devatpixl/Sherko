@@ -16,8 +16,8 @@ const copy = {
   eyebrow: { no: "Slik gjøres det", en: "That's how it's done" } as Bi,
   title: { no: "Ditt oppsett blir ditt eget.", en: "Your setup will be your own." } as Bi,
   body: {
-    no: "Dette er en demo med oppdiktede kunder og tall. Ditt Nordre settes opp rundt din katalog, dine kunder og dine rutiner.",
-    en: "This is a demo with invented customers and figures. Your Nordre is built around your catalogue, your customers and your routines.",
+    no: "Dette er en demo med oppdiktede kunder og tall. Ditt Sherko settes opp rundt din katalog, dine kunder og dine rutiner.",
+    en: "This is a demo with invented customers and figures. Your Sherko is built around your catalogue, your customers and your routines.",
   } as Bi,
   replay: { no: "Spill av igjen", en: "Play it again" } as Bi,
 };
