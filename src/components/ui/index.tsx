@@ -25,7 +25,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`relative scroll-mt-24 py-24 md:py-32 lg:py-40 ${className}`}>
+    <section id={id} className={`relative scroll-mt-28 py-24 md:py-32 lg:py-40 ${className}`}>
       {children}
     </section>
   );
