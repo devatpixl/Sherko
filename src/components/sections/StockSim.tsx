@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Cursor, useSimCursor } from "@/components/hero/SimCursor";
+import { SimEndCard } from "@/components/hero/SimEndCard";
 import { Container, Reveal, Section, SectionHead } from "@/components/ui";
 import {
   categories,
@@ -333,13 +334,16 @@ export function StockSim() {
     return () => ro.disconnect();
   }, []);
 
+  /* Stops at the end rather than wrapping — see SimEndCard. */
+  const done = i >= stockLength;
+
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || done) return;
     const step = stockScript[i];
     const ms = reduced ? Math.min(step.ms, 350) : step.ms;
-    const t = window.setTimeout(() => setI((n) => (n + 1) % stockLength), ms);
+    const t = window.setTimeout(() => setI((n) => n + 1), ms);
     return () => window.clearTimeout(t);
-  }, [i, inView, reduced]);
+  }, [i, inView, reduced, done]);
 
   const { state, target, clicking } = foldStock(i);
   const { x, y } = useSimCursor({
@@ -376,6 +380,7 @@ export function StockSim() {
                   </div>
                 </div>
 
+                <div className="relative">
                 <div
                   ref={wrapRef}
                   className="w-full overflow-x-auto overscroll-x-contain bg-adm-bg [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -445,6 +450,8 @@ export function StockSim() {
                       {!reduced && <Cursor x={x} y={y} clicking={clicking} />}
                     </div>
                   </div>
+                </div>
+                  {done && <SimEndCard onReplay={() => setI(0)} />}
                 </div>
               </div>
             </div>

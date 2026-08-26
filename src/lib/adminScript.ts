@@ -163,8 +163,9 @@ export const adminScript: AdminStep[] = [
     },
   },
 
-  { kind: "wait", ms: 3600 },
-  { kind: "reset", ms: 900 },
+  /* No trailing reset — the flow ends on the finished order and the
+     end card takes over. Replay rewinds to 0. */
+  { kind: "wait", ms: 2600 },
 ];
 
 export const adminLength = adminScript.length;

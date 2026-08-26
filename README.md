@@ -82,7 +82,9 @@ and amount is made up. `adminScript.ts` carries the same warning at the top. If 
 either component, keep it that way — and note the hero whiteboard photo is anonymised
 for the same reason.
 
-Both windows carry a visible "demodata" caption so nobody mistakes the figures for real.
+Both windows carry a visible "demodata" caption, and each simulation ends on a card
+that says in words that the customers and figures are invented. Neither loops forever:
+they stop, and the card offers Replay or Book a demo.
 
 The spreadsheet mark in the Problem section is our own drawing in Excel's green, not
 Microsoft's registered logo — deliberate, to avoid putting a competitor's trademark on

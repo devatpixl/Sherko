@@ -112,9 +112,8 @@ export const stockScript: StockStep[] = [
   { kind: "move", ms: 650, to: "tab-lager" },
   { kind: "click", ms: 240 },
   { kind: "set", ms: 420, patch: { view: "lager" } },
-  { kind: "wait", ms: 2400 },
-
-  { kind: "reset", ms: 700 },
+  /* Ends on the product list; the end card takes over from here. */
+  { kind: "wait", ms: 2000 },
 ];
 
 export const stockLength = stockScript.length;

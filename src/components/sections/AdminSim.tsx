@@ -4,6 +4,7 @@ import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Sidebar, TabStrip, TopBar } from "@/components/hero/AdminChrome";
 import { NewOrder, OrderDetail, OrdersList } from "@/components/hero/AdminScreens";
+import { SimEndCard } from "@/components/hero/SimEndCard";
 import { Container, Reveal, Section, SectionHead } from "@/components/ui";
 import { adminLength, adminScript, foldAdmin } from "@/lib/adminScript";
 import { useLocale, type Bi } from "@/lib/i18n";
@@ -93,13 +94,17 @@ export function AdminSim() {
   }, []);
 
   /* Step clock */
+  /* The clock stops at the end rather than wrapping — a demo that restarts
+     forever gives the viewer no way out. `i === adminLength` means finished. */
+  const done = i >= adminLength;
+
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || done) return;
     const step = adminScript[i];
     const ms = reduced ? Math.min(step.ms, 400) : step.ms;
-    const t = window.setTimeout(() => setI((n) => (n + 1) % adminLength), ms);
+    const t = window.setTimeout(() => setI((n) => n + 1), ms);
     return () => window.clearTimeout(t);
-  }, [i, inView, reduced]);
+  }, [i, inView, reduced, done]);
 
   const { state, target, clicking } = foldAdmin(i);
 
@@ -161,6 +166,7 @@ export function AdminSim() {
                 </div>
 
                 {/* Scaled app canvas */}
+                <div className="relative">
                 <div
                   ref={wrapRef}
                   className="w-full overflow-x-auto overscroll-x-contain bg-adm-bg [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -188,6 +194,8 @@ export function AdminSim() {
                     {!reduced && <Cursor x={x} y={y} clicking={clicking} />}
                   </div>
                   </div>
+                </div>
+                  {done && <SimEndCard onReplay={() => setI(0)} />}
                 </div>
               </div>
             </div>
