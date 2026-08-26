@@ -15,9 +15,9 @@ export const brand = {
 };
 
 export const nav: { id: string; label: Bi }[] = [
-  { id: "hvordan", label: { no: "Slik virker det", en: "How it works" } },
+  { id: "system", label: { no: "Slik virker det", en: "How it works" } },
   { id: "kanaler", label: { no: "Kanaler", en: "Channels" } },
-  { id: "kapasiteter", label: { no: "Hva den gjør", en: "What it does" } },
+  { id: "lager", label: { no: "Lager", en: "Inventory" } },
   { id: "kontroll", label: { no: "Kontroll", en: "Control" } },
 ];
 
@@ -130,123 +130,7 @@ export const problem = {
   },
 };
 
-/* ── How it works ─────────────────────────────────────────────────── */
 
-export const how = {
-  eyebrow: { no: "Slik virker det", en: "How it works" },
-  title: {
-    no: "Fire steg. Det siste er ditt.",
-    en: "Four steps. The last one is yours.",
-  },
-  steps: [
-    {
-      n: "01",
-      key: "mottar",
-      title: { no: "Tar imot", en: "Receives" },
-      body: {
-        no: "Sherko lytter på WhatsApp-nummeret og ordre-innboksen din. Døgnet rundt — også når bestillingen kommer klokka 22 på en søndag.",
-        en: "Sherko listens on your WhatsApp number and your order inbox. Around the clock — including when the order comes in at 10pm on a Sunday.",
-      },
-    },
-    {
-      n: "02",
-      key: "leser",
-      title: { no: "Leser", en: "Reads" },
-      body: {
-        no: "Fritekst, PDF, Excel eller et bilde av en håndskrevet lapp. Vedlegget leses direkte, som det er — ingen mal kunden må følge, ingen skjema de må fylle ut.",
-        en: "Free text, a PDF, an Excel sheet or a photo of a handwritten note. The attachment is read directly, as it is — no template the customer has to follow, no form to fill in.",
-      },
-    },
-    {
-      n: "03",
-      key: "matcher",
-      title: { no: "Matcher", en: "Matches" },
-      body: {
-        no: "Hver linje slås opp mot din faktiske katalog — varenummer, merke, leverandør, pakningsstørrelse. Er to varer like nok til å forveksles, gjetter den ikke. Da spør den.",
-        en: "Every line is resolved against your real catalogue — article number, brand, supplier, pack size. If two products are close enough to confuse, it does not guess. It asks.",
-      },
-    },
-    {
-      n: "04",
-      key: "utkast",
-      title: { no: "Legger inn utkast", en: "Files a draft" },
-      body: {
-        no: "Ordren opprettes som utkast med status «venter på godkjenning». Kunden får en kvittering på hva som er forstått. Du tar den siste avgjørelsen.",
-        en: "The order is created as a draft marked “pending approval”. The customer gets a receipt of exactly what was understood. You make the final call.",
-      },
-    },
-  ],
-};
-
-/* ── Capabilities ─────────────────────────────────────────────────── */
-
-export const capabilities = {
-  eyebrow: { no: "Hva den gjør", en: "What it does" },
-  title: {
-    no: "En kollega på ordredesken, ikke en chatbot",
-    en: "A colleague on the order desk, not a chatbot",
-  },
-  body: {
-    no: "Sherko er bygget rundt én jobb — å få ordren riktig inn i systemet — og alt den kan, tjener den jobben.",
-    en: "Sherko is built around one job — getting the order into the system correctly — and everything it does serves that job.",
-  },
-  tiles: [
-    {
-      key: "intake",
-      span: "lg",
-      title: { no: "Ordremottak", en: "Order intake" },
-      body: {
-        no: "Fra melding til ordreutkast uten et eneste tastetrykk. Sherko viser alltid hva den har forstått og venter på et ja før den legger noe inn.",
-        en: "From message to draft order without a single keystroke. Sherko always shows what it understood and waits for a yes before filing anything.",
-      },
-    },
-    {
-      key: "documents",
-      span: "sm",
-      title: { no: "Dokumentlesing", en: "Document reading" },
-      body: {
-        no: "PDF, Excel og foto leses direkte — også skannede ark og håndskrift.",
-        en: "PDFs, Excel and photos are read directly — including scanned sheets and handwriting.",
-      },
-    },
-    {
-      key: "matching",
-      span: "sm",
-      title: { no: "Katalogmatching", en: "Catalogue matching" },
-      body: {
-        no: "Varenummer, merke og pakningsstørrelse veies opp mot hverandre før en linje låses.",
-        en: "Article number, brand and pack size are weighed against each other before a line is locked.",
-      },
-    },
-    {
-      key: "stats",
-      span: "sm",
-      title: { no: "Tall på sparket", en: "Numbers on demand" },
-      body: {
-        no: "«Hva er omsetningen denne uka?» Svar hentet fra dine data — aldri anslått.",
-        en: "“What is revenue this week?” Answers pulled from your data — never estimated.",
-      },
-    },
-    {
-      key: "feed",
-      span: "sm",
-      title: { no: "Aktivitetsfeed", en: "Activity feed" },
-      body: {
-        no: "«Hva kom inn sist?» Hele ordredesken oppsummert i én melding.",
-        en: "“What came in last?” The whole order desk summarised in one message.",
-      },
-    },
-    {
-      key: "bilingual",
-      span: "md",
-      title: { no: "Norsk og engelsk", en: "Norwegian and English" },
-      body: {
-        no: "Språket oppdages fra meldingen og holdes gjennom hele samtalen. Skriver kunden på engelsk, svarer Sherko på engelsk.",
-        en: "The language is detected from the message and held for the whole conversation. If the customer writes in English, Sherko answers in English.",
-      },
-    },
-  ],
-};
 
 /* ── Control / human in the loop ──────────────────────────────────── */
 
@@ -312,30 +196,6 @@ export const control = {
   ],
 };
 
-/* ── Facts (capability facts, not invented customer results) ──────── */
-
-export const facts = [
-  {
-    value: "24/7",
-    label: { no: "Ordredesken er åpen", en: "The order desk is open" },
-    note: { no: "Også søndag 22:14", en: "Sundays at 22:14 included" },
-  },
-  {
-    value: "0",
-    label: { no: "Auto-godkjente ordrer", en: "Auto-approved orders" },
-    note: { no: "Et menneske godkjenner alltid", en: "A human always approves" },
-  },
-  {
-    value: "6",
-    label: { no: "Formater inn", en: "Inbound formats" },
-    note: { no: "Tekst, PDF, Excel, foto, e-post, CSV", en: "Text, PDF, Excel, photo, email, CSV" },
-  },
-  {
-    value: "2",
-    label: { no: "Språk, automatisk", en: "Languages, automatic" },
-    note: { no: "Norsk og engelsk", en: "Norwegian and English" },
-  },
-];
 
 /* ── Integrations ─────────────────────────────────────────────────── */
 
@@ -475,9 +335,9 @@ export const footer = {
     {
       title: { no: "Produkt", en: "Product" },
       links: [
-        { label: { no: "Slik virker det", en: "How it works" }, href: "#hvordan" },
+        { label: { no: "Slik virker det", en: "How it works" }, href: "#system" },
         { label: { no: "Kanaler", en: "Channels" }, href: "#kanaler" },
-        { label: { no: "Hva den gjør", en: "What it does" }, href: "#kapasiteter" },
+        { label: { no: "Lager", en: "Inventory" }, href: "#lager" },
         { label: { no: "Kontroll", en: "Control" }, href: "#kontroll" },
       ],
     },

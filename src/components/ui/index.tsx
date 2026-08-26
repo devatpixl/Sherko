@@ -139,7 +139,7 @@ export function ButtonPrimary({
 
 export function ButtonGhost({
   children,
-  href = "#hvordan",
+  href = "#system",
   className = "",
 }: {
   children: ReactNode;

@@ -1,12 +1,9 @@
 import { Hero } from "@/components/hero/Hero";
 import { AdminSim } from "@/components/sections/AdminSim";
 import { BuiltFor } from "@/components/sections/BuiltFor";
-import { Capabilities } from "@/components/sections/Capabilities";
 import { Closing } from "@/components/sections/Closing";
 import { Control } from "@/components/sections/Control";
 import { FAQ } from "@/components/sections/FAQ";
-import { Facts } from "@/components/sections/Facts";
-import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Integrations } from "@/components/sections/Integrations";
 import { Problem } from "@/components/sections/Problem";
 import { StockSim } from "@/components/sections/StockSim";
@@ -28,12 +25,6 @@ export default function Home() {
         <StockSim />
         {/* Why it hurts today */}
         <Problem />
-        {/* The mechanism */}
-        <HowItWorks />
-        {/* The surface area */}
-        <Capabilities />
-        {/* The numbers that are actually true */}
-        <Facts />
         {/* The trust argument */}
         <Control />
         {/* Where it plugs in */}

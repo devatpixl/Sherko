@@ -93,7 +93,7 @@ export function Hero() {
                 className="mt-8 flex flex-wrap items-center gap-3 md:mt-10"
               >
                 <ButtonPrimary href="#kontakt">{t(cta.primary)}</ButtonPrimary>
-                <ButtonGhost href="#hvordan">{t(cta.secondary)}</ButtonGhost>
+                <ButtonGhost href="#system">{t(cta.secondary)}</ButtonGhost>
               </motion.div>
 
             </div>
