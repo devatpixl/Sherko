@@ -9,7 +9,7 @@ import { Facts } from "@/components/sections/Facts";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Integrations } from "@/components/sections/Integrations";
 import { Problem } from "@/components/sections/Problem";
-import { StockView } from "@/components/sections/StockView";
+import { StockSim } from "@/components/sections/StockSim";
 import { Footer } from "@/components/site/Footer";
 import { Nav } from "@/components/site/Nav";
 
@@ -25,7 +25,7 @@ export default function Home() {
         {/* The system the order lands in */}
         <AdminSim />
         {/* …and the stock it keeps */}
-        <StockView />
+        <StockSim />
         {/* Why it hurts today */}
         <Problem />
         {/* The mechanism */}

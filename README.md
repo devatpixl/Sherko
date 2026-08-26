@@ -36,7 +36,8 @@ src/
   components/
     hero/             Hero, PhoneSim, DraftPanel, HandwrittenNote, WhatsAppIcons
     sections/         one file per page section
-                      AdminSim + StockView simulate the product's own portal
+                      AdminSim + StockSim simulate the product's own portal,
+                      both driven by the shared cursor in hero/SimCursor.tsx
     site/             Nav, Footer, Wordmark
     ui/               Container, Section, Reveal, SectionHead, buttons
 ```
@@ -74,7 +75,7 @@ approximated — see `WhatsAppIcons.tsx`.
 
 ## Privacy in the portal simulation
 
-`AdminSim` and `StockView` are modelled on a real client's admin portal. **Every name
+`AdminSim` and `StockSim` are modelled on a real client's admin portal. **Every name
 and figure in them is invented**: the portal brands as "Nordre Admin", the tenant is the
 fictional "Fjordvik Engros" (order prefix `FE-`), and every customer, product, contact
 and amount is made up. `adminScript.ts` carries the same warning at the top. If you edit
