@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { ChannelLanes } from "@/components/sections/ChannelStrip";
+import { ExcelSwap } from "@/components/sections/ExcelSwap";
 import { Container, Eyebrow, Reveal, Rule, Section } from "@/components/ui";
 import { brand, channels } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
@@ -144,6 +145,9 @@ export function BuiltFor() {
         </Container>
 
         <ChannelLanes />
+
+        {/* Excel is not one of the formats — it is the thing being replaced. */}
+        <ExcelSwap />
       </div>
     </Section>
   );
