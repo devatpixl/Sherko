@@ -96,14 +96,6 @@ export function Hero() {
                 <ButtonGhost href="#hvordan">{t(cta.secondary)}</ButtonGhost>
               </motion.div>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="mt-6 font-mono text-[11.5px] tracking-tight text-fg-4"
-              >
-                {t(hero.footnote)}
-              </motion.p>
             </div>
           </div>
 
@@ -140,15 +132,6 @@ export function Hero() {
         </div>
       </Container>
 
-      {/* Legend: tells the viewer the cards are the machine, not decoration */}
-      <Container className="mt-16 hidden xl:block">
-        <div className="flex items-center gap-3 font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase">
-          <span className="h-px w-8 bg-line-2" />
-          {locale === "no"
-            ? "Kunden skriver en melding. Sherko fyller ut ordren."
-            : "The customer writes a message. Sherko fills in the order."}
-        </div>
-      </Container>
     </section>
   );
 }

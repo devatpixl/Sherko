@@ -46,10 +46,6 @@ export const hero = {
     en: "A message, a PDF, an Excel sheet or a photo of a note. Sherko reads it and fills in the order.",
   },
   ledeEmphasis: { no: "Du godkjenner.", en: "You approve." },
-  footnote: {
-    no: "Ingen app å laste ned. Ingen mal å fylle ut.",
-    en: "No app to install. No template to fill in.",
-  },
 };
 
 /* ── Channel strip ────────────────────────────────────────────────── */
