@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
-import { Container, Reveal, Section, SectionHead } from "@/components/ui";
+import { Container, Reveal } from "@/components/ui";
 import { channels } from "@/lib/content";
 import { useLocale, type Bi, type Locale } from "@/lib/i18n";
 
@@ -159,9 +159,13 @@ function Lane({
   );
 }
 
-/* ── Section ──────────────────────────────────────────────────────── */
+/* ── Lanes ────────────────────────────────────────────────────────── */
 
-export function ChannelStrip() {
+/* Just the moving lanes and their caption. The header lives in BuiltFor, so
+   the two halves of the argument — who this is for, and how the order gets
+   here — read as one section rather than two. */
+
+export function ChannelLanes() {
   const { locale } = useLocale();
 
   /* The second lane starts three channels in, so the two rows never
@@ -169,16 +173,8 @@ export function ChannelStrip() {
   const laneB = [...channels.items.slice(3), ...channels.items.slice(0, 3)];
 
   return (
-    <Section id="kanaler" className="bg-elev border-y border-line">
-      <Container>
-        <SectionHead
-          eyebrow={channels.eyebrow[locale]}
-          title={channels.title[locale]}
-          body={channels.body[locale]}
-        />
-      </Container>
-
-      <div className="mt-14 flex flex-col gap-3 md:mt-16">
+    <>
+      <div className="mt-12 flex flex-col gap-3 md:mt-14">
         <Reveal>
           <Lane items={channels.items} duration="38s" />
         </Reveal>
@@ -189,11 +185,11 @@ export function ChannelStrip() {
 
       <Container>
         <Reveal delay={0.16}>
-          <p className="mt-12 text-center font-mono text-[11px] tracking-[0.16em] text-fg-4 uppercase">
+          <p className="mt-10 text-center font-mono text-[11px] tracking-[0.16em] text-fg-4 uppercase">
             {caption[locale]}
           </p>
         </Reveal>
       </Container>
-    </Section>
+    </>
   );
 }

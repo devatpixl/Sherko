@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Container, Eyebrow, Reveal, Section } from "@/components/ui";
-import { brand } from "@/lib/content";
+import { ChannelLanes } from "@/components/sections/ChannelStrip";
+import { Container, Eyebrow, Reveal, Rule, Section } from "@/components/ui";
+import { brand, channels } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
 /* The positioning statement. Sherko is a vertical product and the narrowness
@@ -23,6 +24,11 @@ const copy = {
   proofLabel: {
     no: "Forstår dette uten opplæring",
     en: "Understands these out of the box",
+  } as Bi,
+  /* Deliberately starts with "Og" / "And" — it continues the sentence above. */
+  channelsLine: {
+    no: "Og ordren kommer som kunden vil sende den.",
+    en: "And the order arrives however the customer sends it.",
   } as Bi,
 };
 
@@ -109,7 +115,36 @@ export function BuiltFor() {
             </Reveal>
           </div>
         </div>
+
+        {/* ── The same argument, continued: how the order gets here ──── */}
+        <Reveal delay={0.1}>
+          <Rule className="mt-20 md:mt-24" />
+        </Reveal>
       </Container>
+
+      <div id="kanaler" className="scroll-mt-24 pt-16 md:pt-20">
+        <Container>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-start lg:gap-16">
+            <div>
+              <Reveal>
+                <Eyebrow>{channels.eyebrow[locale]}</Eyebrow>
+              </Reveal>
+              <Reveal delay={0.06}>
+                <p className="display mt-6 text-[clamp(1.5rem,3.2vw,2.35rem)] text-fg">
+                  {copy.channelsLine[locale]}
+                </p>
+              </Reveal>
+            </div>
+            <Reveal delay={0.12}>
+              <p className="lede text-[0.9375rem] leading-relaxed text-fg-2 lg:pt-9">
+                {channels.body[locale]}
+              </p>
+            </Reveal>
+          </div>
+        </Container>
+
+        <ChannelLanes />
+      </div>
     </Section>
   );
 }
