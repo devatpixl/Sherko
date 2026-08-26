@@ -2,6 +2,7 @@
 
 import { Fragment } from "react";
 import { Container, Reveal, Rule, Section, SectionHead } from "@/components/ui";
+import { SpreadsheetMark } from "@/components/ui/SpreadsheetMark";
 import { problem } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
@@ -106,6 +107,7 @@ function Column({
   totalLabel,
   live,
   overnight,
+  mark = false,
   className = "",
 }: {
   label: string;
@@ -115,6 +117,8 @@ function Column({
   totalLabel: string;
   live: boolean;
   overnight?: string;
+  /** Show the spreadsheet mark — this is the column that still runs on Excel. */
+  mark?: boolean;
   className?: string;
 }) {
   return (
@@ -125,6 +129,7 @@ function Column({
             live ? "border-accent/30 bg-accent/10 text-accent" : "border-line-2 text-fg-3"
           }`}
         >
+          {mark && <SpreadsheetMark className="mr-2 -ml-0.5 h-3.5 w-3.5 text-fg-2" />}
           {label}
         </span>
       </Reveal>
@@ -181,6 +186,7 @@ export function Problem() {
         <div className="mt-16 grid gap-y-10 md:-mx-10 md:mt-20 md:grid-cols-2 md:gap-0">
           <Column
             label={problem.before.label[locale]}
+            mark
             rows={problem.before.rows.map((r) => r[locale])}
             times={BEFORE_TIMES}
             total={beforeTotal[locale]}

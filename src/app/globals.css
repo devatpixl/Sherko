@@ -48,6 +48,26 @@
   --color-wa-composer:  #2A3942;
   --color-wa-online:    #25D366;
 
+  /* Admin-portal palette — the simulated product UI is light on purpose.
+     A light app inside a dark page is the whole visual point: this is the
+     system the dark marketing site is selling. */
+  --color-adm-bg:      #F6F7F9;
+  --color-adm-panel:   #FFFFFF;
+  --color-adm-line:    #E6E8EC;
+  --color-adm-line-2:  #D3D7DE;
+  --color-adm-ink:     #101828;
+  --color-adm-ink-2:   #5B6577;
+  --color-adm-ink-3:   #8A93A3;
+  --color-adm-blue:    #2F6BFF;
+  --color-adm-blue-bg: #EEF3FF;
+  --color-adm-green:   #16A34A;
+  --color-adm-green-bg:#E9F8EF;
+  --color-adm-amber:   #B45309;
+  --color-adm-amber-bg:#FEF3E2;
+  --color-adm-red:     #DC2626;
+  /* Excel-adjacent green for the spreadsheet mark */
+  --color-xls:         #1D6F42;
+
   /* Fonts wired in layout.tsx via next/font */
   --font-sans:    var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;

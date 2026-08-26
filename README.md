@@ -36,6 +36,7 @@ src/
   components/
     hero/             Hero, PhoneSim, DraftPanel, HandwrittenNote, WhatsAppIcons
     sections/         one file per page section
+                      AdminSim + StockView simulate the product's own portal
     site/             Nav, Footer, Wordmark
     ui/               Container, Section, Reveal, SectionHead, buttons
 ```
@@ -70,6 +71,21 @@ approximated — see `WhatsAppIcons.tsx`.
   near-black, off-white and hairlines.
 - `.card` is unlayered CSS, so its `border` shorthand beats Tailwind `border-*` utilities.
   To recolour a card border, use the gradient utilities directly instead of `.card`.
+
+## Privacy in the portal simulation
+
+`AdminSim` and `StockView` are modelled on a real client's admin portal. **Every name
+and figure in them is invented**: the portal brands as "Nordre Admin", the tenant is the
+fictional "Fjordvik Engros" (order prefix `FE-`), and every customer, product, contact
+and amount is made up. `adminScript.ts` carries the same warning at the top. If you edit
+either component, keep it that way — and note the hero whiteboard photo is anonymised
+for the same reason.
+
+Both windows carry a visible "demodata" caption so nobody mistakes the figures for real.
+
+The spreadsheet mark in the Problem section is our own drawing in Excel's green, not
+Microsoft's registered logo — deliberate, to avoid putting a competitor's trademark on
+the site while still reading instantly as "the spreadsheet you still use".
 
 ## Claims policy
 

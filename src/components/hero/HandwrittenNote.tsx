@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 
-/* The "photo" the customer sends in Act II: a real Moen Engros order, written
+/* The "photo" the customer sends in Act II: a wholesale order, written
    in marker on a whiteboard and photographed. Built in DOM rather than shipped
    as a bitmap so the OCR pass can draw detection boxes over real text nodes,
    and so it stays crisp on any display.
@@ -60,7 +60,7 @@ export function HandwrittenNote({ ocr = false }: { ocr?: boolean }) {
       >
         {/* Heading — the customer's own shorthand for who it's for */}
         <div className="absolute top-[8%] left-1/2 -translate-x-1/2 text-center">
-          <span className="text-[15px] leading-none font-bold tracking-wide">Moen</span>
+          <span className="text-[15px] leading-none font-bold tracking-wide">Fjordvik</span>
           <span className="mt-[2px] block h-[1.5px] w-full rounded bg-[#B23A2E]/75" />
         </div>
 

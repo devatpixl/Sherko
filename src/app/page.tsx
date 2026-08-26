@@ -1,4 +1,5 @@
 import { Hero } from "@/components/hero/Hero";
+import { AdminSim } from "@/components/sections/AdminSim";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { ChannelStrip } from "@/components/sections/ChannelStrip";
 import { Closing } from "@/components/sections/Closing";
@@ -8,6 +9,7 @@ import { Facts } from "@/components/sections/Facts";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Integrations } from "@/components/sections/Integrations";
 import { Problem } from "@/components/sections/Problem";
+import { StockView } from "@/components/sections/StockView";
 import { Footer } from "@/components/site/Footer";
 import { Nav } from "@/components/site/Nav";
 
@@ -20,6 +22,10 @@ export default function Home() {
         <Hero />
         {/* Where orders come from */}
         <ChannelStrip />
+        {/* The system the order lands in */}
+        <AdminSim />
+        {/* …and the stock it keeps */}
+        <StockView />
         {/* Why it hurts today */}
         <Problem />
         {/* The mechanism */}
