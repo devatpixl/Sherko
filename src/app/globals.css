@@ -48,27 +48,54 @@
   --color-wa-composer:  #2A3942;
   --color-wa-online:    #25D366;
 
-  /* Admin-portal palette — the simulated product UI is light on purpose.
-     A light app inside a dark page is the whole visual point: this is the
-     system the dark marketing site is selling. */
-  --color-adm-bg:      #F6F7F9;
-  --color-adm-panel:   #FFFFFF;
-  --color-adm-line:    #E6E8EC;
-  --color-adm-line-2:  #D3D7DE;
-  --color-adm-ink:     #101828;
-  --color-adm-ink-2:   #5B6577;
-  --color-adm-ink-3:   #8A93A3;
-  --color-adm-blue:    #2F6BFF;
-  --color-adm-blue-bg: #EEF3FF;
-  --color-adm-green:   #16A34A;
-  --color-adm-green-bg:#E9F8EF;
-  --color-adm-amber:   #B45309;
-  --color-adm-amber-bg:#FEF3E2;
-  --color-adm-red:     #DC2626;
+  /* ── Admin-portal palette ────────────────────────────────────────
+     The REAL token values, lifted from the Moen Engros admin's own
+     :root — not approximations. The simulated portal therefore renders
+     in the product's actual colours, radii and row heights.
+
+     Namespaced `adm-` because both palettes define `surface` and
+     `accent`; without the prefix the admin's white would overwrite the
+     marketing site's dark surface. */
+
+  /* surfaces */
+  --color-adm-shell:    #f5f5f7;  /* outer frame at the viewport edges */
+  --color-adm-bg:       #f5f5f7;
+  --color-adm-panel:    #ffffff;  /* --surface: cards, panels, table rows */
+  --color-adm-muted:    #f4f4f5;  /* zinc-100 — hover / empty backdrops */
+  --color-adm-line:     #e4e4e7;  /* zinc-200 divider */
+  --color-adm-line-2:   #d4d4d8;  /* zinc-300, stronger rule */
+
+  /* type */
+  --color-adm-ink:      #0f172a;  /* slate-900 body text */
+  --color-adm-ink-2:    #71717a;  /* zinc-500 secondary */
+  --color-adm-ink-3:    #a1a1aa;  /* zinc-400 helper */
+
+  /* brand + semantic — each status is dot / label / background */
+  --color-adm-blue:     #2563eb;  /* blue-600 */
+  --color-adm-blue-fg:  #1e40af;  /* blue-800 label */
+  --color-adm-blue-bg:  #eff6ff;  /* blue-50 */
+  --color-adm-green:    #16a34a;  /* emerald-600 */
+  --color-adm-green-fg: #065f46;  /* emerald-800 label */
+  --color-adm-green-bg: #ecfdf5;  /* emerald-50 */
+  --color-adm-amber:    #d97706;  /* amber-600 dot */
+  --color-adm-amber-fg: #92400e;  /* amber-800 label */
+  --color-adm-amber-bg: #fffbeb;  /* amber-50 */
+  --color-adm-red:      #dc2626;  /* red-600 */
+  --color-adm-red-fg:   #991b1b;  /* red-800 label */
+  --color-adm-red-bg:   #fef2f2;  /* red-50 */
+
+  /* geometry, straight from the product */
+  --radius-adm:    0.75rem;       /* --radius: 12px */
+  --radius-adm-sm: 0.5rem;
+  --radius-adm-md: 0.625rem;
+
   /* Excel-adjacent green for the spreadsheet mark */
   --color-xls:         #1D6F42;
 
   /* Fonts wired in layout.tsx via next/font */
+  /* Geist — what the real admin portal is set in. Simulation only. */
+  --font-adm:      var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-adm-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-sans:    var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
   --font-mono:    var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace;

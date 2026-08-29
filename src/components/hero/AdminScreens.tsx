@@ -1,7 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { Download, Play, Plus, Save } from "lucide-react";
 import { Field, Panel } from "@/components/hero/AdminChrome";
+import { Button } from "@/components/admin-ui/button";
+import { StatusPill, type StatusPillVariant } from "@/components/admin-ui/status-pill";
 import {
   customers,
   kr,
@@ -19,19 +22,21 @@ const T = (no: string, en: string): Bi => ({ no, en });
 
 /* ── Small pieces ─────────────────────────────────────────────────── */
 
-function StatusPill({ status }: { status: keyof typeof statusLabel }) {
+/* Maps our order statuses onto the real StatusPill's variants. Note the real
+   component keeps the pill neutral and colours only the DOT for success/info —
+   my earlier rebuild tinted the whole pill, which was wrong. */
+const PILL_VARIANT: Record<keyof typeof statusLabel, StatusPillVariant> = {
+  godkjent: "success",
+  behandling: "info",
+  venter: "warning",
+};
+
+function OrderStatus({ status }: { status: keyof typeof statusLabel }) {
   const { locale } = useLocale();
-  const tone =
-    status === "godkjent"
-      ? "bg-adm-green-bg text-adm-green"
-      : status === "venter"
-        ? "bg-adm-amber-bg text-adm-amber"
-        : "bg-adm-blue-bg text-adm-blue";
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11.5px] font-medium ${tone}`}>
-      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+    <StatusPill variant={PILL_VARIANT[status]} size="sm">
       {statusLabel[status][locale]}
-    </span>
+    </StatusPill>
   );
 }
 
@@ -67,14 +72,10 @@ export function OrdersList() {
         crumb={locale === "no" ? "Ordre" : "Orders"}
         title={locale === "no" ? "Ordre" : "Orders"}
         right={
-          <button
-            type="button"
-            data-cur="new-order"
-            className="inline-flex items-center gap-2 rounded-lg bg-adm-ink px-3.5 py-2.5 text-[13px] font-medium text-white"
-          >
-            <span className="text-[15px] leading-none">+</span>
+          <Button data-cur="new-order" size="lg">
+            <Plus />
             {locale === "no" ? "Ny ordre" : "New order"}
-          </button>
+          </Button>
         }
       />
 
@@ -116,7 +117,7 @@ export function OrdersList() {
                 <p className="font-mono text-[11px] text-adm-ink-3">{r.org}</p>
               </td>
               <td className="border-b border-adm-line py-3.5">
-                <StatusPill status={r.status} />
+                <OrderStatus status={r.status} />
               </td>
               <td className="border-b border-adm-line py-3.5 text-[12.5px] text-adm-ink-2">{r.date}</td>
               <td className="border-b border-adm-line py-3.5 text-right font-mono text-[12.5px] text-adm-ink">
@@ -277,18 +278,18 @@ export function NewOrder({ state }: { state: AdminState }) {
         title={locale === "no" ? "Ny ordre" : "New order"}
         right={
           <div className="flex items-center gap-2">
-            <span className="rounded-lg border border-adm-line px-3 py-2.5 text-[13px] text-adm-ink-2">
+            <Button variant="outline" size="lg">
+              <Save />
               {locale === "no" ? "Lagre kladd" : "Save draft"}
-            </span>
-            <motion.button
-              type="button"
-              data-cur="register"
+            </Button>
+            <motion.div
               animate={{ scale: state.registering ? 0.95 : 1 }}
               transition={{ duration: 0.18 }}
-              className="rounded-lg bg-adm-ink px-4 py-2.5 text-[13px] font-medium text-white"
             >
-              {locale === "no" ? "Registrer" : "Register"}
-            </motion.button>
+              <Button data-cur="register" size="lg">
+                {locale === "no" ? "Registrer" : "Register"}
+              </Button>
+            </motion.div>
           </div>
         }
       />
@@ -417,18 +418,20 @@ export function OrderDetail({ state }: { state: AdminState }) {
         title={`${locale === "no" ? "Ordrenummer." : "Order no."} ${state.orderNo}`}
         right={
           <div className="flex items-center gap-2">
-            <span className="rounded-lg border border-adm-line px-3 py-2.5 text-[13px] text-adm-ink-2">
+            <Button variant="outline" size="lg">
+              <Download />
               {locale === "no" ? "Last ned PDF" : "Download PDF"}
-            </span>
-            <span className="rounded-lg bg-adm-ink px-4 py-2.5 text-[13px] font-medium text-white">
+            </Button>
+            <Button size="lg">
+              <Play />
               {locale === "no" ? "Start behandling" : "Start processing"}
-            </span>
+            </Button>
           </div>
         }
       />
 
       <div className="mt-4 flex items-center gap-3">
-        <StatusPill status="godkjent" />
+        <OrderStatus status="godkjent" />
         <span className="rounded-full bg-adm-bg px-2.5 py-1 text-[11.5px] text-adm-ink-2">Lager</span>
         <span className="text-[12.5px] text-adm-ink-2">26. aug. 2026, 16:35</span>
         <span className="font-mono text-[13px] font-semibold text-adm-ink">

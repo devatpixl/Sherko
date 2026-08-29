@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, JetBrains_Mono, Schibsted_Grotesk } from "next/font/google";
+import {
+  Caveat,
+  Geist,
+  Geist_Mono,
+  JetBrains_Mono,
+  Schibsted_Grotesk,
+} from "next/font/google";
 import { LocaleProvider } from "@/lib/i18n";
 import "./globals.css";
 
@@ -18,6 +24,21 @@ const jbMono = JetBrains_Mono({
   variable: "--font-jbmono",
   display: "swap",
   weight: ["400", "500"],
+});
+
+/* Geist is what the real admin portal runs on. Used only inside the
+   simulated portal, so those screens are set in the product's own type
+   rather than the marketing site's. */
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
 });
 
 /* Only used inside the simulated handwritten note. */
@@ -84,7 +105,10 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nb" className={`${schibsted.variable} ${jbMono.variable} ${caveat.variable}`}>
+    <html
+      lang="nb"
+      className={`${schibsted.variable} ${jbMono.variable} ${caveat.variable} ${geist.variable} ${geistMono.variable}`}
+    >
       <body className="antialiased">
         <script
           type="application/ld+json"

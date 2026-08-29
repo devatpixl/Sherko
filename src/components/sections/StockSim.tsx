@@ -3,6 +3,9 @@
 import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Cursor, useSimCursor } from "@/components/hero/SimCursor";
+import { Boxes, PackageX, TrendingDown, TriangleAlert, Truck } from "lucide-react";
+import { KPICard } from "@/components/admin-ui/kpi-card";
+import { StatusPill, type StatusPillVariant } from "@/components/admin-ui/status-pill";
 import { SimEndCard } from "@/components/hero/SimEndCard";
 import { Container, Reveal, Section, SectionHead } from "@/components/ui";
 import {
@@ -49,11 +52,15 @@ const TONE = {
   blue: "text-adm-blue",
 } as const;
 
-const PILL: Record<StockStatus, string> = {
-  ok: "bg-adm-green-bg text-adm-green",
-  lavt: "bg-adm-blue-bg text-adm-blue",
-  kritisk: "bg-adm-amber-bg text-adm-amber",
+/* Stock levels onto the real StatusPill's variants. */
+const STOCK_VARIANT: Record<StockStatus, StatusPillVariant> = {
+  ok: "success",
+  lavt: "info",
+  kritisk: "warning",
 };
+
+/* Icons for the KPI tiles, matching the real inventory page. */
+const KPI_ICON = [Boxes, TrendingDown, TriangleAlert, PackageX, Truck] as const;
 
 function Counter({ value, run }: { value: number; run: boolean }) {
   const reduced = usePrefersReducedMotion();
@@ -124,13 +131,17 @@ function LagerView({ run }: { run: boolean }) {
   return (
     <div>
       <div className="grid grid-cols-4 gap-3">
-        {lagerKpis.map((k) => (
-          <div key={k.label.no} className="rounded-xl border border-adm-line bg-adm-panel p-4">
-            <p className="font-mono text-[10px] tracking-[0.14em] text-adm-ink-3 uppercase">{k.label[locale]}</p>
-            <p className={`mt-2 text-[30px] leading-none font-semibold tabular-nums ${TONE[k.tone]}`}>
-              <Counter value={k.value} run={run} />
-            </p>
-          </div>
+        {lagerKpis.map((k, i) => (
+          <KPICard
+            key={k.label.no}
+            label={k.label[locale]}
+            icon={KPI_ICON[i]}
+            value={
+              <span className={`tabular-nums ${TONE[k.tone]}`}>
+                <Counter value={k.value} run={run} />
+              </span>
+            }
+          />
         ))}
       </div>
 
@@ -174,10 +185,9 @@ function LagerView({ run }: { run: boolean }) {
             </span>
             <span className="text-right font-mono text-[12.5px] text-adm-ink-3">{r.reserved ?? "—"}</span>
             <span className="text-right font-mono text-[12.5px] text-adm-ink-2">{r.reorder}</span>
-            <span className={`inline-flex items-center gap-1.5 justify-self-start rounded-full px-2.5 py-1 text-[11px] font-medium ${PILL[r.status]}`}>
-              <span className="h-1.5 w-1.5 rounded-full bg-current" />
+            <StatusPill variant={STOCK_VARIANT[r.status]} size="sm" className="justify-self-start">
               {statusText[r.status][locale]}
-            </span>
+            </StatusPill>
           </motion.div>
         ))}
       </div>
@@ -192,13 +202,17 @@ function OversiktView({ run }: { run: boolean }) {
   return (
     <div>
       <div className="grid grid-cols-5 gap-3">
-        {oversiktKpis.map((k) => (
-          <div key={k.label.no} className="rounded-xl border border-adm-line bg-adm-panel p-4">
-            <p className="font-mono text-[10px] tracking-[0.14em] text-adm-ink-3 uppercase">{k.label[locale]}</p>
-            <p className={`mt-2 text-[30px] leading-none font-semibold tabular-nums ${TONE[k.tone]}`}>
-              <Counter value={k.value} run={run} />
-            </p>
-          </div>
+        {oversiktKpis.map((k, i) => (
+          <KPICard
+            key={k.label.no}
+            label={k.label[locale]}
+            icon={KPI_ICON[i]}
+            value={
+              <span className={`tabular-nums ${TONE[k.tone]}`}>
+                <Counter value={k.value} run={run} />
+              </span>
+            }
+          />
         ))}
       </div>
 
@@ -394,7 +408,13 @@ export function StockSim() {
                     >
                       {/* The page scrolls under a fixed header, as it would in the real app */}
                       <motion.div
-                        className="px-7 pt-7"
+                        className="px-7 pt-7 font-sans"
+                        style={
+                          {
+                            "--font-sans": "var(--font-geist)",
+                            "--font-mono": "var(--font-geist-mono)",
+                          } as React.CSSProperties
+                        }
                         animate={{ y: -state.scroll }}
                         transition={{ duration: reduced ? 0 : 1.1, ease: EASE }}
                       >

@@ -178,7 +178,18 @@ export function AdminSim() {
                     className="absolute top-0 left-0 origin-top-left"
                     style={{ width: CANVAS_W, height: CANVAS_H, transform: `scale(${scale})` }}
                   >
-                    <div className="flex h-full w-full bg-adm-bg">
+                    {/* Rebind the font vars for the whole canvas: the real
+                        portal is set in Geist, so every font-sans/font-mono
+                        inside resolves to it without touching each element. */}
+                    <div
+                      className="flex h-full w-full bg-adm-bg font-sans"
+                      style={
+                        {
+                          "--font-sans": "var(--font-geist)",
+                          "--font-mono": "var(--font-geist-mono)",
+                        } as React.CSSProperties
+                      }
+                    >
                       <Sidebar />
                       <div className="flex min-w-0 flex-1 flex-col">
                         <TopBar />
