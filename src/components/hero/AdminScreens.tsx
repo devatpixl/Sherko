@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { Download, Play, Plus, Save } from "lucide-react";
+import { ArrowRight, Download, Play, Plus, Save } from "lucide-react";
 import { Field, Panel } from "@/components/hero/AdminChrome";
 import { Button } from "@/components/admin-ui/button";
 import { StatusPill, type StatusPillVariant } from "@/components/admin-ui/status-pill";
@@ -92,41 +92,66 @@ export function OrdersList() {
         ))}
       </div>
 
-      <table className="mt-5 w-full border-separate border-spacing-0 text-left">
-        <thead>
-          <tr className="font-mono text-[10.5px] tracking-[0.1em] text-adm-ink-3 uppercase">
-            {[
-              T("Ordrenummer", "Order no"),
-              T("Bedrift", "Company"),
-              T("Status", "Status"),
-              T("Dato", "Date"),
-              T("Beløp eks. mva", "Amount ex. VAT"),
-            ].map((h, i) => (
-              <th key={h.no} className={`border-b border-adm-line pb-2.5 font-normal ${i === 4 ? "text-right" : ""}`}>
-                {h[locale]}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {orderRows.map((r) => (
-            <tr key={r.no}>
-              <td className="border-b border-adm-line py-3.5 font-mono text-[12.5px] text-adm-ink">{r.no}</td>
-              <td className="border-b border-adm-line py-3.5">
-                <p className="text-[13px] font-medium text-adm-ink">{r.company}</p>
-                <p className="font-mono text-[11px] text-adm-ink-3">{r.org}</p>
-              </td>
-              <td className="border-b border-adm-line py-3.5">
-                <OrderStatus status={r.status} />
-              </td>
-              <td className="border-b border-adm-line py-3.5 text-[12.5px] text-adm-ink-2">{r.date}</td>
-              <td className="border-b border-adm-line py-3.5 text-right font-mono text-[12.5px] text-adm-ink">
-                {r.amount} kr
-              </td>
+      {/* Table shell, columns and row treatment follow the real orders page:
+          a bordered card, a muted header row, and a Kanal badge + Åpne action
+          my earlier version was missing entirely. */}
+      <div className="mt-5 overflow-hidden rounded-xl border border-adm-line bg-adm-panel">
+        <table className="w-full border-separate border-spacing-0 text-left">
+          <thead>
+            <tr className="bg-adm-muted/40 text-[12px] text-adm-ink-2">
+              {[
+                T("Ordrenummer", "Order no"),
+                T("Bedrift", "Company"),
+                T("Status", "Status"),
+                T("Kanal", "Channel"),
+                T("Dato", "Date"),
+                T("Beløp eks. mva", "Amount ex. VAT"),
+              ].map((h, i) => (
+                <th
+                  key={h.no}
+                  className={`border-b border-adm-line px-4 py-2.5 font-medium ${i === 5 ? "text-right" : ""}`}
+                >
+                  {h[locale]}
+                </th>
+              ))}
+              <th className="w-[76px] border-b border-adm-line" />
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orderRows.map((r) => (
+              <tr key={r.no} className="transition-colors hover:bg-adm-muted/30">
+                <td className="border-b border-adm-line px-4 py-3 font-mono text-[12px] text-adm-ink">
+                  {r.no}
+                </td>
+                <td className="border-b border-adm-line px-4 py-3">
+                  <p className="text-[13px] font-medium text-adm-ink">{r.company}</p>
+                  <p className="text-[11.5px] text-adm-ink-2">{r.org}</p>
+                </td>
+                <td className="border-b border-adm-line px-4 py-3">
+                  <OrderStatus status={r.status} />
+                </td>
+                <td className="border-b border-adm-line px-4 py-3">
+                  <span className="inline-flex items-center rounded-md bg-adm-muted px-2 py-0.5 text-[11.5px] font-medium text-adm-ink">
+                    {r.channel}
+                  </span>
+                </td>
+                <td className="border-b border-adm-line px-4 py-3 text-[12.5px] text-adm-ink-2">
+                  {r.date}
+                </td>
+                <td className="border-b border-adm-line px-4 py-3 text-right font-mono text-[12.5px] text-adm-ink tabular-nums">
+                  {r.amount} kr
+                </td>
+                <td className="border-b border-adm-line px-4 py-3 text-right">
+                  <Button variant="ghost" size="sm" className="text-adm-ink-2">
+                    {locale === "no" ? "Åpne" : "Open"}
+                    <ArrowRight />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

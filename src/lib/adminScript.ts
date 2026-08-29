@@ -48,17 +48,19 @@ export type OrderRow = {
   company: string;
   org: string;
   status: "godkjent" | "behandling" | "venter";
+  /** Sales channel, rendered as a secondary badge like the real table. */
+  channel: "Lager" | "Web" | "Mobil";
   date: string;
   amount: string;
 };
 
 export const orderRows: OrderRow[] = [
-  { no: "FE-2026-0495", company: "BRYGGEN PIZZERIA AS", org: "918 452 331", status: "godkjent", date: "26. aug. 2026, 16:06", amount: "16 421,00" },
-  { no: "FE-2026-0494", company: "NORDVEST STORKJØKKEN AS", org: "927 551 460", status: "behandling", date: "26. aug. 2026, 15:10", amount: "261 900,00" },
-  { no: "FE-2026-0493", company: "SERVICEGROSSISTEN VEST AS", org: "942 545 258", status: "behandling", date: "26. aug. 2026, 15:09", amount: "124 079,00" },
-  { no: "FE-2026-0492", company: "HAVNA GRILL AS", org: "931 664 205", status: "venter", date: "26. aug. 2026, 15:01", amount: "61 405,00" },
-  { no: "FE-2026-0491", company: "FJELLSTUA RESTAURANT AS", org: "924 118 907", status: "behandling", date: "26. aug. 2026, 14:05", amount: "11 222,00" },
-  { no: "FE-2026-0490", company: "KYSTENS KANTINE AS", org: "916 302 884", status: "venter", date: "26. aug. 2026, 14:01", amount: "9 800,00" },
+  { no: "FE-2026-0495", company: "BRYGGEN PIZZERIA AS", org: "918 452 331", status: "godkjent", channel: "Lager", date: "26. aug. 2026, 16:06", amount: "16 421,00" },
+  { no: "FE-2026-0494", company: "NORDVEST STORKJØKKEN AS", org: "927 551 460", status: "behandling", channel: "Web", date: "26. aug. 2026, 15:10", amount: "261 900,00" },
+  { no: "FE-2026-0493", company: "SERVICEGROSSISTEN VEST AS", org: "942 545 258", status: "behandling", channel: "Lager", date: "26. aug. 2026, 15:09", amount: "124 079,00" },
+  { no: "FE-2026-0492", company: "HAVNA GRILL AS", org: "931 664 205", status: "venter", channel: "Mobil", date: "26. aug. 2026, 15:01", amount: "61 405,00" },
+  { no: "FE-2026-0491", company: "FJELLSTUA RESTAURANT AS", org: "924 118 907", status: "behandling", channel: "Web", date: "26. aug. 2026, 14:05", amount: "11 222,00" },
+  { no: "FE-2026-0490", company: "KYSTENS KANTINE AS", org: "916 302 884", status: "venter", channel: "Lager", date: "26. aug. 2026, 14:01", amount: "9 800,00" },
 ];
 
 export const statusLabel: Record<OrderRow["status"], Bi> = {
