@@ -25,6 +25,12 @@ export const cta = {
   primary: { no: "Book en demo", en: "Book a demo" },
   secondary: { no: "Se den jobbe", en: "Watch it work" },
   login: { no: "Logg inn", en: "Log in" },
+  /* Opens the live demo — the real portal, running on demo data. */
+  demo: { no: "Prøv demoen", en: "Try the demo" },
+  demoHint: {
+    no: "Ekte system, oppdiktede tall. Ingen innlogging.",
+    en: "Real system, invented figures. No sign-in.",
+  },
 };
 
 /* ── Hero ─────────────────────────────────────────────────────────── */

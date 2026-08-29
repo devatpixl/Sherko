@@ -2,7 +2,8 @@
 
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Container, Reveal, Section, SectionHead } from "@/components/ui";
-import { closing } from "@/lib/content";
+import { DEMO_ENABLED, DEMO_URL } from "@/lib/config";
+import { closing, cta } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
 /* The ask. The chips stay because they answer the question the form provokes —
@@ -54,6 +55,23 @@ export function Closing() {
             {closing.reassure[locale]}
           </p>
         </Reveal>
+
+        {/* Not everyone is ready to book. Let them poke at the real thing. */}
+        {DEMO_ENABLED && (
+          <Reveal delay={0.34}>
+            <p className="mt-5 text-center text-[0.9375rem] text-fg-3">
+              <a
+                href={DEMO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-fg underline decoration-line-2 underline-offset-4 transition-colors hover:decoration-accent"
+              >
+                {cta.demo[locale]}
+              </a>{" "}
+              — {cta.demoHint[locale]}
+            </p>
+          </Reveal>
+        )}
       </Container>
     </Section>
   );

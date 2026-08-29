@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/site/Wordmark";
+import { DEMO_ENABLED, DEMO_URL } from "@/lib/config";
 import { cta, nav } from "@/lib/content";
 import { useLocale } from "@/lib/i18n";
 
@@ -121,6 +122,28 @@ export function Nav() {
             </div>
 
             <div className="ml-auto flex items-center gap-2 lg:ml-0">
+              {/* The live demo is the strongest proof we have, so it gets a
+                  permanent home rather than living only behind the animations. */}
+              {DEMO_ENABLED && (
+                <a
+                  href={DEMO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-[0.875rem] tracking-tight text-fg-2 transition-colors duration-300 hover:bg-surface hover:text-fg md:inline-flex"
+                >
+                  {cta.demo[locale]}
+                  <svg viewBox="0 0 16 16" className="h-3 w-3" aria-hidden>
+                    <path
+                      d="M6 3h7v7M13 3 4 12"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </a>
+              )}
               <div className="hidden sm:block">
                 <LocaleToggle />
               </div>
@@ -174,15 +197,38 @@ export function Nav() {
                   </motion.a>
                 ))}
               </nav>
-              <div className="flex items-center justify-between gap-4">
-                <LocaleToggle />
-                <a
-                  href="#kontakt"
-                  onClick={() => setOpen(false)}
-                  className="inline-flex flex-1 items-center justify-center rounded-full bg-fg px-5 py-3.5 text-[0.9375rem] font-medium text-canvas"
-                >
-                  {cta.primary[locale]}
-                </a>
+              <div className="flex flex-col gap-4">
+                {DEMO_ENABLED && (
+                  <a
+                    href={DEMO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-line-2 px-5 py-3.5 text-[0.9375rem] font-medium text-fg-2"
+                  >
+                    {cta.demo[locale]}
+                    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden>
+                      <path
+                        d="M6 3h7v7M13 3 4 12"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </a>
+                )}
+                <div className="flex items-center justify-between gap-4">
+                  <LocaleToggle />
+                  <a
+                    href="#kontakt"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex flex-1 items-center justify-center rounded-full bg-fg px-5 py-3.5 text-[0.9375rem] font-medium text-canvas"
+                  >
+                    {cta.primary[locale]}
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>
