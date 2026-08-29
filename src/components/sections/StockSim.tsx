@@ -408,7 +408,7 @@ export function StockSim() {
                     >
                       {/* The page scrolls under a fixed header, as it would in the real app */}
                       <motion.div
-                        className="px-7 pt-7 font-sans"
+                        className="px-7 pt-7 font-sans text-adm-ink"
                         style={
                           {
                             "--font-sans": "var(--font-geist)",

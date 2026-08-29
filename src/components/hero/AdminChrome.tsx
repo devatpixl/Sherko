@@ -1,6 +1,17 @@
 "use client";
 
 import type { ReactNode } from "react";
+import {
+  Building2,
+  ChevronDown,
+  FileSignature,
+  LayoutDashboard,
+  Package,
+  Settings,
+  ShoppingCart,
+  Warehouse,
+  type LucideIcon,
+} from "lucide-react";
 import { operator, tenant } from "@/lib/adminScript";
 import { useLocale, type Bi } from "@/lib/i18n";
 
@@ -15,10 +26,20 @@ function Caret({ open = false }: { open?: boolean }) {
   );
 }
 
-const NAV: { label: Bi; children?: Bi[] }[] = [
-  { label: { no: "Oversikt", en: "Overview" } },
+/* Groups, icons and sub-items exactly as the real portal defines them in
+   components/dashboard-shell.tsx — same lucide glyphs, same order. */
+const NAV: { label: Bi; icon: LucideIcon; children?: Bi[] }[] = [
+  {
+    label: { no: "Oversikt", en: "Overview" },
+    icon: LayoutDashboard,
+    children: [
+      { no: "Hjem", en: "Home" },
+      { no: "Rapporter", en: "Reports" },
+    ],
+  },
   {
     label: { no: "Salg", en: "Sales" },
+    icon: ShoppingCart,
     children: [
       { no: "Ordre", en: "Orders" },
       { no: "Hurtigordre", en: "Quick orders" },
@@ -26,11 +47,11 @@ const NAV: { label: Bi; children?: Bi[] }[] = [
       { no: "Kundegrupper", en: "Customer groups" },
     ],
   },
-  { label: { no: "Kunder", en: "Customers" } },
-  { label: { no: "Lager", en: "Inventory" } },
-  { label: { no: "Innkjøp", en: "Purchasing" } },
-  { label: { no: "Katalog", en: "Catalogue" } },
-  { label: { no: "Innstillinger", en: "Settings" } },
+  { label: { no: "Kunder", en: "Customers" }, icon: Building2 },
+  { label: { no: "Lager", en: "Inventory" }, icon: Warehouse },
+  { label: { no: "Innkjøp", en: "Purchasing" }, icon: FileSignature },
+  { label: { no: "Katalog", en: "Catalogue" }, icon: Package },
+  { label: { no: "Innstillinger", en: "Settings" }, icon: Settings },
 ];
 
 export function Sidebar() {
@@ -48,34 +69,43 @@ export function Sidebar() {
         </div>
       </div>
 
+      {/* Group + sub-item treatment copied from the real shell:
+          active group = flat zinc-100 pill with slate-900 text;
+          active sub-item = plain blue-600 text, NO background and no ring
+          (the real code calls that "the cleanest possible signal"). */}
       <nav className="mt-1 flex-1 px-3">
         {NAV.map((item) => {
-          const isSales = item.children != null;
+          const expanded = item.label.no === "Salg";
+          const Icon = item.icon;
           return (
             <div key={item.label.no}>
               <div
-                className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-[13.5px] ${
-                  isSales ? "bg-adm-blue-bg font-medium text-adm-ink" : "text-adm-ink-2"
+                className={`flex h-11 items-center gap-3 rounded-lg px-3.5 text-[15px] ${
+                  expanded ? "bg-adm-muted font-semibold text-adm-ink" : "text-adm-ink-2"
                 }`}
               >
-                <span>{item.label[locale]}</span>
-                <Caret open={isSales} />
+                <Icon className="h-5 w-5 shrink-0" strokeWidth={1.75} aria-hidden />
+                <span className="flex-1 truncate text-left">{item.label[locale]}</span>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 transition-transform ${expanded ? "rotate-180" : ""}`}
+                  strokeWidth={2}
+                  aria-hidden
+                />
               </div>
-              {item.children && (
-                <div className="mt-0.5 mb-1 space-y-0.5 pl-3">
+              {expanded && item.children && (
+                <ul className="my-1 flex flex-col gap-1">
                   {item.children.map((c, i) => (
-                    <div
-                      key={c.no}
-                      className={`rounded-lg px-3 py-2 text-[13px] ${
-                        i === 0
-                          ? "bg-adm-blue-bg font-medium text-adm-blue ring-1 ring-adm-blue/30"
-                          : "text-adm-ink-2"
-                      }`}
-                    >
-                      {c[locale]}
-                    </div>
+                    <li key={c.no}>
+                      <div
+                        className={`flex h-11 items-center rounded-lg pr-3.5 pl-12 text-[15px] ${
+                          i === 0 ? "font-medium text-adm-blue" : "text-adm-ink-2"
+                        }`}
+                      >
+                        {c[locale]}
+                      </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
           );

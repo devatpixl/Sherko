@@ -182,7 +182,7 @@ export function AdminSim() {
                         portal is set in Geist, so every font-sans/font-mono
                         inside resolves to it without touching each element. */}
                     <div
-                      className="flex h-full w-full bg-adm-bg font-sans"
+                      className="flex h-full w-full bg-adm-bg font-sans text-adm-ink"
                       style={
                         {
                           "--font-sans": "var(--font-geist)",
