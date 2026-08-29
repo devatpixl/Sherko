@@ -29,7 +29,16 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  */
 export type Find = { role?: string; text?: string; nth?: number };
 
-const INTERACTIVE = "button, a, [role='button'], [role='combobox'], [role='option']";
+const INTERACTIVE =
+  "button, a, input, [role='button'], [role='combobox'], [role='option']";
+
+/** Text we can match a control by — inputs carry theirs in the placeholder. */
+function labelOf(el: HTMLElement): string {
+  const own = (el.textContent || "").replace(/\s+/g, " ").trim();
+  if (own) return own;
+  const ph = el.getAttribute("placeholder") || "";
+  return ph.replace(/\s+/g, " ").trim();
+}
 
 export type FrameStep =
   | { kind: "wait"; ms: number }
@@ -42,9 +51,7 @@ export type FrameStep =
 
 function locate(doc: Document, f: Find): HTMLElement | null {
   const nodes = [...doc.querySelectorAll<HTMLElement>(f.role ?? INTERACTIVE)];
-  const matches = f.text
-    ? nodes.filter((n) => (n.textContent || "").replace(/\s+/g, " ").trim().includes(f.text!))
-    : nodes;
+  const matches = f.text ? nodes.filter((n) => labelOf(n).includes(f.text!)) : nodes;
   // Only things actually on screen — the app renders a mobile drawer copy of
   // the nav that is display:none, and clicking that does nothing visible.
   const visible = matches.filter((n) => n.getClientRects().length > 0);
@@ -58,6 +65,8 @@ function locate(doc: Document, f: Find): HTMLElement | null {
  * open on pointerdown, so a bare click leaves menus and comboboxes shut.
  */
 function realClick(el: HTMLElement) {
+  // Some pickers are text inputs that open their list on focus, not on click.
+  if (el instanceof HTMLInputElement) el.focus();
   const view = el.ownerDocument.defaultView;
   const base = { bubbles: true, cancelable: true, view, composed: true } as const;
   const pointer = { ...base, isPrimary: true, pointerId: 1, pointerType: "mouse" };
@@ -119,7 +128,7 @@ export function LiveDemoFrame({
   /* Wait for a control to exist, then point at it. Returns its centre. */
   const pointAt = useCallback(
     async (f: Find, ms: number) => {
-      const deadline = Date.now() + 4000;
+      const deadline = Date.now() + 6500;
       let el: HTMLElement | null = null;
       while (Date.now() < deadline) {
         const d = doc();
@@ -128,6 +137,16 @@ export function LiveDemoFrame({
         await new Promise((r) => setTimeout(r, 120));
       }
       if (!el) return null;
+
+      // Bring it into the frame first. Half the form sits below 900px, so
+      // without this the cursor clicks something the viewer cannot see — and
+      // the page never appears to do anything.
+      const before = el.getBoundingClientRect();
+      if (before.top < 40 || before.bottom > height - 40) {
+        el.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+        await new Promise((r) => setTimeout(r, reduced ? 0 : 650));
+      }
+
       const r = el.getBoundingClientRect();
       const cx = r.left + r.width / 2;
       const cy = r.top + r.height / 2;
@@ -135,7 +154,7 @@ export function LiveDemoFrame({
       await Promise.all([animate(x, cx, opts).finished, animate(y, cy, opts).finished]);
       return el;
     },
-    [doc, reduced, x, y],
+    [doc, reduced, x, y, height],
   );
 
   /* Readiness is polled, not taken from onLoad.
@@ -176,10 +195,19 @@ export function LiveDemoFrame({
           continue;
         }
         const el = await pointAt(step.find, step.ms);
+        if (process.env.NEXT_PUBLIC_FRAME_DEBUG === "true") {
+          console.log("[frame]", step.kind, JSON.stringify(step.find), el ? "FOUND" : "NOT FOUND");
+        }
         if (cancelled) return;
         if (step.kind === "click" && el) {
+          // Re-locate before clicking. The cursor takes ~900ms to travel, and
+          // React can re-render the form in that window — leaving `el`
+          // detached, so the click lands on a node no longer in the document
+          // and nothing happens.
+          const d = doc();
+          const fresh = (d && locate(d, step.find)) || el;
           setClicking(true);
-          realClick(el);
+          realClick(fresh);
           await sleep(160);
           setClicking(false);
           await sleep(step.settle ?? 900);
@@ -191,7 +219,7 @@ export function LiveDemoFrame({
     return () => {
       cancelled = true;
     };
-  }, [active, ready, steps, pointAt, reduced]);
+  }, [active, ready, steps, pointAt, reduced, doc]);
 
   return (
     <div

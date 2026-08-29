@@ -29,12 +29,26 @@ const copy = {
   } as Bi,
 };
 
-/* Locators are by visible text, so they keep working when the app's markup
-   changes — which is the whole reason for framing the real thing. */
+/* Controls are found by visible text, so this survives markup changes
+   upstream — which is the whole reason for framing the real thing.
+
+   Scope note: the product line picker is deliberately not driven here. It is
+   a text input whose result list opens on a real focus, and it will not open
+   from synthetic events once the customer combobox has taken and released
+   focus — verified repeatedly. Rather than ship a step that intermittently
+   does nothing, the sequence stops at a resolved customer, which is the
+   part that reliably works every run. */
 const steps: FrameStep[] = [
-  { kind: "wait", ms: 2200 },
-  { kind: "click", ms: 900, find: { text: "Ny ordre" }, settle: 3000 },
-  { kind: "wait", ms: 2600 },
+  { kind: "wait", ms: 1800 },
+
+  // Orders list → the real new-order form
+  { kind: "click", ms: 900, find: { text: "Ny ordre" }, settle: 2600 },
+
+  // Open the real customer picker and choose from the real catalogue
+  { kind: "click", ms: 850, find: { text: "Velg kunde" }, settle: 1200 },
+  { kind: "click", ms: 700, find: { role: "[role='option']", text: "Bodø Sjøhus" }, settle: 2600 },
+
+  { kind: "wait", ms: 2400 },
 ];
 
 export function AdminSim() {
