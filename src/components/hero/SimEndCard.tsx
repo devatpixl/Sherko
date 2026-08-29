@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { DEMO_ENABLED, DEMO_URL } from "@/lib/config";
 import { cta } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
@@ -20,6 +21,7 @@ const copy = {
     en: "This is a demo with invented customers and figures. Your Sherko is built around your catalogue, your customers and your routines.",
   } as Bi,
   replay: { no: "Spill av igjen", en: "Play it again" } as Bi,
+  tryIt: { no: "Prøv demoen", en: "Try the demo" } as Bi,
 };
 
 export function SimEndCard({ onReplay }: { onReplay: () => void }) {
@@ -60,7 +62,33 @@ export function SimEndCard({ onReplay }: { onReplay: () => void }) {
           {copy.body[locale]}
         </p>
 
-        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        {/* Someone who just watched the whole flow is the warmest they will be
+            on this section — so the real, clickable product leads. */}
+        {DEMO_ENABLED && (
+          <a
+            href={DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative mt-7 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-fg px-5 py-3 text-[0.875rem] font-medium tracking-tight text-canvas transition-transform duration-300 hover:scale-[1.02] sm:w-auto"
+          >
+            <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-accent via-ice to-violet transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+            <span className="relative">{copy.tryIt[locale]}</span>
+            <svg viewBox="0 0 16 16" className="relative h-3.5 w-3.5" aria-hidden>
+              <path
+                d="M6 3h7v7M13 3 4 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        )}
+
+        <div
+          className={`flex flex-col items-center justify-center gap-3 sm:flex-row ${DEMO_ENABLED ? "mt-3" : "mt-7"}`}
+        >
           <button
             type="button"
             onClick={onReplay}
