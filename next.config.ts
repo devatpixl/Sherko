@@ -12,9 +12,10 @@ import type { NextConfig } from "next";
  * The demo must run with NEXT_PUBLIC_BASE_PATH=/demo so it serves its own
  * /demo/_next assets; both are Next apps and would otherwise collide.
  *
- * DEMO_ORIGIN is the VPS in production, a local dev server while working.
+ * DEMO_ORIGIN defaults to the VPS; point it at a local dev server when
+ * working on the demo fork itself.
  */
-const DEMO_ORIGIN = process.env.DEMO_ORIGIN ?? "http://127.0.0.1:4400";
+const DEMO_ORIGIN = process.env.DEMO_ORIGIN ?? "https://sherko-demo.pixlmedia.no";
 
 const nextConfig: NextConfig = {
   async rewrites() {

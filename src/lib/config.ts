@@ -5,11 +5,17 @@
  * which makes every API adapter fall back to in-memory fixtures — no backend,
  * no database, nothing to break. Its fixture data is already fictional.
  *
- * Override locally to point at a dev instance:
- *   NEXT_PUBLIC_DEMO_URL=http://localhost:4400/dashboard/orders npm run dev
+ * This links straight at the demo host rather than through our own /demo
+ * proxy. The proxy exists so the *iframe* is same-origin and therefore
+ * drivable; pushing a whole interactive app through it for a plain link
+ * would spend our bandwidth for nothing.
+ *
+ * Override to point at a local instance while working on the fork:
+ *   NEXT_PUBLIC_DEMO_URL=http://localhost:4400/demo/dashboard/orders npm run dev
  */
 export const DEMO_URL =
-  process.env.NEXT_PUBLIC_DEMO_URL ?? "https://demo.sherko.no/dashboard/orders";
+  process.env.NEXT_PUBLIC_DEMO_URL ??
+  "https://sherko-demo.pixlmedia.no/demo/dashboard/orders";
 
-/** Until the demo is actually deployed, the CTA stays hidden. */
-export const DEMO_ENABLED = process.env.NEXT_PUBLIC_DEMO_ENABLED === "true";
+/** Set NEXT_PUBLIC_DEMO_ENABLED=false to pull the CTA if the demo host is down. */
+export const DEMO_ENABLED = process.env.NEXT_PUBLIC_DEMO_ENABLED !== "false";
