@@ -1,7 +1,16 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, Download, Play, Plus, Save } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  Download,
+  Play,
+  Plus,
+  Save,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 import { Field, Panel } from "@/components/hero/AdminChrome";
 import { Button } from "@/components/admin-ui/button";
 import { StatusPill, type StatusPillVariant } from "@/components/admin-ui/status-pill";
@@ -40,7 +49,17 @@ function OrderStatus({ status }: { status: keyof typeof statusLabel }) {
   );
 }
 
-function PageHead({ crumb, title, right }: { crumb: string; title: string; right?: React.ReactNode }) {
+function PageHead({
+  crumb,
+  title,
+  subtitle,
+  right,
+}: {
+  crumb: string;
+  title: string;
+  subtitle?: string;
+  right?: React.ReactNode;
+}) {
   return (
     <div className="flex items-start justify-between">
       <div>
@@ -48,6 +67,7 @@ function PageHead({ crumb, title, right }: { crumb: string; title: string; right
         <h3 className="mt-1.5 font-mono text-[26px] leading-none font-semibold tracking-tight text-adm-ink">
           {title}
         </h3>
+        {subtitle && <p className="mt-2 text-[13px] text-adm-ink-2">{subtitle}</p>}
       </div>
       {right}
     </div>
@@ -58,12 +78,15 @@ function PageHead({ crumb, title, right }: { crumb: string; title: string; right
 
 export function OrdersList() {
   const { locale } = useLocale();
+  /* All seven, in the real page's order — mine was missing Levert/Kansellert. */
   const filters = [
     T("Alle statuser", "All statuses"),
     T("Venter godkjenning", "Pending approval"),
     T("Godkjent", "Approved"),
     T("Under behandling", "Processing"),
     T("Sendt", "Sent"),
+    T("Levert", "Delivered"),
+    T("Kansellert", "Cancelled"),
   ];
 
   return (
@@ -71,6 +94,11 @@ export function OrdersList() {
       <PageHead
         crumb={locale === "no" ? "Ordre" : "Orders"}
         title={locale === "no" ? "Ordre" : "Orders"}
+        subtitle={
+          locale === "no"
+            ? "Paginert liste fra API (50 per side). Godkjenn eller avvis fra detaljsiden."
+            : "Paginated list from the API (50 per page). Approve or reject from the detail page."
+        }
         right={
           <Button data-cur="new-order" size="lg">
             <Plus />
@@ -92,13 +120,35 @@ export function OrdersList() {
         ))}
       </div>
 
-      {/* Table shell, columns and row treatment follow the real orders page:
-          a bordered card, a muted header row, and a Kanal badge + Åpne action
-          my earlier version was missing entirely. */}
-      <div className="mt-5 overflow-hidden rounded-xl border border-adm-line bg-adm-panel">
+      {/* Filter row — the real page has search, an advanced-filter toggle, a
+          company lookup and a channel select. It was missing entirely. */}
+      <div className="mt-4 flex items-center gap-3">
+        <div className="flex w-[300px] items-center gap-2 rounded-lg border border-adm-line bg-adm-panel px-3 py-2">
+          <Search className="h-3.5 w-3.5 text-adm-ink-3" strokeWidth={1.75} />
+          <span className="text-[13px] text-adm-ink-3">
+            {locale === "no" ? "Søk ordre, kunde, e-post…" : "Search order, customer, email…"}
+          </span>
+        </div>
+        <span className="grid h-9 w-9 place-items-center rounded-lg border border-adm-line bg-adm-panel">
+          <SlidersHorizontal className="h-3.5 w-3.5 text-adm-ink-2" strokeWidth={1.75} />
+        </span>
+        <div className="w-[240px] rounded-lg border border-adm-line bg-adm-panel px-3 py-2 text-[13px] text-adm-ink-3">
+          {locale === "no" ? "Bedrift (navn eller UUID)" : "Company (name or UUID)"}
+        </div>
+        <div className="flex w-[170px] items-center justify-between rounded-lg border border-adm-line bg-adm-panel px-3 py-2 text-[13px] text-adm-ink">
+          {locale === "no" ? "Alle kanaler" : "All channels"}
+          <ChevronDown className="h-3.5 w-3.5 text-adm-ink-2" strokeWidth={1.75} />
+        </div>
+      </div>
+
+      {/* Table styling taken from the real Table primitive: a zinc-50 header
+          with UPPERCASE zinc-500 labels, zinc-100 row rules, px-4 py-3.5 cells.
+          I had previously set these sentence-case off the page source, without
+          checking what the component actually renders. */}
+      <div className="mt-4 overflow-hidden rounded-xl border border-adm-line bg-adm-panel">
         <table className="w-full border-separate border-spacing-0 text-left">
-          <thead>
-            <tr className="bg-adm-muted/40 text-[12px] text-adm-ink-2">
+          <thead className="bg-adm-subtle">
+            <tr>
               {[
                 T("Ordrenummer", "Order no"),
                 T("Bedrift", "Company"),
@@ -109,43 +159,46 @@ export function OrdersList() {
               ].map((h, i) => (
                 <th
                   key={h.no}
-                  className={`border-b border-adm-line px-4 py-2.5 font-medium ${i === 5 ? "text-right" : ""}`}
+                  className={`border-b border-adm-muted px-4 py-3.5 align-middle text-[12px] font-medium whitespace-nowrap text-adm-ink-2 uppercase ${
+                    i === 5 ? "text-right" : ""
+                  }`}
                 >
                   {h[locale]}
                 </th>
               ))}
-              <th className="w-[76px] border-b border-adm-line" />
+              <th className="w-[86px] border-b border-adm-muted" />
             </tr>
           </thead>
           <tbody>
             {orderRows.map((r) => (
-              <tr key={r.no} className="transition-colors hover:bg-adm-muted/30">
-                <td className="border-b border-adm-line px-4 py-3 font-mono text-[12px] text-adm-ink">
+              <tr key={r.no} className="transition-colors hover:bg-adm-muted/40">
+                <td className="border-b border-adm-muted px-4 py-3.5 align-middle font-mono text-[12px] text-adm-ink">
                   {r.no}
                 </td>
-                <td className="border-b border-adm-line px-4 py-3">
+                <td className="border-b border-adm-muted px-4 py-3.5 align-middle">
                   <p className="text-[13px] font-medium text-adm-ink">{r.company}</p>
                   <p className="text-[11.5px] text-adm-ink-2">{r.org}</p>
                 </td>
-                <td className="border-b border-adm-line px-4 py-3">
+                <td className="border-b border-adm-muted px-4 py-3.5 align-middle">
                   <OrderStatus status={r.status} />
                 </td>
-                <td className="border-b border-adm-line px-4 py-3">
+                <td className="border-b border-adm-muted px-4 py-3.5 align-middle">
                   <span className="inline-flex items-center rounded-md bg-adm-muted px-2 py-0.5 text-[11.5px] font-medium text-adm-ink">
                     {r.channel}
                   </span>
                 </td>
-                <td className="border-b border-adm-line px-4 py-3 text-[12.5px] text-adm-ink-2">
+                <td className="border-b border-adm-muted px-4 py-3.5 align-middle text-[13px] text-adm-ink-2">
                   {r.date}
                 </td>
-                <td className="border-b border-adm-line px-4 py-3 text-right font-mono text-[12.5px] text-adm-ink tabular-nums">
+                <td className="border-b border-adm-muted px-4 py-3.5 text-right align-middle font-mono text-[13px] text-adm-ink tabular-nums">
                   {r.amount} kr
                 </td>
-                <td className="border-b border-adm-line px-4 py-3 text-right">
-                  <Button variant="ghost" size="sm" className="text-adm-ink-2">
+                <td className="border-b border-adm-muted px-4 py-3.5 text-right align-middle">
+                  {/* Borderless, like the real ghost button */}
+                  <span className="inline-flex items-center gap-1 text-[13px] text-adm-ink-2">
                     {locale === "no" ? "Åpne" : "Open"}
-                    <ArrowRight />
-                  </Button>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
                 </td>
               </tr>
             ))}

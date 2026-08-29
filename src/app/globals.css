@@ -61,7 +61,8 @@
   --color-adm-shell:    #f5f5f7;  /* outer frame at the viewport edges */
   --color-adm-bg:       #f5f5f7;
   --color-adm-panel:    #ffffff;  /* --surface: cards, panels, table rows */
-  --color-adm-muted:    #f4f4f5;  /* zinc-100 — hover / empty backdrops */
+  --color-adm-subtle:   #fafafa;  /* zinc-50 — table header fill */
+  --color-adm-muted:    #f4f4f5;  /* zinc-100 — hover / empty / row rules */
   --color-adm-line:     #e4e4e7;  /* zinc-200 divider */
   --color-adm-line-2:   #d4d4d8;  /* zinc-300, stronger rule */
 
