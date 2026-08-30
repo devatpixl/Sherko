@@ -32,23 +32,69 @@ const copy = {
 /* Controls are found by visible text, so this survives markup changes
    upstream — which is the whole reason for framing the real thing.
 
-   Scope note: the product line picker is deliberately not driven here. It is
-   a text input whose result list opens on a real focus, and it will not open
-   from synthetic events once the customer combobox has taken and released
-   focus — verified repeatedly. Rather than ship a step that intermittently
-   does nothing, the sequence stops at a resolved customer, which is the
-   part that reliably works every run. */
+   The product picker is driven by typing rather than clicking. It opens its
+   result list on focus, and focus is the one thing we cannot reliably take:
+   Radix hands focus back to the customer combobox as that closes, which
+   fires the picker's onBlur and shuts the list again. The field also opens
+   on change, so typing gets there without touching focus — and showing the
+   catalogue search actually narrowing is the better demo anyway. */
+const PICKER = "[data-picker-popover='true'] [role='listbox'] button";
+
 const steps: FrameStep[] = [
-  { kind: "wait", ms: 1800 },
+  { kind: "wait", ms: 1500 },
 
   // Orders list → the real new-order form
-  { kind: "click", ms: 900, find: { text: "Ny ordre" }, settle: 2600 },
+  { kind: "click", ms: 900, find: { text: "Ny ordre" }, settle: 2400 },
 
-  // Open the real customer picker and choose from the real catalogue
-  { kind: "click", ms: 850, find: { text: "Velg kunde" }, settle: 1200 },
-  { kind: "click", ms: 700, find: { role: "[role='option']", text: "Bodø Sjøhus" }, settle: 2600 },
+  // Real customer picker, reading the real customer registry
+  { kind: "click", ms: 800, find: { text: "Velg kunde" }, settle: 1100 },
+  {
+    kind: "click",
+    ms: 650,
+    find: { role: "[role='option']", text: "Brygga Sjømatrestaurant" },
+    // The line grid stays disabled until a customer resolves and the
+    // catalogue finishes loading, and typing into a disabled input does
+    // nothing at all — so wait for it rather than racing it.
+    settle: 2600,
+  },
 
-  { kind: "wait", ms: 2400 },
+  // First line: search the catalogue, take a row, set a quantity
+  {
+    kind: "type",
+    ms: 850,
+    find: { role: "input[placeholder='Velg produkt']", nth: 0 },
+    text: "laks",
+    settle: 800,
+  },
+  { kind: "click", ms: 600, find: { role: PICKER, text: "Laksefilet" }, settle: 1000 },
+  {
+    kind: "type",
+    ms: 600,
+    find: { role: "input[aria-label='Antall']", nth: 0 },
+    text: "24",
+    perChar: 140,
+    settle: 1000,
+  },
+
+  // Second line, so the order total visibly moves
+  {
+    kind: "type",
+    ms: 750,
+    find: { role: "input[placeholder='Velg produkt']", nth: 1 },
+    text: "kaffe",
+    settle: 800,
+  },
+  { kind: "click", ms: 600, find: { role: PICKER, text: "Kaffe" }, settle: 1000 },
+  {
+    kind: "type",
+    ms: 600,
+    find: { role: "input[aria-label='Antall']", nth: 1 },
+    text: "6",
+    perChar: 160,
+    settle: 1200,
+  },
+
+  { kind: "wait", ms: 2200 },
 ];
 
 export function AdminSim() {

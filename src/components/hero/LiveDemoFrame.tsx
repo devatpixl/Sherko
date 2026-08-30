@@ -32,6 +32,18 @@ export type Find = { role?: string; text?: string; nth?: number };
 const INTERACTIVE =
   "button, a, input, [role='button'], [role='combobox'], [role='option']";
 
+/**
+ * Is this node an <input>?
+ *
+ * `instanceof HTMLInputElement` cannot answer that here. The node comes from
+ * the framed document, which is a separate realm with its own constructors,
+ * so it is never an instance of *our* HTMLInputElement and the check silently
+ * returns false for every input on the page.
+ */
+function isInput(el: Element | null): el is HTMLInputElement {
+  return !!el && el.tagName === "INPUT";
+}
+
 /** Text we can match a control by — inputs carry theirs in the placeholder. */
 function labelOf(el: HTMLElement): string {
   const own = (el.textContent || "").replace(/\s+/g, " ").trim();
@@ -45,7 +57,18 @@ export type FrameStep =
   /** Move the cursor onto a control and click it for real. */
   | { kind: "click"; ms: number; find: Find; settle?: number }
   /** Move without clicking — used to lead the eye before a page change. */
-  | { kind: "move"; ms: number; find: Find };
+  | { kind: "move"; ms: number; find: Find }
+  /**
+   * Move onto a field and type into it, character by character.
+   *
+   * This is how the product picker gets opened. That control opens its list
+   * on focus, and focus is exactly what we cannot reliably take: Radix
+   * returns focus to the customer combobox as it closes, which fires the
+   * picker's onBlur and shuts the list again. But the field also opens on
+   * change — so typing drives it without touching focus at all, and has the
+   * pleasant side effect of showing the search actually working.
+   */
+  | { kind: "type"; ms: number; find: Find; text: string; perChar?: number; settle?: number };
 
 /* ── Locating things in the framed document ───────────────────────── */
 
@@ -66,7 +89,7 @@ function locate(doc: Document, f: Find): HTMLElement | null {
  */
 function realClick(el: HTMLElement) {
   // Some pickers are text inputs that open their list on focus, not on click.
-  if (el instanceof HTMLInputElement) el.focus();
+  if (isInput(el)) el.focus();
   const view = el.ownerDocument.defaultView;
   const base = { bubbles: true, cancelable: true, view, composed: true } as const;
   const pointer = { ...base, isPrimary: true, pointerId: 1, pointerType: "mouse" };
@@ -76,6 +99,26 @@ function realClick(el: HTMLElement) {
   el.dispatchEvent(new PointerEvent("pointerup", pointer));
   el.dispatchEvent(new MouseEvent("mouseup", base));
   el.click();
+}
+
+/**
+ * Write into a React-controlled input.
+ *
+ * Assigning `.value` directly is not enough: React caches the last value it
+ * set on the node and skips the change event when it sees no difference.
+ * Going through the prototype setter updates the node underneath that cache,
+ * so the input event React hears looks exactly like a real keystroke.
+ *
+ * The prototype has to come from the framed window — ours is a different
+ * realm, and its setter would not apply to a node from over there.
+ */
+function setNativeValue(el: HTMLInputElement, value: string) {
+  const win = el.ownerDocument.defaultView as (Window & typeof globalThis) | null;
+  const proto = win ? win.HTMLInputElement.prototype : HTMLInputElement.prototype;
+  const setter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+  if (setter) setter.call(el, value);
+  else el.value = value;
+  el.dispatchEvent(new Event("input", { bubbles: true, composed: true }));
 }
 
 /* ── The frame ────────────────────────────────────────────────────── */
@@ -199,6 +242,18 @@ export function LiveDemoFrame({
           console.log("[frame]", step.kind, JSON.stringify(step.find), el ? "FOUND" : "NOT FOUND");
         }
         if (cancelled) return;
+
+        if (step.kind === "type" && isInput(el)) {
+          // Character by character, so the list visibly narrows as it goes.
+          for (let i = 1; i <= step.text.length; i++) {
+            if (cancelled) return;
+            setNativeValue(el, step.text.slice(0, i));
+            await sleep(step.perChar ?? 70);
+          }
+          await sleep(step.settle ?? 900);
+          continue;
+        }
+
         if (step.kind === "click" && el) {
           // Re-locate before clicking. The cursor takes ~900ms to travel, and
           // React can re-render the form in that window — leaving `el`
