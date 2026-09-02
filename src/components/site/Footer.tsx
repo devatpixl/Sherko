@@ -15,7 +15,7 @@ export function Footer() {
       {/* One flourish: the name, half sunk below the edge of the page. */}
       <span
         aria-hidden
-        className="display pointer-events-none absolute -bottom-[0.18em] left-1/2 -translate-x-1/2 text-[clamp(6rem,20vw,16rem)] whitespace-nowrap select-none footer-ghost"
+        className="display pointer-events-none absolute -bottom-[0.18em] left-1/2 -translate-x-1/2 text-[clamp(3.25rem,19vw,16rem)] whitespace-nowrap select-none footer-ghost"
       >
         {brand.name.toUpperCase()}
       </span>

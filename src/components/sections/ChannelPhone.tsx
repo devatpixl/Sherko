@@ -100,7 +100,7 @@ export function ChannelPhone() {
         className="mt-14 grid items-start gap-10 md:mt-16 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16"
       >
         {/* what goes in, and what comes out */}
-        <div className="order-2 lg:order-none">
+        <div className="order-2 min-w-0 lg:order-none">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -111,11 +111,11 @@ export function ChannelPhone() {
               {locale === "no" ? "Dette går inn" : "This goes in"}
             </p>
 
-            <ul className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line">
+            <ul className="mt-5 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2">
               {INBOUND.map((item, i) => (
                 <motion.li
                   key={item.label}
-                  className="flex items-center gap-3 bg-surface px-4 py-3.5 transition-colors duration-300 hover:bg-accent/8"
+                  className="flex min-w-0 items-center gap-3 bg-surface px-4 py-3.5 transition-colors duration-300 hover:bg-accent/8"
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ margin: "-8% 0px" }}
@@ -158,7 +158,7 @@ export function ChannelPhone() {
                 {locale === "no" ? "Ut som én ordre" : "Out as one order"}
               </span>
             </div>
-            <DraftPanel form={view.form} className="mt-4 w-full max-w-[460px]" />
+            <DraftPanel form={view.form} className="mt-4 w-full max-w-[460px] min-w-0" />
           </motion.div>
         </div>
 
@@ -168,7 +168,7 @@ export function ChannelPhone() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ margin: "-10% 0px" }}
           transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
-          className="order-1 flex justify-center lg:order-none"
+          className="order-1 flex w-full min-w-0 justify-center lg:order-none"
         >
           {/* Scaled down so the whole exchange sits inside one screen. The
               origin is the top, so the section height follows the scale. */}

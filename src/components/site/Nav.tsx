@@ -216,7 +216,7 @@ export function Nav() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.06 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="display border-b border-line py-5 text-[2rem] text-fg"
+                    className="display border-b border-line py-4 text-[1.375rem] text-fg"
                   >
                     {n.label[locale]}
                   </motion.a>

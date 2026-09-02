@@ -189,6 +189,49 @@ function AppCard({ app, delay }: { app: App; delay: number }) {
 /** Zapier's drawn bracket: a vertical spine with a stub into the middle.
  *  Both arms carry a travelling packet, and the whole bracket is mirrored for
  *  the outbound side so flow always reads toward, then away from, the middle. */
+/* The same funnel turned on its side, for the stacked phone layout. The
+   horizontal bracket is hidden under md, which left the mobile diagram as
+   three unrelated lists with nothing joining them. Same arms, same drawn-in
+   rails, same accent pulse running along them. */
+function BracketV({ flip = false }: { flip?: boolean }) {
+  const ARMS = [
+    "M14 2 V22 Q14 30 26 30 H106 Q120 30 120 40 V54",
+    "M226 2 V22 Q226 30 214 30 H134 Q120 30 120 40 V54",
+    "M120 2 V54",
+  ];
+  return (
+    <div className={`relative h-14 w-full md:hidden ${flip ? "scale-y-[-1]" : ""}`}>
+      <svg viewBox="0 0 240 56" preserveAspectRatio="none" className="h-full w-full text-line-2" aria-hidden>
+        {ARMS.map((d, i) => (
+          <motion.path
+            key={`vrail-${i}`}
+            d={d}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, delay: i * 0.08, ease: EASE }}
+          />
+        ))}
+        {ARMS.map((d, i) => (
+          <path
+            key={`vflow-${i}`}
+            d={d}
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="1.6"
+            strokeDasharray="16 220"
+            className="bracket-flow"
+            style={{ animationDelay: `${i * 0.45}s` }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 function Bracket({ flip = false }: { flip?: boolean }) {
   const ARMS = [
     "M2 14 H22 Q30 14 30 26 V106 Q30 120 40 120 H54",
@@ -255,6 +298,7 @@ export function Integrations() {
             </div>
 
             <Bracket />
+            <BracketV />
 
             {/* the product */}
             <motion.div
@@ -278,6 +322,7 @@ export function Integrations() {
               />
             </motion.div>
 
+            <BracketV flip />
             <Bracket flip />
 
             {/* out */}
