@@ -130,27 +130,59 @@ export function Control() {
           </div>
         </Reveal>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {control.guarantees.map((g, i) => (
+        {/* Cursor's "Stay on the frontier" shape: the three that carry the
+            argument get room and a visual, the rest sit underneath as a spec
+            row. Six equal cards made every guarantee look equally minor. */}
+        <div className="mt-5 grid gap-5 lg:grid-cols-3">
+          {control.guarantees.slice(0, 3).map((g, i) => (
             <Reveal key={g.key} delay={0.06 * i} className="h-full">
-              <article className="card flex h-full flex-col p-6">
-                <div className="grow">
-                  <Glyph name={g.key} />
-                  <h3 className="display mt-4 text-[1.125rem] text-fg">{g.title[locale]}</h3>
-                  <p className="mt-2 text-[0.9375rem] leading-relaxed text-fg-2">
-                    {g.body[locale]}
+              <article className="card flex h-full flex-col p-7">
+                <Glyph name={g.key} />
+                <h3 className="display mt-5 text-[1.25rem] text-fg">{g.title[locale]}</h3>
+                <p className="mt-2.5 grow text-[0.9375rem] leading-relaxed text-fg-2">
+                  {g.body[locale]}
+                </p>
+
+                {/* the rule as the system actually stores it */}
+                <div className="mt-7 rounded-lg border border-line bg-canvas/60 p-4">
+                  <p className="font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">
+                    {locale === "no" ? "I systemet" : "In the system"}
+                  </p>
+                  <p className="mt-2 flex items-start gap-2 font-mono text-[11.5px] leading-relaxed tracking-tight text-fg-2">
+                    <span aria-hidden className="text-accent">
+                      ✓
+                    </span>
+                    <span>{ASSERTIONS[g.key]}</span>
                   </p>
                 </div>
-                <p className="mt-5 flex items-start gap-2 border-t border-line pt-4 font-mono text-[11px] tracking-tight text-fg-3">
-                  <span aria-hidden className="text-accent">
-                    ✓
-                  </span>
-                  <span>{ASSERTIONS[g.key]}</span>
-                </p>
               </article>
             </Reveal>
           ))}
         </div>
+
+        <div className="mt-5 grid gap-x-8 gap-y-px sm:grid-cols-2 lg:grid-cols-3">
+          {control.guarantees.slice(3).map((g, i) => (
+            <Reveal key={g.key} delay={0.06 * i}>
+              <div className="group flex h-full items-start gap-3.5 border-t border-line py-5 transition-colors duration-300 hover:border-accent">
+                <span className="mt-0.5 shrink-0 text-accent">
+                  <Glyph name={g.key} />
+                </span>
+                <div>
+                  <h3 className="text-[0.9375rem] font-medium text-fg transition-colors duration-300 group-hover:text-accent">
+                    {g.title[locale]}
+                  </h3>
+                  <p className="mt-1.5 text-[0.875rem] leading-relaxed text-fg-3">
+                    {g.body[locale]}
+                  </p>
+                  <p className="mt-2.5 font-mono text-[10.5px] tracking-tight text-fg-4">
+                    {ASSERTIONS[g.key]}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
       </Container>
     </Section>
   );

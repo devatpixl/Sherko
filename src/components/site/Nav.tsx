@@ -5,10 +5,38 @@ import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/site/Wordmark";
 import { DEMO_ENABLED, DEMO_URL } from "@/lib/config";
 import { cta, nav } from "@/lib/content";
+import { useTheme } from "@/lib/theme";
 import { useLocale } from "@/lib/i18n";
 
 /* A floating capsule rather than a full-width bar: it sits over the page with
    air on all sides, so the dark hero reads as one uninterrupted stage. */
+
+/* Sun / moon, sharing the pill treatment the locale switch already uses so the
+   two controls read as one cluster rather than two unrelated widgets. */
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  const dark = theme === "dark";
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+      aria-pressed={!dark}
+      className="pointer-events-auto grid h-[30px] w-[30px] shrink-0 cursor-pointer place-items-center rounded-full bg-surface/70 text-fg-3 transition-colors duration-300 hover:text-fg"
+    >
+      <svg viewBox="0 0 24 24" className="h-[15px] w-[15px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden>
+        {dark ? (
+          <path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a7 7 0 0 0 10.7 10.7Z" />
+        ) : (
+          <>
+            <circle cx="12" cy="12" r="4.2" />
+            <path d="M12 2.6v2.2M12 19.2v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6" />
+          </>
+        )}
+      </svg>
+    </button>
+  );
+}
 
 function LocaleToggle() {
   const { locale, setLocale } = useLocale();
@@ -104,7 +132,7 @@ export function Nav() {
                     key={n.id}
                     href={`#${n.id}`}
                     aria-current={on ? "true" : undefined}
-                    className={`relative rounded-full px-3.5 py-2 text-[0.875rem] tracking-tight transition-colors duration-300 ${
+                    className={`relative rounded-full px-3.5 py-2 text-[0.9375rem] tracking-tight transition-colors duration-300 ${
                       on ? "text-fg" : "text-fg-2 hover:text-fg"
                     }`}
                   >
@@ -124,12 +152,18 @@ export function Nav() {
             <div className="ml-auto flex items-center gap-2 lg:ml-0">
               {/* The live demo is the strongest proof we have, so it gets a
                   permanent home rather than living only behind the animations. */}
+              <div className="hidden items-center gap-2 sm:flex">
+                <ThemeToggle />
+                <LocaleToggle />
+              </div>
+              {/* The live demo is the strongest proof we have, so it *is* the
+                  primary action rather than a booking form. */}
               {DEMO_ENABLED && (
                 <a
                   href={DEMO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-[0.875rem] tracking-tight text-fg-2 transition-colors duration-300 hover:bg-surface hover:text-fg md:inline-flex"
+                  className="hidden items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[0.9375rem] font-medium tracking-tight text-white transition-colors duration-300 hover:bg-accent-dim sm:inline-flex"
                 >
                   {cta.demo[locale]}
                   <svg viewBox="0 0 16 16" className="h-3 w-3" aria-hidden>
@@ -144,15 +178,6 @@ export function Nav() {
                   </svg>
                 </a>
               )}
-              <div className="hidden sm:block">
-                <LocaleToggle />
-              </div>
-              <a
-                href="#kontakt"
-                className="hidden rounded-full bg-fg px-4.5 py-2.5 text-[0.875rem] font-medium tracking-tight text-canvas transition-opacity duration-300 hover:opacity-88 sm:inline-flex"
-              >
-                {cta.primary[locale]}
-              </a>
 
               <button
                 type="button"
@@ -204,7 +229,7 @@ export function Nav() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setOpen(false)}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-line-2 px-5 py-3.5 text-[0.9375rem] font-medium text-fg-2"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-[0.9375rem] font-medium text-white"
                   >
                     {cta.demo[locale]}
                     <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden>
@@ -221,13 +246,7 @@ export function Nav() {
                 )}
                 <div className="flex items-center justify-between gap-4">
                   <LocaleToggle />
-                  <a
-                    href="#kontakt"
-                    onClick={() => setOpen(false)}
-                    className="inline-flex flex-1 items-center justify-center rounded-full bg-fg px-5 py-3.5 text-[0.9375rem] font-medium text-canvas"
-                  >
-                    {cta.primary[locale]}
-                  </a>
+                  <ThemeToggle />
                 </div>
               </div>
             </div>

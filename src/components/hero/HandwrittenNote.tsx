@@ -99,7 +99,7 @@ export function HandwrittenNote({ ocr = false }: { ocr?: boolean }) {
             transition={{ duration: 0.25 }}
             className="pointer-events-none absolute inset-0"
           >
-            <div className="absolute inset-0 bg-[#5CE1B0]/10" />
+            <div className="absolute inset-0 bg-accent/10" />
 
             {/* One box per line, landing in reading order. Line 3 lands amber —
                 the machine flagging the question mark the human wrote. */}
@@ -128,7 +128,7 @@ export function HandwrittenNote({ ocr = false }: { ocr?: boolean }) {
             <div className="absolute inset-x-0 top-0 h-full overflow-hidden">
               <div className="ocr-sweep absolute inset-x-0 h-[20%]">
                 <div className="h-full w-full bg-linear-to-b from-transparent via-accent/22 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 h-px bg-accent shadow-[0_0_12px_2px_rgba(92,225,176,0.75)]" />
+                <div className="absolute inset-x-0 bottom-0 h-px bg-accent shadow-[0_0_12px_2px_rgba(245,78,0,0.55)]" />
               </div>
             </div>
 

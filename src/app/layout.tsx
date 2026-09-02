@@ -1,34 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Caveat,
-  Geist,
-  Geist_Mono,
-  JetBrains_Mono,
-  Schibsted_Grotesk,
-} from "next/font/google";
+import { Caveat, Geist, Geist_Mono } from "next/font/google";
 import { LocaleProvider } from "@/lib/i18n";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
-/* Schibsted Grotesk is a Norwegian typeface — the right provenance for a
-   product sold to Norwegian wholesalers, and a better display face than
-   the usual Inter default. */
-const schibsted = Schibsted_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-schibsted",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
-
-const jbMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jbmono",
-  display: "swap",
-  weight: ["400", "500"],
-});
-
-/* Geist is what the real admin portal runs on. Used only inside the
-   simulated portal, so those screens are set in the product's own type
-   rather than the marketing site's. */
+/* Geist sets the whole site: the marketing pages and the simulated portal.
+   It is the closest open face to the grotesque cursor.com is set in — within
+   0.13% on width for the same string — and it is already what the real admin
+   portal runs on, so the simulations and the marketing page now agree. */
 const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
@@ -52,11 +31,11 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://sherko.no"),
   title: {
-    default: "Sherko — AI-ordredesk for grossister",
+    default: "Sherko - AI-ordredesk for grossister",
     template: "%s · Sherko",
   },
   description:
-    "Sherko tar imot ordrer på WhatsApp og e-post — fritekst, PDF, Excel eller et bilde av en håndskrevet lapp — matcher dem mot katalogen din og legger inn ordreutkast til godkjenning.",
+    "Sherko tar imot ordrer på WhatsApp og e-post, fritekst, PDF, Excel eller et bilde av en håndskrevet lapp, matcher dem mot katalogen din og legger inn ordreutkast til godkjenning.",
   keywords: [
     "ordremottak",
     "AI ordredesk",
@@ -70,21 +49,21 @@ export const metadata: Metadata = {
     locale: "nb_NO",
     alternateLocale: ["en_US"],
     siteName: "Sherko",
-    title: "Sherko — AI-ordredesk for grossister",
+    title: "Sherko - AI-ordredesk for grossister",
     description:
       "Kundene sender ordren der de allerede er. Sherko leser den, matcher katalogen og legger inn utkastet. Du godkjenner.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sherko — AI-ordredesk for grossister",
+    title: "Sherko - AI-ordredesk for grossister",
     description:
-      "Bygget for grossister, ikke for alle. WhatsApp, e-post, PDF, Excel og håndskrevne lapper inn — ordreutkast ut.",
+      "Bygget for grossister, ikke for alle. WhatsApp, e-post, PDF, Excel og håndskrevne lapper inn, ordreutkast ut.",
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#07080A",
+  themeColor: "#14120B",
   colorScheme: "dark",
 };
 
@@ -97,7 +76,7 @@ const jsonLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, WhatsApp, Email",
   description:
-    "AI order desk for wholesalers. Takes orders on WhatsApp and email — free text, PDF, Excel or a photo of a handwritten note — matches them against your catalogue and files draft orders for human approval.",
+    "AI order desk for wholesalers. Takes orders on WhatsApp and email, free text, PDF, Excel or a photo of a handwritten note, matches them against your catalogue and files draft orders for human approval.",
   inLanguage: ["nb-NO", "en"],
   author: { "@type": "Organization", name: "Pixl Media", url: "https://pixlmedia.no" },
   offers: { "@type": "Offer", availability: "https://schema.org/PreOrder" },
@@ -107,8 +86,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="nb"
-      className={`${schibsted.variable} ${jbMono.variable} ${caveat.variable} ${geist.variable} ${geistMono.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${caveat.variable}`}
+      /* THEME_INIT_SCRIPT stamps data-theme and color-scheme on this element
+         before React hydrates, so the client tree legitimately carries two
+         attributes the server HTML cannot know. The theme is per-visitor
+         localStorage, so it can never be rendered on the server. Scoped to
+         this element only: children still warn normally. */
+      suppressHydrationWarning
     >
+      <head>
+        {/* Sets data-theme before first paint, so a light-mode visitor never
+            sees a dark flash. Must run before React loads, hence inline. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="antialiased">
         <script
           type="application/ld+json"

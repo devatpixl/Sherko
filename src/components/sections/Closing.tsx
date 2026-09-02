@@ -2,8 +2,7 @@
 
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Container, Reveal, Section, SectionHead } from "@/components/ui";
-import { DEMO_ENABLED, DEMO_URL } from "@/lib/config";
-import { closing, cta } from "@/lib/content";
+import { closing } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
 /* The ask. The chips stay because they answer the question the form provokes —
@@ -22,7 +21,6 @@ export function Closing() {
       {/* ── Atmosphere — a quieter echo of the hero, never louder ──── */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="grid-substrate mask-radial absolute inset-0 opacity-60" />
-        <div className="aurora aurora-drift absolute top-[18%] left-1/2 h-[560px] w-[900px] -translate-x-1/2 opacity-40" />
       </div>
 
       <Container>
@@ -56,22 +54,6 @@ export function Closing() {
           </p>
         </Reveal>
 
-        {/* Not everyone is ready to book. Let them poke at the real thing. */}
-        {DEMO_ENABLED && (
-          <Reveal delay={0.34}>
-            <p className="mt-5 text-center text-[0.9375rem] text-fg-3">
-              <a
-                href={DEMO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-fg underline decoration-line-2 underline-offset-4 transition-colors hover:decoration-accent"
-              >
-                {cta.demo[locale]}
-              </a>{" "}
-              — {cta.demoHint[locale]}
-            </p>
-          </Reveal>
-        )}
       </Container>
     </Section>
   );

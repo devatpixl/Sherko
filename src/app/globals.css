@@ -15,26 +15,26 @@
 
 @theme {
   /* Canvas + surfaces */
-  --color-canvas:     #07080A;
-  --color-elev:       #0C0E11;
-  --color-surface:    #111418;
-  --color-surface-2:  #171B21;
-  --color-line:       #21262C;
-  --color-line-2:     #2C333A;
+  --color-canvas:     #14120B;
+  --color-elev:       #1B1913;
+  --color-surface:    #1D1B15;
+  --color-surface-2:  #201E18;
+  --color-line:       #26241E;
+  --color-line-2:     #2B2923;
 
   /* Type */
-  --color-fg:         #F0EEE9;
-  --color-fg-2:       #A2AAB2;
-  --color-fg-3:       #6E767E;
-  --color-fg-4:       #4A5158;
+  --color-fg:         #EDECEC;
+  --color-fg-2:       #D7D6D5;
+  --color-fg-3:       #8A8781;
+  --color-fg-4:       #5F5C56;
 
   /* Aurora accent ramp */
-  --color-accent:     #5CE1B0;
-  --color-accent-dim: #2E9E77;
-  --color-ice:        #4CC9F0;
-  --color-violet:     #7C6BF5;
-  --color-signal:     #F0B849;
-  --color-on-accent:  #041710;
+  --color-accent:     #F54E00;
+  --color-accent-dim: #C23E00;
+  --color-ice:        #F54E00;
+  --color-violet:     #C23E00;
+  --color-signal:     #DFA88F;
+  --color-on-accent:  #14120B;
 
   /* WhatsApp-faithful palette (phone simulation only) */
   --color-wa-bg:        #0B141A;
@@ -97,18 +97,93 @@
   /* Geist — what the real admin portal is set in. Simulation only. */
   --font-adm:      var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-adm-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-sans:    var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans:    var(--font-geist), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+/* ── Light theme ──────────────────────────────────────────────────── */
+/* Modelled on zapier.com: a warm off-white ground rather than pure white,
+   near-black type, and the same orange doing all the accent work.
+
+   Only the tokens change. Every component reads these variables, so nothing
+   below needs a light-mode branch. Set by the pre-paint script in layout.tsx,
+   toggled from the nav. */
+
+[data-theme="light"] {
+  /* White ground, warm off-white for the banded sections and panels so cards
+     still separate without a shadow. Three colours do all the work: black,
+     white, orange. */
+  --color-canvas:     #FFFFFF;
+  --color-elev:       #F6F4EF;
+  --color-surface:    #FBFAF7;
+  --color-surface-2:  #F3F1EC;
+  --color-line:       #E5E2DB;
+  --color-line-2:     #CFCBC1;
+
+  /* Every step is darkened from the first pass: fg-3 and fg-4 were captions
+     and timestamps at roughly 3:1 on white, which is what "text is not clear"
+     meant. These clear 4.5:1 and 7:1 respectively. */
+  --color-fg:         #050403;
+  --color-fg-2:       #2E2B26;
+  --color-fg-3:       #57534A;
+  --color-fg-4:       #6B675E;
+
+  --color-accent:     #DC4405;
+  --color-accent-dim: #B03400;
+  --color-ice:        #DC4405;
+  --color-violet:     #B03400;
+  --color-signal:     #9C4E18;
+  --color-on-accent:  #FFFFFF;
+}
+
+/* The grain and the engineering grid are tuned for a near-black ground and
+   turn to dirt on a light one. */
+[data-theme="light"] .grain::after { opacity: 0.014; }
+[data-theme="light"] .grid-substrate {
+  background-image:
+    linear-gradient(to right,  color-mix(in oklab, var(--color-fg) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-fg) 6%, transparent) 1px, transparent 1px);
+}
+
+/* The name sunk into the footer edge. A flat alpha does not survive the theme
+   swap: 2.8% off-white on near-black reads, the same 2.8% near-black on white
+   is one step off the page colour and disappears. Light gets its own value. */
+.footer-ghost { color: color-mix(in oklab, var(--color-fg) 2.8%, transparent); }
+[data-theme="light"] .footer-ghost { color: color-mix(in oklab, var(--color-fg) 7%, transparent); }
+
+/* ── Client logo tones ────────────────────────────────────────────── */
+/* Which correction a logo needs depends on the ground it sits on, so it is a
+   theme concern rather than a per-logo constant. Flipping a dark wordmark to
+   white is right on the near-black canvas and exactly wrong on the light one. */
+
+.logo-invert { filter: brightness(0) invert(1); }
+.logo-lift   { filter: brightness(2.1) saturate(1.35) contrast(1.08); }
+
+/* Some brands ship two official files, one for a dark ground and one for a
+   light one. Show the right one rather than filtering a single file into a
+   colour the brand does not actually use. */
+.only-dark  { display: none; }
+.only-light { display: none; }
+[data-theme="dark"]  .only-dark  { display: block; }
+[data-theme="light"] .only-light { display: block; }
+
+[data-theme="light"] .logo-invert,
+[data-theme="light"] .logo-lift { filter: none; }
+
 /* ── Base ─────────────────────────────────────────────────────────── */
 
-* { border-color: var(--color-line); }
+/* Must sit in @layer base. Unlayered rules beat everything in Tailwind's
+   layers, so as a bare `*` this silently overrode every border-colour utility
+   on the site: border-line-2, border-accent/35 and every hover:border-* were
+   all being painted --color-line instead. */
+@layer base {
+  * { border-color: var(--color-line); }
+}
 
 html {
   scroll-behavior: smooth;
@@ -119,7 +194,9 @@ body {
   background: var(--color-canvas);
   color: var(--color-fg);
   font-family: var(--font-sans);
-  font-feature-settings: "cv05" 1, "ss01" 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -161,18 +238,22 @@ select:focus-visible {
 
 .display {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   text-wrap: balance;
 }
 
+/* No leading rule. A hairline before every small heading read as a stray
+   long dash down the page, so the italic carries the "this is a label" job
+   on its own. Sentence case, because the strings are already written that way. */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-transform: none;
   color: var(--color-fg-3);
 }
 
@@ -210,21 +291,6 @@ select:focus-visible {
 }
 
 /* Aurora ribbon — the hero's light source */
-.aurora {
-  background:
-    radial-gradient(60% 44% at 22% 30%, color-mix(in oklab, var(--color-accent) 34%, transparent) 0%, transparent 68%),
-    radial-gradient(52% 40% at 70% 22%, color-mix(in oklab, var(--color-ice) 26%, transparent) 0%, transparent 66%),
-    radial-gradient(58% 46% at 52% 68%, color-mix(in oklab, var(--color-violet) 26%, transparent) 0%, transparent 70%);
-  filter: blur(72px);
-}
-
-@keyframes aurora-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1);      opacity: 0.75; }
-  33%      { transform: translate3d(3%, -3%, 0) scale(1.07); opacity: 1;    }
-  66%      { transform: translate3d(-3%, 2%, 0) scale(1.03); opacity: 0.85; }
-}
-.aurora-drift { animation: aurora-drift 22s ease-in-out infinite; }
-
 /* Hairline rule that fades at both ends */
 .rule-x {
   height: 1px;
@@ -236,9 +302,26 @@ select:focus-visible {
 /* Card with a top-edge specular highlight — reads as lit from above */
 .card {
   position: relative;
-  background: linear-gradient(180deg, var(--color-surface-2) 0%, var(--color-surface) 100%);
+  background: var(--color-surface);
   border: 1px solid var(--color-line);
   border-radius: 16px;
+  transition:
+    transform 0.35s var(--ease-out-expo),
+    border-color 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease-out-expo);
+}
+
+/* Cards are not links, but they still have to answer the pointer. Without it
+   a whole section reads as a printed page. */
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: 0 14px 34px -16px color-mix(in oklab, var(--color-fg) 30%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: border-color 0.2s linear; }
+  .card:hover { transform: none; box-shadow: none; }
 }
 .card::before {
   content: "";
@@ -256,12 +339,57 @@ select:focus-visible {
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
 
-/* Accent text gradient */
+/* ── Theta mark ───────────────────────────────────────────────────── */
+/* cursor.com's logo is a 1.52s clip, loop=false, autoplay=false, parked on
+   frame 0. It plays once on hover: a full Y-axis revolution that passes
+   edge-on at the halfway point. Same thing here, in CSS. */
+
+.theta-stage {
+  perspective: 220px;
+}
+
+.theta-mark {
+  display: block;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.theta-bar {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.group:hover .theta-mark {
+  animation: theta-spin 1.52s cubic-bezier(0.62, 0.02, 0.34, 1);
+}
+
+/* the bar runs on the same clock as the spin: it closes as the mark turns
+   toward edge-on, then opens back out as the face comes round again */
+.group:hover .theta-bar {
+  animation: theta-bar 1.52s cubic-bezier(0.62, 0.02, 0.34, 1);
+}
+
+@keyframes theta-spin {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+@keyframes theta-bar {
+  0%   { transform: scaleX(1); }
+  22%  { transform: scaleX(0.06); }
+  50%  { transform: scaleX(1); }
+  78%  { transform: scaleX(0.06); }
+  100% { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .theta-mark,
+  .group:hover .theta-bar { animation: none; }
+}
+
+/* Accent text — flat, cursor.com uses no text gradients */
 .aurora-text {
-  background: linear-gradient(100deg, var(--color-accent) 0%, var(--color-ice) 46%, var(--color-violet) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-accent);
 }
 
 /* Marquee */
@@ -305,4 +433,48 @@ select:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* ── Integration diagram motion ───────────────────────────────────── */
+/* The middle block is where the work happens, so it is the thing that moves:
+   the dot field drifts under a soft pulse, and a short dash runs each bracket
+   toward it. Both stop under prefers-reduced-motion (handled globally). */
+
+.dot-plate {
+  position: relative;
+  background-image: radial-gradient(var(--color-accent) 1px, transparent 1px);
+  background-size: 5px 5px;
+  opacity: 0.45;
+}
+
+/* zapier fills the dot field with a solid bar that sweeps across and back,
+   so the plate reads as throughput rather than texture */
+.dot-plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-accent) 12%,
+    var(--color-accent) 88%,
+    transparent 100%
+  );
+  animation: dot-sweep 3.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+@keyframes dot-sweep {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+.bracket-flow {
+  /* alternate, so the packet runs in and then back out again rather than
+     snapping to the start each cycle */
+  animation: bracket-flow 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+@keyframes bracket-flow {
+  from { stroke-dashoffset: 236; }
+  to   { stroke-dashoffset: 0; }
 }

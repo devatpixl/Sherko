@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { foldScript, script, scriptLength, type ChatView } from "@/lib/chatScript";
 import { useLocale } from "@/lib/i18n";
+import { paced } from "@/lib/pace";
 
 const MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -43,7 +44,7 @@ export function useSimulation(active: boolean) {
     if (!active) return;
     const step = script[i];
     // Reduced motion still tells the story, just without the dwell time.
-    const ms = reduced ? Math.min(step.ms, 500) : step.ms;
+    const ms = reduced ? Math.min(paced(step.ms), 500) : paced(step.ms);
     const t = window.setTimeout(() => setI((n) => (n + 1) % scriptLength), ms);
     return () => window.clearTimeout(t);
   }, [i, active, reduced]);
@@ -53,7 +54,7 @@ export function useSimulation(active: boolean) {
     const step = script[i];
     if (step.kind !== "compose" || reduced || !active) return;
     const total = step.text[locale].length;
-    const per = Math.max(14, (step.ms * 0.78) / total);
+    const per = Math.max(9, (paced(step.ms) * 0.78) / total);
     let n = 0;
     const id = window.setInterval(() => {
       // Type in small bursts — a steady one-char metronome reads robotic.

@@ -173,13 +173,13 @@ function OrderMessage({ item }: { item: Extract<ChatItem, { kind: "order" }> }) 
               className="flex gap-[6px] text-[15px] leading-[20px]"
             >
               <span className="shrink-0 text-[#E9EDEF]/50 tabular-nums">{i + 1}.</span>
-              {/* One wrapping run — "name — qty" — which is exactly how the
+              {/* One wrapping run — "name, qty" — which is exactly how the
                   real bot composes an order line, and it wraps like prose
                   instead of stranding the quantity on its own line. */}
               <span className="min-w-0">
                 {l.name[locale]}
-                {l.flagged && <span className="text-[#F0B849]"> (?)</span>}
-                <span className="text-[#E9EDEF]/45"> — </span>
+                {l.flagged && <span className="text-signal"> (?)</span>}
+                <span className="text-[#E9EDEF]/45">, </span>
                 <span className="font-medium">{l.qty[locale]}</span>
               </span>
             </motion.li>
@@ -228,10 +228,10 @@ function ReceiptMessage({ item }: { item: Extract<ChatItem, { kind: "receipt" }>
           </div>
           <div className="mt-[5px] flex items-center gap-[6px]">
             <span className="relative flex h-[6px] w-[6px]">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F0B849] opacity-70" />
-              <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-[#F0B849]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-70" />
+              <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-signal" />
             </span>
-            <span className="text-[12.5px] leading-[16px] text-[#F0B849]">{item.status[locale]}</span>
+            <span className="text-[12.5px] leading-[16px] text-signal">{item.status[locale]}</span>
           </div>
         </motion.div>
 
@@ -325,7 +325,7 @@ function ChatHeader() {
     <div className="flex h-[56px] shrink-0 items-center bg-[#1F2C34] pr-[14px] pl-[8px]">
       <ChevronBack className="shrink-0 text-[#E9EDEF]" />
       <div className="relative ml-[4px] shrink-0">
-        <div className="grid h-[40px] w-[40px] place-items-center overflow-hidden rounded-full bg-linear-to-br from-[#5CE1B0] to-[#2E9E77]">
+        <div className="grid h-[40px] w-[40px] place-items-center overflow-hidden rounded-full bg-accent">
           <span className="font-display text-[17px] font-semibold text-[#041710]">N</span>
         </div>
         <span className="absolute right-0 bottom-0 h-[10px] w-[10px] rounded-full border-2 border-[#1F2C34] bg-[#25D366]" />

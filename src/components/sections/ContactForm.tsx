@@ -114,7 +114,7 @@ function Field({
         initial={false}
         animate={{ scaleX: focused ? 1 : 0 }}
         transition={{ duration: 0.4, ease: EASE }}
-        className="absolute inset-x-0 bottom-0 h-px origin-left bg-linear-to-r from-accent via-ice to-violet"
+        className="absolute inset-x-0 bottom-0 h-px origin-left bg-accent"
       />
 
       <AnimatePresence>
@@ -245,9 +245,8 @@ export function ContactForm() {
               <button
                 type="submit"
                 disabled={state === "sending"}
-                className="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-fg px-7 py-4 text-[0.9375rem] font-medium tracking-tight text-canvas transition-transform duration-300 hover:scale-[1.02] active:scale-[0.99] disabled:cursor-wait disabled:hover:scale-100 sm:w-auto"
+                className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-accent px-7 py-4 text-[0.9375rem] font-medium tracking-tight text-white transition-[transform,background-color] duration-300 hover:scale-[1.02] hover:bg-accent-dim active:scale-[0.99] disabled:cursor-wait disabled:hover:scale-100 sm:w-auto"
               >
-                <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-accent via-ice to-violet transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
                 <span className="relative">
                   {state === "sending" ? contact.submitting[locale] : contact.submit[locale]}
                 </span>

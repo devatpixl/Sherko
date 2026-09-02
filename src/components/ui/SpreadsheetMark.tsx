@@ -1,30 +1,77 @@
-/* A spreadsheet mark in Excel's green.
+"use client";
 
-   Deliberately our own drawing rather than Microsoft's registered logo — it
-   reads instantly as "the spreadsheet you're still using" without putting a
-   competitor's trademark on our marketing site. */
+import { motion } from "motion/react";
 
-export function SpreadsheetMark({ className = "" }: { className?: string }) {
+/* Microsoft's own Excel mark, from the file the client supplied, with an
+   orange blade drawn across it.
+
+   Earlier versions of this were our own drawing of a spreadsheet. That was a
+   deliberate trademark dodge, but it never read as Excel, which is the whole
+   point of the section: we name the product in order to say we replace it.
+
+   `cut` draws the blade and parts the mark either side of it, so it reads as
+   cut rather than merely crossed out. */
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+export function SpreadsheetMark({
+  className = "",
+  cut = false,
+  delay = 0.3,
+}: {
+  className?: string;
+  cut?: boolean;
+  delay?: number;
+}) {
+  if (!cut) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src="/logos/apps/excel.svg" alt="" aria-hidden className={`object-contain ${className}`} />
+    );
+  }
+
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden>
-      {/* Sheet */}
-      <path
-        d="M4.5 2.5h9.6L19.5 7.9V21a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-        opacity="0.55"
-      />
-      <path d="M14 2.6V8h5.3" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" opacity="0.55" />
-      {/* The green tile with the X */}
-      <rect x="1.5" y="8.5" width="12" height="11" rx="1.6" fill="var(--color-xls)" />
-      <path
-        d="M4.6 11.4 10.4 16.6M10.4 11.4 4.6 16.6"
-        stroke="#fff"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-      />
-    </svg>
+    <span className={`relative inline-block ${className}`}>
+      {/* upper-left half, pushed away from the blade */}
+      <motion.span
+        className="absolute inset-0"
+        style={{ clipPath: "polygon(-20% -20%, 120% -20%, -20% 120%)" }}
+        initial={{ x: 0, y: 0 }}
+        whileInView={{ x: -1.5, y: -1.5 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.55, delay: delay + 0.3, ease: EASE }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logos/apps/excel.svg" alt="" aria-hidden className="h-full w-full object-contain" />
+      </motion.span>
+
+      {/* lower-right half */}
+      <motion.span
+        className="absolute inset-0"
+        style={{ clipPath: "polygon(120% -20%, 120% 120%, -20% 120%)" }}
+        initial={{ x: 0, y: 0 }}
+        whileInView={{ x: 1.5, y: 1.5 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.55, delay: delay + 0.3, ease: EASE }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logos/apps/excel.svg" alt="" aria-hidden className="h-full w-full object-contain" />
+      </motion.span>
+
+      {/* the blade */}
+      <svg viewBox="0 0 32 32" className="absolute inset-0 h-full w-full" aria-hidden>
+        <motion.path
+          d="M2 30 30 2"
+          fill="none"
+          stroke="var(--color-accent)"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          whileInView={{ pathLength: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, delay, ease: EASE }}
+        />
+      </svg>
+    </span>
   );
 }

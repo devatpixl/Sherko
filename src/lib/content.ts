@@ -22,7 +22,14 @@ export const nav: { id: string; label: Bi }[] = [
 ];
 
 export const cta = {
-  primary: { no: "Book en demo", en: "Book a demo" },
+  /* `bookDemo` appears EXACTLY ONCE on the whole site — the secondary action
+     in the hero — the way cursor.com uses "Request a demo". The nav and every
+     section below lead with `demo`, which opens the real working portal.
+     Do not add a second booking button. */
+  /* Deliberately NOT another "demo": next to "Prøv demoen" that read as two
+     buttons for the same thing. This one is the sales conversation, the way
+     cursor.com pairs "Get started" with "Contact sales". */
+  bookDemo: { no: "Snakk med oss", en: "Talk to us" },
   secondary: { no: "Se den jobbe", en: "Watch it work" },
   login: { no: "Logg inn", en: "Log in" },
   /* Opens the live demo — the real portal, running on demo data. */
@@ -43,13 +50,16 @@ export const hero = {
   /* Line 2 carries the aurora gradient.
      Both lines are deliberately short words — a single long word cannot wrap
      and would overflow the column into the panel beside it. */
+  /* The core claim of the business, stated first: a warehouse system built for
+     wholesalers that replaces the manual work and the spreadsheet. The old
+     headline ("orders that fill themselves in") sold one feature. */
   headline: {
-    l1: { no: "Ordrer som", en: "Orders that" },
-    l2: { no: "fyller seg selv.", en: "fill themselves in." },
+    l1: { no: "Lagersystemet", en: "The warehouse system" },
+    l2: { no: "grossister faktisk trenger.", en: "wholesalers actually need." },
   },
   lede: {
-    no: "Melding, PDF, Excel eller et bilde av en lapp. Sherko leser det og fyller ut ordren.",
-    en: "A message, a PDF, an Excel sheet or a photo of a note. Sherko reads it and fills in the order.",
+    no: "Skreddersydd for driften din, ikke en generell pakke. Sherko erstatter det manuelle arbeidet og regnearket, og samler ordre, lager og oversikt i ett system.",
+    en: "Built around how you actually run, not a generic package. Sherko replaces the manual work and the spreadsheet, and puts orders, stock and overview in one system.",
   },
   ledeEmphasis: { no: "Du godkjenner.", en: "You approve." },
 };
@@ -109,8 +119,8 @@ export const problem = {
     en: "The order is already written. Someone just types it in again.",
   },
   body: {
-    no: "Ingen grossist mangler bestillinger. De mangler timene det tar å flytte dem fra en melding til et system — og de tåler ikke feilene som oppstår underveis.",
-    en: "No wholesaler is short of orders. They are short of the hours it takes to move them from a message into a system — and they cannot afford the mistakes made on the way.",
+    no: "Ingen grossist mangler bestillinger. De mangler timene det tar å flytte dem fra en melding til et system, og de tåler ikke feilene som oppstår underveis.",
+    en: "No wholesaler is short of orders. They are short of the hours it takes to move them from a message into a system, and they cannot afford the mistakes made on the way.",
   },
   before: {
     label: { no: "I dag", en: "Today" },
@@ -147,8 +157,8 @@ export const control = {
     en: "Sherko never approves an order",
   },
   body: {
-    no: "Det er ikke en innstilling du kan skru av. Det er slik systemet er bygget — fordi en feilsendt pall koster mer enn de minuttene den skulle spare.",
-    en: "That is not a setting you can switch off. It is how the system is built — because one pallet sent to the wrong place costs more than the minutes it was meant to save.",
+    no: "Det er ikke en innstilling du kan skru av. Det er slik systemet er bygget, fordi en feilsendt pall koster mer enn de minuttene den skulle spare.",
+    en: "That is not a setting you can switch off. It is how the system is built, because one pallet sent to the wrong place costs more than the minutes it was meant to save.",
   },
   guarantees: [
     {
@@ -171,8 +181,8 @@ export const control = {
       key: "ask",
       title: { no: "Spør heller enn å gjette", en: "Asks rather than guesses" },
       body: {
-        no: "Er den i tvil, stiller den ett konkret spørsmål med navngitte alternativer — aldri «kan du presisere».",
-        en: "In doubt, it asks one concrete question naming the actual options — never “could you clarify”.",
+        no: "Er den i tvil, stiller den ett konkret spørsmål med navngitte alternativer, aldri «kan du presisere».",
+        en: "In doubt, it asks one concrete question naming the actual options, never “could you clarify”.",
       },
     },
     {
@@ -212,8 +222,8 @@ export const integrations = {
     en: "Sits on top of the system you already run",
   },
   body: {
-    no: "Sherko er ikke et nytt ERP. Den er laget for å snakke med det du kjører i dag, over API — og skrive ordreutkast rett inn der ordrene dine allerede bor.",
-    en: "Sherko is not another ERP. It is built to talk to what you run today, over an API — and to write draft orders straight into wherever your orders already live.",
+    no: "Sherko er ikke et nytt ERP. Den er laget for å snakke med det du kjører i dag, over API, og skrive ordreutkast rett inn der ordrene dine allerede bor.",
+    en: "Sherko is not another ERP. It is built to talk to what you run today, over an API, and to write draft orders straight into wherever your orders already live.",
   },
   items: [
     { key: "whatsapp", name: { no: "WhatsApp Business", en: "WhatsApp Business" }, note: { no: "Ditt eget nummer", en: "Your own number" } },
@@ -234,22 +244,22 @@ export const faq = {
     {
       q: { no: "Hva om den forstår ordren feil?", en: "What if it misreads the order?" },
       a: {
-        no: "Da fanger du det opp før noe skjer. Sherko viser alltid kunden hva den har forstått — linje for linje, med antall og enhet — og legger ingenting inn før kunden sier ja. Deretter ligger ordren som utkast til du godkjenner den. Det er to menneskelige sjekkpunkter før noe blir reelt.",
-        en: "You catch it before anything happens. Sherko always shows the customer what it understood — line by line, with quantity and unit — and files nothing until the customer says yes. After that the order sits as a draft until you approve it. That is two human checkpoints before anything becomes real.",
+        no: "Da fanger du det opp før noe skjer. Sherko viser alltid kunden hva den har forstått, linje for linje, med antall og enhet, og legger ingenting inn før kunden sier ja. Deretter ligger ordren som utkast til du godkjenner den. Det er to menneskelige sjekkpunkter før noe blir reelt.",
+        en: "You catch it before anything happens. Sherko always shows the customer what it understood, line by line, with quantity and unit, and files nothing until the customer says yes. After that the order sits as a draft until you approve it. That is two human checkpoints before anything becomes real.",
       },
     },
     {
       q: { no: "Må kundene våre lære seg noe nytt?", en: "Do our customers have to learn anything new?" },
       a: {
-        no: "Nei. De sender bestillingen akkurat som i dag — samme WhatsApp-nummer, samme e-postadresse, samme rotete format. Hele poenget er at endringen skjer på din side, ikke deres.",
-        en: "No. They send the order exactly as they do today — same WhatsApp number, same email address, same messy format. The entire point is that the change happens on your side, not theirs.",
+        no: "Nei. De sender bestillingen akkurat som i dag, samme WhatsApp-nummer, samme e-postadresse, samme rotete format. Hele poenget er at endringen skjer på din side, ikke deres.",
+        en: "No. They send the order exactly as they do today, same WhatsApp number, same email address, same messy format. The entire point is that the change happens on your side, not theirs.",
       },
     },
     {
       q: { no: "Leser den virkelig håndskrift?", en: "Does it really read handwriting?" },
       a: {
-        no: "Ja. Et bilde av en håndskrevet lapp, en tavle eller et utfylt ordreskjema leses direkte som bilde — ikke gjennom et tekstuttrekk som mister halvparten. Er skriften uleselig på en linje, gjetter den ikke: den viser deg linjen og spør.",
-        en: "Yes. A photo of a handwritten note, a whiteboard or a filled-in order form is read directly as an image — not through a text extraction step that loses half of it. If one line is genuinely illegible it does not guess: it shows you the line and asks.",
+        no: "Ja. Et bilde av en håndskrevet lapp, en tavle eller et utfylt ordreskjema leses direkte som bilde, ikke gjennom et tekstuttrekk som mister halvparten. Er skriften uleselig på en linje, gjetter den ikke: den viser deg linjen og spør.",
+        en: "Yes. A photo of a handwritten note, a whiteboard or a filled-in order form is read directly as an image, not through a text extraction step that loses half of it. If one line is genuinely illegible it does not guess: it shows you the line and asks.",
       },
     },
     {
@@ -262,8 +272,8 @@ export const faq = {
     {
       q: { no: "Hva om den ikke finner varen?", en: "What if it cannot find the product?" },
       a: {
-        no: "Da prøver den et annet søk — merkenavn, varenummer, et mer treffende ord — før den gir seg. Finner den fortsatt ingenting, legger den inn resten av ordren og flagger den ene linja tydelig, slik at en kollega legger den til manuelt. Én uklar linje stopper aldri hele ordren.",
-        en: "It tries a different search — the brand, the article number, a more distinctive word — before giving up. If it still finds nothing, it files the rest of the order and flags that one line clearly so a colleague can add it manually. One unclear line never blocks the whole order.",
+        no: "Da prøver den et annet søk, merkenavn, varenummer, et mer treffende ord, før den gir seg. Finner den fortsatt ingenting, legger den inn resten av ordren og flagger den ene linja tydelig, slik at en kollega legger den til manuelt. Én uklar linje stopper aldri hele ordren.",
+        en: "It tries a different search, the brand, the article number, a more distinctive word, before giving up. If it still finds nothing, it files the rest of the order and flags that one line clearly so a colleague can add it manually. One unclear line never blocks the whole order.",
       },
     },
     {
@@ -285,8 +295,8 @@ export const closing = {
     en: "Send us an order you got yesterday",
   },
   body: {
-    no: "Den rotete meldingen, den uskarpe lappen, det Excel-arket ingen klarer å lese. Vi kjører den gjennom Sherko og viser deg nøyaktig hva den fikk ut av den — på et tjue minutters møte, uten at du har koblet opp noe som helst.",
-    en: "The messy message, the blurry note, the Excel sheet nobody can read. We run it through Sherko and show you exactly what it made of it — in a twenty minute call, with nothing connected on your side.",
+    no: "Den rotete meldingen, den uskarpe lappen, det Excel-arket ingen klarer å lese. Vi kjører den gjennom Sherko og viser deg nøyaktig hva den fikk ut av den, på et tjue minutters møte, uten at du har koblet opp noe som helst.",
+    en: "The messy message, the blurry note, the Excel sheet nobody can read. We run it through Sherko and show you exactly what it made of it, in a twenty minute call, with nothing connected on your side.",
   },
   reassure: {
     no: "Tjue minutter. Ingen integrasjon. Din egen ordre.",
@@ -315,10 +325,10 @@ export const contact = {
       error: { no: "Skriv inn en gyldig e-postadresse", en: "Please enter a valid email address" },
     },
   },
-  submit: { no: "Book en demo", en: "Book a demo" },
+  submit: { no: "Send melding", en: "Send message" },
   submitting: { no: "Sender", en: "Sending" },
   success: {
-    title: { no: "Takk — vi tar kontakt.", en: "Thank you — we'll be in touch." },
+    title: { no: "Takk, vi tar kontakt.", en: "Thank you, we'll be in touch." },
     body: {
       no: "Vi svarer normalt innen én arbeidsdag. Ha gjerne en ordre klar som vi kan kjøre gjennom.",
       en: "We normally reply within one working day. Have an order ready for us to run through if you can.",

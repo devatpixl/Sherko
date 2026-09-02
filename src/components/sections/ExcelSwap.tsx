@@ -3,164 +3,150 @@
 import { motion } from "motion/react";
 import { Container, Reveal } from "@/components/ui";
 import { SpreadsheetMark } from "@/components/ui/SpreadsheetMark";
-import { Mark } from "@/components/site/Wordmark";
 import { useLocale, type Bi } from "@/lib/i18n";
 
-/* Excel's role on this page is not "another format we accept" — it is the
-   thing being retired. Three marks and one line, no paragraph: the sheet
-   goes grey and gets struck through, Sherko reads it, the order lands in
-   the system. */
+/* The core claim of the whole site, so it is staged like cursor.com stages
+   theirs: one centred sentence, two actions, then a single large window that
+   shows the product doing the thing. No icon row, no three-step diagram.
+
+   The left side carries Microsoft's own Excel mark with an orange blade cut
+   through it; the record that replaces it is live on the right. */
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const copy = {
   title: {
-    no: "Slutt å lagre ordrene i Excel.",
-    en: "Stop keeping your orders in Excel.",
+    no: "Lagersystemet som erstatter regnearket.",
+    en: "The warehouse system that replaces the spreadsheet.",
   } as Bi,
   sub: {
-    no: "Send den. Sherko legger den rett inn i systemet.",
-    en: "Send it. Sherko files it straight into the system.",
+    no: "Skreddersydd for grossister. Sherko tar over det manuelle arbeidet, ordrene, lageret og oversikten, og legger det i ett system i stedet for i Excel.",
+    en: "Built for wholesalers. Sherko takes over the manual work, the orders, the stock and the overview, and puts it in one system instead of in Excel.",
   } as Bi,
+  before: { no: "Regnearket", en: "The spreadsheet" } as Bi,
+  beforeNote: { no: "Manuelt · til nå", en: "Manual · until now" } as Bi,
+  after: { no: "Sherko", en: "Sherko" } as Bi,
+  afterNote: { no: "Søkbart · sporbart", en: "Searchable · traceable" } as Bi,
+  win: { no: "Lager", en: "Stock" } as Bi,
 };
 
-const steps: { label: Bi; note: Bi }[] = [
-  {
-    label: { no: "Regnearket", en: "The spreadsheet" },
-    note: { no: "Til nå", en: "Until now" },
-  },
-  {
-    label: { no: "Sherko", en: "Sherko" },
-    note: { no: "Leser og forstår", en: "Reads and understands" },
-  },
-  {
-    label: { no: "Ordren i systemet", en: "The order, in your system" },
-    note: { no: "Søkbar. Sporbar.", en: "Searchable. Traceable." },
-  },
+/* Rows on both sides say the same thing, so the eye reads it as one record
+   moving across rather than two unrelated tables. */
+const ROWS: { art: string; name: Bi; qty: string }[] = [
+  { art: "20354", name: { no: "Revet ost 70/30, 2 kg", en: "Grated cheese 70/30, 2 kg" }, qty: "612" },
+  { art: "20205", name: { no: "Frityrolje 10 L", en: "Frying oil 10 L" }, qty: "31" },
+  { art: "10877", name: { no: "Kavli mysost 500 g", en: "Kavli brown cheese 500 g" }, qty: "148" },
+  { art: "30112", name: { no: "Laksefilet 1,2 kg", en: "Salmon fillet 1.2 kg" }, qty: "24" },
 ];
-
-/** A stored, queryable record — the thing that replaces the sheet. */
-function SystemMark({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-      <ellipse cx="12" cy="6" rx="7.5" ry="3" />
-      <path d="M4.5 6v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V6" />
-      <path d="M4.5 12v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6" />
-    </svg>
-  );
-}
-
-function Connector({ delay }: { delay: number }) {
-  return (
-    <div className="relative flex h-10 w-full items-center justify-center md:h-auto md:w-16">
-      <svg viewBox="0 0 64 8" className="hidden w-16 text-fg-4 md:block" aria-hidden>
-        <motion.path
-          d="M0 4h56M50 1l6 3-6 3"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay, ease: EASE }}
-        />
-      </svg>
-      <svg viewBox="0 0 8 40" className="h-10 text-fg-4 md:hidden" aria-hidden>
-        <motion.path
-          d="M4 0v32M1 26l3 6 3-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay, ease: EASE }}
-        />
-      </svg>
-    </div>
-  );
-}
 
 export function ExcelSwap() {
   const { locale } = useLocale();
 
   return (
-    <div className="pt-16 md:pt-20">
+    <div className="pt-32 md:pt-40 lg:pt-48">
       <Container>
+        {/* ── the claim ── */}
         <Reveal>
-          <p className="display mx-auto max-w-2xl text-center text-[clamp(1.6rem,3.4vw,2.5rem)] text-fg">
+          <h2 className="display mx-auto max-w-[18ch] text-center text-[clamp(2rem,4.6vw,3.6rem)] text-fg">
             {copy.title[locale]}
-          </p>
+          </h2>
         </Reveal>
         <Reveal delay={0.08}>
-          <p className="mx-auto mt-4 max-w-lg text-center text-[1rem] text-fg-2">
+          <p className="lede mx-auto mt-6 max-w-[58ch] text-center text-[1.0625rem] leading-relaxed text-fg-2">
             {copy.sub[locale]}
           </p>
         </Reveal>
-
-        <Reveal delay={0.14}>
-          <div className="mt-11 flex flex-col items-center justify-center md:flex-row md:items-stretch">
-            {/* 1 — the sheet, being retired */}
-            <div className="relative w-full max-w-[15rem] rounded-2xl border border-line bg-surface/40 p-5 text-center md:w-[15rem]">
-              <span className="relative mx-auto grid h-12 w-12 place-items-center">
-                <SpreadsheetMark className="h-9 w-9 text-fg-3 opacity-90" />
-                {/* Struck through, drawn on scroll */}
-                <svg viewBox="0 0 48 48" className="absolute inset-0 h-12 w-12 text-signal" aria-hidden>
-                  <motion.path
-                    d="M9 39 39 9"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.45, delay: 0.3, ease: EASE }}
-                  />
-                </svg>
+        {/* ── one window, the swap happening inside it ── */}
+        <Reveal delay={0.2}>
+          <div className="mt-14 overflow-hidden rounded-2xl border border-line bg-surface md:mt-20">
+            {/* window chrome */}
+            <div className="flex items-center gap-[7px] border-b border-line px-4 py-3">
+              {/* macOS traffic lights, in their real colours */}
+              <span className="h-[11px] w-[11px] rounded-full bg-[#FF5F57]" />
+              <span className="h-[11px] w-[11px] rounded-full bg-[#FEBC2E]" />
+              <span className="h-[11px] w-[11px] rounded-full bg-[#28C840]" />
+              <span className="ml-3 font-mono text-[10.5px] tracking-[0.16em] text-fg-3 uppercase">
+                {copy.win[locale]}
               </span>
-              <p className="mt-4 text-[0.9375rem] font-medium text-fg-3 line-through decoration-signal/70 decoration-1">
-                {steps[0].label[locale]}
-              </p>
-              <p className="mt-1 font-mono text-[10.5px] tracking-[0.14em] text-fg-4 uppercase">
-                {steps[0].note[locale]}
-              </p>
             </div>
 
-            <Connector delay={0.45} />
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr]">
+              {/* left: the sheet, retired */}
+              <div className="p-6 md:p-8">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center">
+                    <SpreadsheetMark className="h-9 w-9" cut />
+                  </span>
+                  <span>
+                    <span className="block text-[0.9375rem] font-medium text-fg-3 line-through decoration-fg-4 decoration-1">
+                      {copy.before[locale]}
+                    </span>
+                    <span className="mt-0.5 block font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">
+                      {copy.beforeNote[locale]}
+                    </span>
+                  </span>
+                </div>
 
-            {/* 2 — Sherko */}
-            <div className="relative w-full max-w-[15rem] rounded-2xl border border-line bg-surface/40 p-5 text-center md:w-[15rem]">
-              <span className="mx-auto grid h-12 w-12 place-items-center">
-                <Mark className="h-10 w-10" />
-              </span>
-              <p className="mt-4 text-[0.9375rem] font-medium text-fg">{steps[1].label[locale]}</p>
-              <p className="mt-1 font-mono text-[10.5px] tracking-[0.14em] text-fg-4 uppercase">
-                {steps[1].note[locale]}
-              </p>
+                <div className="mt-6 space-y-px opacity-45">
+                  {ROWS.map((r) => (
+                    <div
+                      key={r.art}
+                      className="grid grid-cols-[3.4rem_1fr_2.6rem] items-center gap-3 border-b border-line/60 py-2.5 font-mono text-[11.5px] text-fg-3"
+                    >
+                      <span className="text-fg-4">{r.art}</span>
+                      <span className="truncate">{r.name[locale]}</span>
+                      <span className="text-right">{r.qty}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* the hand-off */}
+              <div className="relative flex items-center justify-center px-6 py-2 md:px-0 md:py-8">
+                <span className="hidden h-full w-px bg-line md:block" />
+                <span className="absolute grid h-9 w-9 place-items-center rounded-full border border-line bg-elev text-accent">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 rotate-90 md:rotate-0" fill="none" aria-hidden>
+                    <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+
+              {/* right: the same stock, now a live record */}
+              <div className="border-t border-line p-6 md:border-t-0 md:p-8">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-accent/40 text-accent">
+                    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+                      <ellipse cx="12" cy="6" rx="7.5" ry="3" />
+                      <path d="M4.5 6v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V6" />
+                      <path d="M4.5 12v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6" />
+                    </svg>
+                  </span>
+                  <span>
+                    <span className="block text-[0.9375rem] font-medium text-fg">{copy.after[locale]}</span>
+                    <span className="mt-0.5 block font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">
+                      {copy.afterNote[locale]}
+                    </span>
+                  </span>
+                </div>
+
+                <div className="mt-6 space-y-px">
+                  {ROWS.map((r, i) => (
+                    <motion.div
+                      key={r.art}
+                      initial={{ opacity: 0, x: 10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.5 + i * 0.07, ease: EASE }}
+                      className="grid grid-cols-[3.4rem_1fr_2.6rem] items-center gap-3 border-b border-line py-2.5 font-mono text-[11.5px] text-fg-2"
+                    >
+                      <span className="text-fg-3">{r.art}</span>
+                      <span className="truncate text-fg">{r.name[locale]}</span>
+                      <span className="text-right text-accent">{r.qty}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
-
-            <Connector delay={0.6} />
-
-            {/* 3 — the record that replaces it */}
-            <motion.div
-              initial={{ opacity: 0.55 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.75, ease: EASE }}
-              className="relative w-full max-w-[15rem] rounded-2xl border border-accent/30 bg-linear-to-b from-surface-2 to-surface p-5 text-center shadow-[0_0_60px_-18px_rgba(92,225,176,0.55)] md:w-[15rem]"
-            >
-              <span className="mx-auto grid h-12 w-12 place-items-center">
-                <SystemMark className="h-8 w-8 text-accent" />
-              </span>
-              <p className="mt-4 text-[0.9375rem] font-medium text-fg">{steps[2].label[locale]}</p>
-              <p className="mt-1 font-mono text-[10.5px] tracking-[0.14em] text-accent/80 uppercase">
-                {steps[2].note[locale]}
-              </p>
-            </motion.div>
           </div>
         </Reveal>
       </Container>

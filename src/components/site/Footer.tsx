@@ -15,7 +15,7 @@ export function Footer() {
       {/* One flourish: the name, half sunk below the edge of the page. */}
       <span
         aria-hidden
-        className="display pointer-events-none absolute -bottom-[0.18em] left-1/2 -translate-x-1/2 text-[clamp(6rem,20vw,16rem)] whitespace-nowrap text-fg/[0.028] select-none"
+        className="display pointer-events-none absolute -bottom-[0.18em] left-1/2 -translate-x-1/2 text-[clamp(6rem,20vw,16rem)] whitespace-nowrap select-none footer-ghost"
       >
         {brand.name.toUpperCase()}
       </span>
@@ -44,7 +44,7 @@ export function Footer() {
                       <li key={link.label.no}>
                         <a
                           href={link.href}
-                          className="text-[0.9375rem] text-fg-2 transition-colors hover:text-fg"
+                          className="-my-1 inline-block py-2 text-[0.9375rem] text-fg-2 transition-colors hover:text-fg"
                         >
                           {link.label[locale]}
                         </a>

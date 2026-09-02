@@ -148,15 +148,15 @@ const m6: ChatItem = {
   lines: [
     { name: { no: "Jalapeño", en: "Jalapeño" }, qty: { no: "1 pall", en: "1 pallet" } },
     { name: { no: "Champignon", en: "Champignon" }, qty: { no: "1 pall", en: "1 pallet" } },
-    { name: { no: "«? Esk – Hvit»", en: "“? Esk – Hvit”" }, qty: { no: "1 pall", en: "1 pallet" }, flagged: true },
+    { name: { no: "«? Esk, Hvit»", en: "“? Esk, Hvit”" }, qty: { no: "1 pall", en: "1 pallet" }, flagged: true },
     { name: { no: "Serviett", en: "Napkins" }, qty: { no: "1 pall", en: "1 pallet" } },
     { name: { no: "Topping", en: "Topping" }, qty: { no: "2 pall", en: "2 pallets" } },
     { name: { no: "Frityrolje", en: "Frying oil" }, qty: { no: "30 kanner", en: "30 cans" } },
   ],
   meta: [{ label: { no: "Kunde", en: "Customer" }, value: { no: "Nordby Kafé AS", en: "Nordby Kafé AS" } }],
   question: {
-    no: "Linje 3 står det «? Esk – Hvit» på tavla. Mente du hvite esker 1/1 eller 1/2?",
-    en: "Line 3 just says “? Esk – Hvit” on the board. Did you mean white boxes 1/1 or 1/2?",
+    no: "Linje 3 står det «? Esk, Hvit» på tavla. Mente du hvite esker 1/1 eller 1/2?",
+    en: "Line 3 just says “? Esk, Hvit” on the board. Did you mean white boxes 1/1 or 1/2?",
   },
 };
 
@@ -173,7 +173,7 @@ const m8: ChatItem = {
   from: "sherko",
   kind: "receipt",
   time: "22:17",
-  intro: { no: "Perfekt — alle seks linjene er inne.", en: "Perfect — all six lines are in." },
+  intro: { no: "Perfekt, alle seks linjene er inne.", en: "Perfect, all six lines are in." },
   orderNo: "12049",
   status: { no: "Venter på godkjenning", en: "Pending approval" },
   tail: {
@@ -226,7 +226,7 @@ export const script: Step[] = [
   { kind: "form", ms: 490, patch: { kunde: B("Nordby Kafé AS", "Nordby Kafé AS") } },
   { kind: "form", ms: 560, patch: { varer: B("6 varelinjer fra tavla", "6 lines from the board") } },
   { kind: "typing", ms: 490 },
-  { kind: "form", ms: 560, patch: { note: B("Linje 3 var uklar — spør kunden", "Line 3 was unclear — asking the customer") } },
+  { kind: "form", ms: 560, patch: { note: B("Linje 3 var uklar, spør kunden", "Line 3 was unclear, asking the customer") } },
   { kind: "push", ms: 3360, item: m6 },
 
   { kind: "compose", ms: 840, text: m7.kind === "text" ? m7.text : { no: "", en: "" }, item: m7 },

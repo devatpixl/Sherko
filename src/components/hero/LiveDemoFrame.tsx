@@ -4,6 +4,7 @@ import { animate, useMotionValue } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Cursor } from "@/components/hero/SimCursor";
 import { usePrefersReducedMotion } from "@/lib/useSimulation";
+import { paced } from "@/lib/pace";
 
 /* ═══════════════════════════════════════════════════════════════════
    The real admin portal, framed and driven.
@@ -177,7 +178,7 @@ export function LiveDemoFrame({
         const d = doc();
         el = d ? locate(d, f) : null;
         if (el) break;
-        await new Promise((r) => setTimeout(r, 120));
+        await new Promise((r) => setTimeout(r, paced(120)));
       }
       if (!el) return null;
 
@@ -187,13 +188,13 @@ export function LiveDemoFrame({
       const before = el.getBoundingClientRect();
       if (before.top < 40 || before.bottom > height - 40) {
         el.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
-        await new Promise((r) => setTimeout(r, reduced ? 0 : 650));
+        await new Promise((r) => setTimeout(r, reduced ? 0 : paced(650)));
       }
 
       const r = el.getBoundingClientRect();
       const cx = r.left + r.width / 2;
       const cy = r.top + r.height / 2;
-      const opts = { duration: reduced ? 0 : ms / 1000, ease: EASE };
+      const opts = { duration: reduced ? 0 : paced(ms) / 1000, ease: EASE };
       await Promise.all([animate(x, cx, opts).finished, animate(y, cy, opts).finished]);
       return el;
     },
@@ -228,7 +229,8 @@ export function LiveDemoFrame({
   useEffect(() => {
     if (!active || !ready) return;
     let cancelled = false;
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, reduced ? Math.min(ms, 200) : ms));
+    const sleep = (ms: number) =>
+      new Promise((r) => setTimeout(r, reduced ? Math.min(paced(ms), 200) : paced(ms)));
 
     (async () => {
       for (const step of steps) {

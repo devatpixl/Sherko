@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { DEMO_ENABLED, DEMO_URL } from "@/lib/config";
-import { cta } from "@/lib/content";
+
 import { useLocale, type Bi } from "@/lib/i18n";
 
 /* Shown when a simulation finishes instead of looping it forever.
@@ -71,7 +71,7 @@ export function SimEndCard({ onReplay }: { onReplay: () => void }) {
             rel="noopener noreferrer"
             className="group relative mt-7 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-fg px-5 py-3 text-[0.875rem] font-medium tracking-tight text-canvas transition-transform duration-300 hover:scale-[1.02] sm:w-auto"
           >
-            <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-accent via-ice to-violet transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+            <span className="absolute inset-0 -translate-x-full bg-accent transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
             <span className="relative">{copy.tryIt[locale]}</span>
             <svg viewBox="0 0 16 16" className="relative h-3.5 w-3.5" aria-hidden>
               <path
@@ -107,16 +107,6 @@ export function SimEndCard({ onReplay }: { onReplay: () => void }) {
             {copy.replay[locale]}
           </button>
 
-          <a
-            href="#kontakt"
-            className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-fg px-5 py-3 text-[0.875rem] font-medium tracking-tight text-canvas transition-transform duration-300 hover:scale-[1.02] sm:w-auto"
-          >
-            <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-accent via-ice to-violet transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
-            <span className="relative">{cta.primary[locale]}</span>
-            <svg viewBox="0 0 16 16" className="relative h-3.5 w-3.5" aria-hidden>
-              <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </a>
         </div>
       </motion.div>
     </motion.div>

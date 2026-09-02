@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ChannelLanes } from "@/components/sections/ChannelStrip";
+import { ChannelPhone } from "@/components/sections/ChannelPhone";
+import { CountUp } from "@/components/ui/Metrics";
 import { ExcelSwap } from "@/components/sections/ExcelSwap";
-import { Container, Eyebrow, Reveal, Rule, Section } from "@/components/ui";
+import { Container, Eyebrow, Reveal, Section } from "@/components/ui";
 import { brand, channels } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
@@ -19,8 +20,8 @@ const copy = {
   l2: { no: "grossister.", en: "wholesalers." } as Bi,
   l3: { no: "Ingen andre.", en: "Nobody else." } as Bi,
   body: {
-    no: "Sherko er ikke en generell AI du må lære opp. Den kan bransjen din fra første dag — og forstår ordren slik kundene dine faktisk skriver den.",
-    en: "Sherko is not a general AI you have to train. It knows your trade from day one — and reads an order the way your customers actually write it.",
+    no: "Sherko er ikke en generell AI du må lære opp. Den kan bransjen din fra første dag, og forstår ordren slik kundene dine faktisk skriver den.",
+    en: "Sherko is not a general AI you have to train. It knows your trade from day one, and reads an order the way your customers actually write it.",
   } as Bi,
   proofLabel: {
     no: "Forstår dette uten opplæring",
@@ -46,11 +47,11 @@ export function BuiltFor() {
   const { locale } = useLocale();
 
   return (
-    <Section id="grossister" className="relative overflow-hidden border-y border-line bg-elev">
+    <Section id="grossister" className="relative overflow-hidden bg-elev">
       <div className="grid-substrate mask-radial pointer-events-none absolute inset-0 -z-10 opacity-50" />
 
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-end lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-center lg:gap-16">
           <div>
             <Reveal>
               <Eyebrow>{copy.eyebrow[locale]}</Eyebrow>
@@ -80,33 +81,54 @@ export function BuiltFor() {
                 {copy.proofLabel[locale]}
               </p>
             </Reveal>
-            <ul className="mt-5 space-y-0">
+            {/* Zapier leads a claim like this with figures, then the detail
+                underneath. The numbers here are capability facts about how the
+                system is built, not measured customer results: six formats it
+                reads, two languages it speaks, zero orders it approves itself. */}
+            <div className="mt-6 grid grid-cols-3 gap-4 border-y border-line py-6">
+              {[
+                { n: 6, unit: "", label: { no: "Formater inn", en: "Inbound formats" } },
+                { n: 2, unit: "", label: { no: "Språk", en: "Languages" } },
+                { n: 0, unit: "", label: { no: "Auto-godkjent", en: "Auto-approved" } },
+              ].map((f, i) => (
+                <div key={i}>
+                  <CountUp
+                    to={f.n}
+                    suffix={f.unit}
+                    duration={1.1 + i * 0.15}
+                    className="display block text-[clamp(1.75rem,3.2vw,2.5rem)] text-accent"
+                  />
+                  <p className="mt-1.5 font-mono text-[10px] leading-[1.4] tracking-[0.14em] text-fg-4 uppercase">
+                    {f.label[locale]}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <dl className="mt-2">
               {proof.map((item, i) => (
-                <Reveal key={item.no} delay={0.24 + i * 0.05}>
-                  <li className="flex items-center gap-3 border-b border-line py-3.5 first:border-t">
-                    <motion.svg
-                      viewBox="0 0 16 16"
-                      className="h-3.5 w-3.5 shrink-0 text-accent"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.35, delay: 0.3 + i * 0.05, ease: EASE }}
-                      aria-hidden
-                    >
-                      <motion.path
-                        d="M3 8.5l3.2 3.2L13 5"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </motion.svg>
-                    <span className="text-[0.9375rem] text-fg">{item[locale]}</span>
-                  </li>
+                <Reveal key={item.no} delay={0.2 + i * 0.05}>
+                  <div className="group grid grid-cols-[auto_1fr] items-baseline gap-x-5 border-b border-line py-4">
+                    <dt className="font-mono text-[10.5px] tracking-[0.16em] text-fg-4 tabular-nums uppercase">
+                      {String(i + 1).padStart(2, "0")}
+                    </dt>
+                    <dd className="flex items-baseline justify-between gap-4">
+                      <span className="text-[0.9375rem] text-fg">{item[locale]}</span>
+                      <motion.span
+                        aria-hidden
+                        className="font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase transition-colors duration-300 group-hover:text-accent"
+                        initial={{ opacity: 0, x: -6 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.3 + i * 0.05, ease: EASE }}
+                      >
+                        {locale === "no" ? "Innebygd" : "Built in"}
+                      </motion.span>
+                    </dd>
+                  </div>
                 </Reveal>
               ))}
-            </ul>
+            </dl>
             <Reveal delay={0.56}>
               <p className="mt-5 font-mono text-[11px] tracking-tight text-fg-4">
                 {locale === "no"
@@ -116,14 +138,10 @@ export function BuiltFor() {
             </Reveal>
           </div>
         </div>
-
-        {/* ── The same argument, continued: how the order gets here ──── */}
-        <Reveal delay={0.1}>
-          <Rule className="mt-20 md:mt-24" />
-        </Reveal>
       </Container>
 
-      <div id="kanaler" className="scroll-mt-24 pt-16 md:pt-20">
+      {/* The same argument, continued: how the order gets here. */}
+      <div id="kanaler" className="scroll-mt-24 pt-32 md:pt-40 lg:pt-48">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-start lg:gap-16">
             <div>
@@ -144,7 +162,7 @@ export function BuiltFor() {
           </div>
         </Container>
 
-        <ChannelLanes />
+        <ChannelPhone />
 
         {/* Excel is not one of the formats — it is the thing being replaced. */}
         <ExcelSwap />

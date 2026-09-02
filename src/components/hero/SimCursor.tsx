@@ -2,6 +2,7 @@
 
 import { animate, motion, useMotionValue } from "motion/react";
 import { useEffect, type RefObject } from "react";
+import { paced } from "@/lib/pace";
 
 /* Shared cursor for the portal simulations.
 
@@ -84,7 +85,7 @@ export function useSimCursor({
     const cx = (r.left - c.left) / s + r.width / s / 2;
     const cy = (r.top - c.top) / s + r.height / s / 2;
 
-    const opts = { duration: reduced ? 0 : 0.55, ease: EASE };
+    const opts = { duration: reduced ? 0 : paced(550) / 1000, ease: EASE };
     const a = animate(x, cx, opts);
     const b = animate(y, cy, opts);
 
