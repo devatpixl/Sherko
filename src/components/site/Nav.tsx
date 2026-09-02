@@ -117,8 +117,8 @@ export function Nav() {
             aria-label="Primary"
             className={`pointer-events-auto flex items-center gap-3 rounded-full border py-2 pr-2 pl-4 transition-[background-color,border-color,box-shadow] duration-500 md:pl-5 ${
               scrolled
-                ? "border-line-2/80 bg-canvas/80 shadow-[0_16px_40px_-14px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
-                : "border-line/70 bg-canvas/45 backdrop-blur-xl"
+                ? "nav-blur border-line-2/80 bg-canvas/80 shadow-[0_16px_40px_-14px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
+                : "nav-blur border-line/70 bg-canvas/45 backdrop-blur-xl"
             }`}
           >
             <Wordmark />
@@ -216,7 +216,7 @@ export function Nav() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.06 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="display border-b border-line py-4 text-[1.375rem] text-fg"
+                    className="display border-b border-line py-4 text-[1.1875rem] text-fg"
                   >
                     {n.label[locale]}
                   </motion.a>

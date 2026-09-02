@@ -2,6 +2,7 @@
 
 import { Container, Reveal } from "@/components/ui";
 import { useLocale, type Bi } from "@/lib/i18n";
+import { useAnimGate } from "@/lib/useAnimGate";
 
 /* The logo carousel under the hero, built the way cursor.com and zapier.com
    run theirs: recognisable marks in tiles, one line of type above, links out.
@@ -104,9 +105,10 @@ function Row({ hidden = false }: { hidden?: boolean }) {
 
 export function PoweredBy() {
   const { locale } = useLocale();
+  const ref = useAnimGate<HTMLDivElement>();
 
   return (
-    <div className="border-t border-line bg-elev py-16 md:py-20">
+    <div ref={ref} className="border-t border-line bg-elev py-16 md:py-20">
       <Container>
         <Reveal>
           <p className="text-center text-[0.9375rem] text-fg-2 italic">{copy.label[locale]}</p>

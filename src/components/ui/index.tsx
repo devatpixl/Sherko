@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "motion/react";
 import { useRef, type ReactNode } from "react";
+import { useAnimGate } from "@/lib/useAnimGate";
 
 /* ── Layout ───────────────────────────────────────────────────────── */
 
@@ -24,8 +25,9 @@ export function Section({
   children: ReactNode;
   className?: string;
 }) {
+  const ref = useAnimGate<HTMLElement>();
   return (
-    <section id={id} className={`relative scroll-mt-28 py-16 md:py-20 lg:py-24 ${className}`}>
+    <section ref={ref} id={id} className={`relative scroll-mt-28 py-16 md:py-20 lg:py-24 ${className}`}>
       {children}
     </section>
   );
