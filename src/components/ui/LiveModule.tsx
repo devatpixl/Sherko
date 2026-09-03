@@ -56,11 +56,15 @@ export function LiveModule({
   /** shown in the window chrome */
   label: string;
   /**
-   * Show this still and boot the application only when the visitor asks.
-   * The hero sits above the fold, so a frame there is running before anyone
-   * has scrolled: measured on a throttled CPU it took dropped frames from
-   * 2.4% to 17.9%, with a worst frame of 433ms. Deferring costs nothing until
-   * it is wanted, and then it is the same live portal as every other card.
+   * A still of this module, shown the moment the card paints and dropped again
+   * the instant the application has rendered.
+   *
+   * Booting a whole application over the network takes a second or two, longer
+   * on a phone, and an empty window for that long reads as broken. Leaving the
+   * still underneath afterwards is not free though: a full-bleed image sitting
+   * behind a compositing iframe held the whole page at 30fps while scrolling,
+   * even though nothing of it was visible. Measured, removing either one on its
+   * own took dropped frames from 100% back to about 3%.
    */
   poster?: string;
   className?: string;
@@ -69,8 +73,8 @@ export function LiveModule({
   const hostRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
-  const [mount, setMount] = useState(priority && !poster);
-  const [asked, setAsked] = useState(false);
+  const [mount, setMount] = useState(priority);
+  const [painted, setPainted] = useState(false);
   const [scale, setScale] = useState(1);
   /* Bumped to force a fresh <iframe> when the first attempt comes up empty. */
   const [attempt, setAttempt] = useState(0);
@@ -99,9 +103,29 @@ export function LiveModule({
     }
   }, []);
 
-  /* Re-opens the sidebar group the current route belongs to. Runs on the same
-     interval as dress(), because the framed app re-renders its own nav and
-     drops the class whenever it does. */
+  /* Keeps the embed styling applied, and notices when the application has
+     actually rendered. Both are polled rather than driven off the load event,
+     which on a warm cache can fire before React has attached a handler. */
+  useEffect(() => {
+    if (!mount) return;
+    const tick = () => {
+      dress(frameRef.current);
+      try {
+        const body = frameRef.current?.contentDocument?.body;
+        if (body && body.innerText.trim().length > 40) setPainted(true);
+      } catch {
+        /* frame not ready yet */
+      }
+    };
+    tick();
+    const t = window.setInterval(tick, 500);
+    return () => {
+      window.clearInterval(t);
+      /* Released along with the frame, so the still comes back on return. */
+      setPainted(false);
+    };
+  }, [mount, dress]);
+
   /* Fit the fixed-width frame to whatever width the card actually has. */
   useEffect(() => {
     const el = stageRef.current;
@@ -138,13 +162,17 @@ export function LiveModule({
      scroll. It comes straight back on return. */
   useEffect(() => {
     const el = hostRef.current;
-    if (!el || (poster && !asked)) return;
+    if (!el) return;
     const io = new IntersectionObserver(([e]) => setMount(e.isIntersecting), {
-      rootMargin: "500px 0px",
+      /* Enough warning to start loading before the card is on screen, but not
+         so much that two applications are alive at once: 1200px kept the hero
+         and the tour mounted together and the scroll collapsed to 100% dropped
+         frames. */
+      rootMargin: "600px 0px",
     });
     io.observe(el);
     return () => io.disconnect();
-  }, [poster, asked]);
+  }, []);
 
   return (
     <div
@@ -162,22 +190,9 @@ export function LiveModule({
         <span className="mx-auto truncate font-mono text-[11px] tracking-[0.04em] text-fg-3">
           {label}
         </span>
-        {poster && !asked ? (
-          <button
-            type="button"
-            onClick={() => {
-              setAsked(true);
-              setMount(true);
-            }}
-            className="shrink-0 rounded-full bg-accent px-3 py-1 font-mono text-[10px] tracking-[0.14em] text-white uppercase transition-colors duration-300 hover:bg-accent-dim"
-          >
-            Prøv selv
-          </button>
-        ) : (
-          <span className="shrink-0 rounded-full bg-accent/10 px-2.5 py-1 font-mono text-[9.5px] tracking-[0.14em] text-accent uppercase">
+        <span className="shrink-0 rounded-full bg-accent/10 px-2.5 py-1 font-mono text-[9.5px] tracking-[0.14em] text-accent uppercase">
             Live
           </span>
-        )}
       </div>
 
       {/* Says plainly what this is. The frame points at the demo deployment,
@@ -198,7 +213,7 @@ export function LiveModule({
             behind the frame afterwards, so it is covered the moment the app
             paints rather than waiting on an event that may already have
             fired. */}
-        {poster ? (
+        {poster && !painted ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={poster}
@@ -206,13 +221,13 @@ export function LiveModule({
             aria-hidden
             className="absolute inset-0 z-0 h-full w-full object-cover object-top"
           />
-        ) : (
+        ) : !painted ? (
           <span aria-hidden className="absolute inset-0 z-0 grid place-items-center">
             <span className="font-mono text-[11px] tracking-[0.16em] text-fg-4 uppercase">
               Laster portalen
             </span>
           </span>
-        )}
+        ) : null}
 
         {/* Holds the scroll width when the frame is wider than the card. */}
         <span aria-hidden className="block" style={{ width: DESIGN_W * scale, height: 1 }} />

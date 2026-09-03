@@ -326,6 +326,31 @@ select:focus-visible {
   animation-play-state: paused !important;
 }
 
+/* The three-step flow: the arrow crosses the whole gap between two cards.
+   A CSS loop rather than a motion one, because an always-running JS animation
+   per arrow shows up as dropped frames on scroll. Only left/top and opacity
+   move, so the centring translate and the rotation stay untouched. */
+@keyframes step-travel-y {
+  0%        { top: 0%;   opacity: 0; }
+  14%       { opacity: 1; }
+  86%       { opacity: 1; }
+  100%      { top: 100%; opacity: 0; }
+}
+@keyframes step-travel-x {
+  0%        { left: 0%;   opacity: 0; }
+  14%       { opacity: 1; }
+  86%       { opacity: 1; }
+  100%      { left: 100%; opacity: 0; }
+}
+.step-arrow {
+  top: 50%;
+  left: 50%;
+  animation: step-travel-y 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@media (min-width: 48rem) {
+  .step-arrow { animation-name: step-travel-x; }
+}
+
 @keyframes flow-arrow {
   0%, 100% { transform: translateX(-3px); opacity: 0.4; }
   50%      { transform: translateX(3px);  opacity: 1; }

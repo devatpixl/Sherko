@@ -95,6 +95,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
+        {/* The framed portal lives on another host. Opening the connection
+            before a frame asks for it takes a round trip off the load. */}
+        <link rel="preconnect" href="https://sherko-demo.pixlmedia.no" />
+        <link rel="dns-prefetch" href="https://sherko-demo.pixlmedia.no" />
         {/* Sets data-theme before first paint, so a light-mode visitor never
             sees a dark flash. Must run before React loads, hence inline. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />

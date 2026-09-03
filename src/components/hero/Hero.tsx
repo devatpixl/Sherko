@@ -89,7 +89,7 @@ export function Hero() {
           transition={{ duration: 1, delay: 0.5, ease: EASE }}
           className="mt-14 md:mt-20"
         >
-          <LiveModule priority route="/demo/dashboard/reports" label="sherko-demo.pixlmedia.no/dashboard/reports"
+          <LiveModule priority poster="/video/rapporter.jpg" route="/demo/dashboard/reports" label="sherko-demo.pixlmedia.no/dashboard/reports"
             className="mx-auto max-w-[1100px] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]"
           />
         </motion.div>

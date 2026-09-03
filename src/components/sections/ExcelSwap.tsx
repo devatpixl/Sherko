@@ -88,28 +88,26 @@ function SystemMark() {
 
 const MARKS = [<SheetMark key="a" />, <Mark key="b" className="h-9 w-9 text-accent" />, <SystemMark key="c" />];
 
-/** The travelling pulse between two cards. */
+/** The arrow that travels from one card to the next: down when stacked, along
+ *  the line when not. It covers the whole gap rather than nudging in place,
+ *  which is what makes the three cards read as one movement. */
 function Connector({ index }: { index: number }) {
   return (
-    <div aria-hidden className="relative hidden h-px w-full min-w-[2rem] max-w-[5rem] flex-1 self-center bg-line md:block">
-      {/* An arrow head, not a dot: a dot travelling a line says "loading",
-          an arrow head says which way the work moves. */}
-      <motion.span
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 text-accent"
-        initial={{ left: "0%", opacity: 0 }}
-        animate={{ left: ["0%", "100%"], opacity: [0, 1, 1, 0] }}
-        transition={{
-          duration: 1.1,
-          ease: "easeInOut",
-          repeat: Infinity,
-          repeatDelay: 2.2,
-          delay: index * 1.1,
-        }}
+    <div
+      aria-hidden
+      className="relative flex h-12 w-full shrink-0 items-center justify-center self-center md:h-px md:min-w-[2rem] md:flex-1 md:bg-line"
+    >
+      {/* the rail it runs along, vertical only while stacked */}
+      <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-line md:hidden" />
+      <svg
+        viewBox="0 0 12 12"
+        /* Centring uses the standalone translate and rotate properties, so the
+           keyframes are free to own left/top without fighting a transform. */
+        className="step-arrow absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-90 fill-accent md:rotate-0"
+        style={{ animationDelay: `${index * 1.1}s` }}
       >
-        <svg viewBox="0 0 12 12" className="block h-3 w-3 fill-current" aria-hidden>
-          <path d="M1.5 1.2 10.5 6 1.5 10.8 3.2 6z" />
-        </svg>
-      </motion.span>
+        <path d="M1.5 1.2 10.5 6 1.5 10.8 3.2 6z" />
+      </svg>
     </div>
   );
 }

@@ -22,7 +22,7 @@ const copy = {
   } as Bi,
 };
 
-type Tab = { id: string; label: Bi; note: Bi; url: string; route: string };
+type Tab = { id: string; label: Bi; note: Bi; url: string; route: string; poster: string };
 
 const TABS: Tab[] = [
   {
@@ -31,6 +31,7 @@ const TABS: Tab[] = [
     note: { no: "Omsetning, salg per produktgruppe, snittordre", en: "Revenue, sales per product group, average order" },
     url: "sherko-demo.pixlmedia.no/dashboard/reports",
     route: "/demo/dashboard/reports",
+    poster: "/video/rapporter.jpg",
   },
   {
     id: "ordre",
@@ -38,6 +39,7 @@ const TABS: Tab[] = [
     note: { no: "Alle statuser, kanal og beløp i én liste", en: "Every status, channel and amount in one list" },
     url: "sherko-demo.pixlmedia.no/dashboard/orders",
     route: "/demo/dashboard/orders",
+    poster: "/video/ordre.jpg",
   },
   {
     id: "lager",
@@ -45,6 +47,7 @@ const TABS: Tab[] = [
     note: { no: "Beholdning, bevegelser og bestillingspunkter", en: "Balances, movements and reorder points" },
     url: "sherko-demo.pixlmedia.no/dashboard/inventory",
     route: "/demo/dashboard/inventory",
+    poster: "/video/lager.jpg",
   },
   {
     id: "kunder",
@@ -52,6 +55,7 @@ const TABS: Tab[] = [
     note: { no: "Kundekort, prisavtaler og kundegrupper", en: "Customer records, price agreements and groups" },
     url: "sherko-demo.pixlmedia.no/dashboard/customers",
     route: "/demo/dashboard/customers",
+    poster: "/video/kunder.jpg",
   },
   {
     id: "innkjop",
@@ -59,6 +63,7 @@ const TABS: Tab[] = [
     note: { no: "Innkjøpsordre mot leverandør, med status", en: "Purchase orders to suppliers, with status" },
     url: "sherko-demo.pixlmedia.no/dashboard/purchase-orders",
     route: "/demo/dashboard/purchase-orders",
+    poster: "/video/innkjop.jpg",
   },
   {
     id: "brukere",
@@ -66,6 +71,7 @@ const TABS: Tab[] = [
     note: { no: "Roller og tilgang per ansatt", en: "Roles and access per employee" },
     url: "sherko-demo.pixlmedia.no/dashboard/staff",
     route: "/demo/dashboard/staff",
+    poster: "/video/brukere.jpg",
   },
   {
     id: "katalog",
@@ -73,6 +79,7 @@ const TABS: Tab[] = [
     note: { no: "Varer, kategorier, merker og MVA", en: "Products, categories, brands and VAT" },
     url: "sherko-demo.pixlmedia.no/dashboard/products",
     route: "/demo/dashboard/products",
+    poster: "/video/katalog.jpg",
   },
 ];
 
@@ -137,6 +144,7 @@ export function DashboardPreview() {
           <motion.div key={tab.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
             <LiveModule
               route={tab.route}
+              poster={tab.poster}
               label={tab.url}
               priority={tab.id === TABS[0].id}
               className="mt-7 shadow-[0_40px_120px_-45px_rgba(0,0,0,0.9)]"

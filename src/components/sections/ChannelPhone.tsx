@@ -108,15 +108,15 @@ export function ChannelPhone() {
             {copy.stepIn[locale]}
           </p>
 
+          {/* One reveal for the whole grid, not one per tile.
+              Twelve motion elements each with their own observer and their own
+              replaying animation is what made this block stutter on every
+              scroll past it. The list arrives as a unit now. */}
           <ul className="mt-5 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2">
-            {INBOUND.map((item, i) => (
-              <motion.li
+            {INBOUND.map((item) => (
+              <li
                 key={item.label}
                 className="flex min-w-0 items-center gap-3 bg-canvas px-4 py-3 transition-colors duration-300 hover:bg-accent/8"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ margin: "-8% 0px" }}
-                transition={{ duration: 0.45, delay: 0.03 + i * 0.03, ease: EASE }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -133,7 +133,7 @@ export function ChannelPhone() {
                     {item.note[locale]}
                   </span>
                 </span>
-              </motion.li>
+              </li>
             ))}
           </ul>
         </motion.div>
