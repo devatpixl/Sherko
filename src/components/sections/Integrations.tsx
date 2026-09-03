@@ -358,27 +358,47 @@ export function Integrations() {
               {copy.appsSub[locale]}
             </p>
 
-            <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-              {CATALOGUE.map((a, i) => (
-                <motion.div
-                  key={a.name}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: (i % 2) * 0.05, ease: EASE }}
-                  className="flex gap-4"
-                >
-                  <span className="mt-0.5 grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-line bg-surface p-2.5 text-fg-3">
-                    {a.glyph}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[0.9375rem] font-medium text-fg">{a.name}</span>
-                    <span className="mt-1 block text-[0.875rem] leading-relaxed text-fg-3">
-                      {a.note[locale]}
-                    </span>
-                  </span>
-                </motion.div>
-              ))}
+            {/* Two rows walking opposite ways, the way the earlier version of
+                this page ran its channel strip. A 12-cell grid of identical
+                rows read as a spec sheet; moving them says "there are more of
+                these than fit on your screen", which is the actual point.
+                Hovering the strip stops it so a name can be read. */}
+            <div className="relative mt-10 -mx-6 overflow-hidden py-2 md:-mx-10 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
+              {[0, 1].map((row) => {
+                const half = CATALOGUE.slice(row * 6, row * 6 + 6);
+                return (
+                  <div
+                    key={row}
+                    className={`marquee mt-3 flex w-max first:mt-0 hover:[animation-play-state:paused] ${
+                      row === 1 ? "[animation-direction:reverse]" : ""
+                    }`}
+                    style={{ ["--marquee-duration" as string]: row === 0 ? "38s" : "46s" }}
+                  >
+                    {[0, 1].map((copyIdx) => (
+                      <div key={copyIdx} className="flex shrink-0" aria-hidden={copyIdx === 1}>
+                        {half.map((a) => (
+                          <div
+                            key={a.name}
+                            className="mr-3 flex w-[19rem] shrink-0 items-center gap-4 rounded-xl border border-line bg-surface px-5 py-4 transition-colors duration-300 hover:border-accent"
+                          >
+                            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-line bg-canvas p-2">
+                              {a.glyph}
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block text-[0.9375rem] font-medium text-fg">
+                                {a.name}
+                              </span>
+                              <span className="mt-0.5 block truncate text-[0.8125rem] text-fg-3">
+                                {a.note[locale]}
+                              </span>
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </Reveal>

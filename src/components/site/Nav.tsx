@@ -132,7 +132,7 @@ export function Nav() {
                     key={n.id}
                     href={`#${n.id}`}
                     aria-current={on ? "true" : undefined}
-                    className={`relative rounded-full px-3.5 py-2 text-[0.9375rem] tracking-tight transition-colors duration-300 ${
+                    className={`group/nav relative rounded-full px-3.5 py-2 text-[0.9375rem] tracking-tight transition-colors duration-300 ${
                       on ? "text-fg" : "text-fg-2 hover:text-fg"
                     }`}
                   >
@@ -144,6 +144,12 @@ export function Nav() {
                       />
                     )}
                     <span className="relative">{n.label[locale]}</span>
+                    {/* Hover rule, drawn from the centre out. The links had no
+                        hover state at all, so nothing said they were links. */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-3.5 bottom-[3px] h-[2px] origin-center scale-x-0 rounded-full bg-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/nav:scale-x-100"
+                    />
                   </a>
                 );
               })}
@@ -219,6 +225,12 @@ export function Nav() {
                     className="display border-b border-line py-4 text-[1.1875rem] text-fg"
                   >
                     {n.label[locale]}
+                    {/* Hover rule, drawn from the centre out. Nav items had no
+                        hover state at all, so nothing said they were links. */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-3.5 bottom-[3px] h-[2px] origin-center scale-x-0 rounded-full bg-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/nav:scale-x-100"
+                    />
                   </motion.a>
                 ))}
               </nav>

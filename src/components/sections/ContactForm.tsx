@@ -186,7 +186,7 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
-            className="card p-10 text-center"
+            className="card p-10"
           >
             <svg viewBox="0 0 48 48" className="mx-auto h-12 w-12 text-accent" aria-hidden>
               <motion.circle

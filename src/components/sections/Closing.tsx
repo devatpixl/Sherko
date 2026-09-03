@@ -25,14 +25,13 @@ export function Closing() {
 
       <Container>
         <SectionHead
-          align="center"
           eyebrow={closing.eyebrow[locale]}
           title={closing.title[locale]}
           body={closing.body[locale]}
         />
 
         <Reveal delay={0.12}>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-2.5">
+          <div className="mt-9 flex flex-wrap items-center gap-2.5">
             {formats[locale].map((label) => (
               <span
                 key={label}
@@ -49,7 +48,7 @@ export function Closing() {
         </Reveal>
 
         <Reveal delay={0.28}>
-          <p className="mt-10 text-center font-mono text-[11px] tracking-[0.14em] text-fg-3 uppercase">
+          <p className="mt-10 font-mono text-[11px] tracking-[0.14em] text-fg-3 uppercase">
             {closing.reassure[locale]}
           </p>
         </Reveal>

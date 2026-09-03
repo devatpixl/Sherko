@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HandwrittenNote } from "@/components/hero/HandwrittenNote";
 import {
   ChevronBack,
@@ -345,27 +345,91 @@ function ChatHeader() {
   );
 }
 
+/**
+ * The message box, and the one thing on the phone you can actually use.
+ *
+ * cursor.com's hero is not a video, it is their real interface rebuilt in the
+ * DOM, so you can click into it. This is the same idea at the scale that makes
+ * sense here: click the composer and it takes focus, you can type, backspace,
+ * select, paste. It is a real input.
+ *
+ * Nothing is ever sent. Enter is swallowed on purpose, and the send button
+ * does not submit: the phone is a demonstration of a conversation, and a
+ * message that vanished into nothing would be worse than one you cannot send.
+ * The moment you type, the scripted typewriter hands over and stays out of the
+ * way until the field is empty again.
+ */
 function Composer({ text, done }: { text: string; done: boolean }) {
   const { locale } = useLocale();
-  const empty = text.length === 0;
+  const [typed, setTyped] = useState<string | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  /* Once you have taken over, your text wins until you clear the field. */
+  const live = typed ?? text;
+  const empty = live.length === 0;
+  const mine = typed !== null;
+
   return (
     <div className="flex min-h-[62px] shrink-0 items-end gap-[8px] bg-[#111B21] px-[8px] pt-[8px] pb-[10px]">
-      <div className="flex min-h-[44px] min-w-0 flex-1 items-end gap-[8px] rounded-[20px] bg-[#2A3942] px-[11px] py-[10px]">
+      <div
+        onClick={() => inputRef.current?.focus()}
+        className="flex min-h-[44px] min-w-0 flex-1 items-end gap-[8px] rounded-[20px] bg-[#2A3942] px-[11px] py-[10px] focus-within:ring-1 focus-within:ring-[#00A884]/60"
+      >
         <IconEmoji className="shrink-0 text-[#8696A0]" />
-        <p className="max-h-[100px] min-w-0 flex-1 overflow-y-auto text-[15px] leading-[20px] wrap-break-word whitespace-pre-wrap text-[#E9EDEF] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {empty ? (
-            <span className="text-[#8696A0]">{locale === "no" ? "Melding" : "Message"}</span>
-          ) : (
-            <>
-              {text}
-              {!done && <span className="caret ml-[1px] inline-block w-[1.5px] bg-[#00A884] align-middle">&nbsp;</span>}
-            </>
-          )}
-        </p>
+
+        <div className="relative min-w-0 flex-1">
+          {/* The scripted text, visible until you start typing your own. */}
+          <p
+            aria-hidden={mine}
+            className={`max-h-[100px] min-w-0 overflow-y-auto text-[15px] leading-[20px] wrap-break-word whitespace-pre-wrap text-[#E9EDEF] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+              mine ? "invisible" : ""
+            }`}
+          >
+            {text.length === 0 ? (
+              <span className="text-[#8696A0]">{locale === "no" ? "Melding" : "Message"}</span>
+            ) : (
+              <>
+                {text}
+                {!done && (
+                  <span className="caret ml-[1px] inline-block w-[1.5px] bg-[#00A884] align-middle">
+                    &nbsp;
+                  </span>
+                )}
+              </>
+            )}
+          </p>
+
+          {/* The real field, laid over it. Transparent until you use it, so
+              the scripted line shows through rather than being duplicated. */}
+          <textarea
+            ref={inputRef}
+            rows={1}
+            value={typed ?? ""}
+            spellCheck={false}
+            aria-label={locale === "no" ? "Skriv en melding" : "Write a message"}
+            placeholder=""
+            onChange={(e) => setTyped(e.target.value === "" ? null : e.target.value)}
+            onKeyDown={(e) => {
+              /* Swallowed on purpose: nothing here sends anywhere. */
+              if (e.key === "Enter") e.preventDefault();
+            }}
+            className={`absolute inset-0 h-full w-full resize-none bg-transparent text-[15px] leading-[20px] outline-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+              mine ? "text-[#E9EDEF] caret-[#00A884]" : "text-transparent caret-[#00A884]"
+            }`}
+          />
+        </div>
+
         <IconClip className="shrink-0 text-[#8696A0]" />
         {empty && <IconCamera className="shrink-0 text-[#8696A0]" />}
       </div>
-      <div className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full bg-[#00A884] text-white">
+
+      <button
+        type="button"
+        aria-label={locale === "no" ? "Send" : "Send"}
+        /* Deliberately inert. See the note above the component. */
+        onClick={(e) => e.preventDefault()}
+        className="grid h-[46px] w-[46px] shrink-0 cursor-default place-items-center rounded-full bg-[#00A884] text-white"
+      >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={empty ? "mic" : "send"}
@@ -377,7 +441,7 @@ function Composer({ text, done }: { text: string; done: boolean }) {
             {empty ? <IconMic /> : <IconSend />}
           </motion.span>
         </AnimatePresence>
-      </div>
+      </button>
     </div>
   );
 }

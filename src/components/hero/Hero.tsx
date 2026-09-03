@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { ButtonGhost, ButtonPrimary, Container } from "@/components/ui";
-import { ProductVideo } from "@/components/ui/ProductVideo";
+import { LiveModule } from "@/components/ui/LiveModule";
 import { cta, hero } from "@/lib/content";
 import { useLocale } from "@/lib/i18n";
 import { DEMO_URL } from "@/lib/config";
@@ -89,10 +89,7 @@ export function Hero() {
           transition={{ duration: 1, delay: 0.5, ease: EASE }}
           className="mt-14 md:mt-20"
         >
-          <ProductVideo
-            priority
-            src="/video/rapporter.mp4"
-            label="sherko-demo.pixlmedia.no/dashboard/rapporter"
+          <LiveModule priority route="/demo/dashboard/reports" label="sherko-demo.pixlmedia.no/dashboard/reports"
             className="mx-auto max-w-[1100px] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]"
           />
         </motion.div>

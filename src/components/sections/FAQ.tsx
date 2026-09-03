@@ -85,7 +85,7 @@ export function FAQ() {
                         transition={{ duration: 0.38, ease: EASE }}
                         className="overflow-hidden"
                       >
-                        <p className="max-w-[54ch] pr-8 pb-6 text-[0.9375rem] leading-relaxed text-fg-2 md:text-[1rem]">
+                        <p className="pr-10 pb-6 text-justify text-[0.9375rem] leading-relaxed text-fg-2 hyphens-auto md:text-[1rem]">
                           {item.a[locale]}
                         </p>
                       </motion.div>

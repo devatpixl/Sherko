@@ -1,18 +1,12 @@
 "use client";
 
-import { motion } from "motion/react";
-import { ChannelPhone } from "@/components/sections/ChannelPhone";
-import { CountUp } from "@/components/ui/Metrics";
-import { ExcelSwap } from "@/components/sections/ExcelSwap";
 import { Container, Eyebrow, Reveal, Section } from "@/components/ui";
-import { brand, channels } from "@/lib/content";
 import { useLocale, type Bi } from "@/lib/i18n";
 
 /* The positioning statement. Sherko is a vertical product and the narrowness
    is the selling point, so it is said out loud — and then proved with the
    vocabulary only someone in the trade would bother to support. */
 
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 const copy = {
   eyebrow: { no: "Vertikal, ikke generell", en: "Vertical, not general" } as Bi,
@@ -20,12 +14,18 @@ const copy = {
   l2: { no: "grossister.", en: "wholesalers." } as Bi,
   l3: { no: "Ingen andre.", en: "Nobody else." } as Bi,
   body: {
-    no: "Sherko er ikke en generell AI du må lære opp. Den kan bransjen din fra første dag, og forstår ordren slik kundene dine faktisk skriver den.",
-    en: "Sherko is not a general AI you have to train. It knows your trade from day one, and reads an order the way your customers actually write it.",
+    no: "Vi bygger lagersystemet rundt din drift, ikke omvendt. Sherko kan grossistvokabularet fra dag én: pall, D-pak, kolli, varenummer, EAN og prisavtaler per kunde.",
+    en: "We build the warehouse system around how you run, not the other way round. Sherko knows the wholesale vocabulary from day one: pallets, cases, units, article numbers, EAN and per-customer price agreements.",
   } as Bi,
-  proofLabel: {
-    no: "Forstår dette uten opplæring",
-    en: "Understands these out of the box",
+  rawLabel: { no: "Slik kunden skriver det", en: "How the customer writes it" } as Bi,
+  raw: {
+    no: "«2 pall jalapeño, 1 D-pak servietter 33, og 30 kn frityrolje til fredag»",
+    en: "«2 pallets jalapeño, 1 case of 33cm napkins, and 30 cans of fryer oil for Friday»",
+  } as Bi,
+  parsedLabel: { no: "Slik Sherko leser det", en: "How Sherko reads it" } as Bi,
+  terms: {
+    no: "Pall, D-pak og kolli er ikke gjettet. Sherko slår opp varenummer og EAN i din egen katalog, bruker prisavtalen som gjelder den kunden, og skiller MVA på 15 % og 25 % uten at du sier fra.",
+    en: "Pallets, cases and units are not guessed. Sherko looks up article numbers and EAN in your own catalogue, applies that customer's price agreement, and separates 15 % and 25 % VAT without being told.",
   } as Bi,
   /* Deliberately starts with "Og" / "And" — it continues the sentence above. */
   channelsLine: {
@@ -34,13 +34,12 @@ const copy = {
   } as Bi,
 };
 
-const proof: Bi[] = [
-  { no: "D-pak, kolli og pall", en: "Cases, units and pallets" },
-  { no: "Varenummer og EAN", en: "Article numbers and EAN" },
-  { no: "Prisavtaler per kunde", en: "Per-customer price agreements" },
-  { no: "MVA 15 % og 25 %", en: "VAT at 15 % and 25 %" },
-  { no: "Bestillingspunkter", en: "Reorder points" },
-  { no: "Restordre og delleveranser", en: "Backorders and part deliveries" },
+/* One order line as a customer would send it, and the same line resolved.
+   Article numbers match the demo catalogue used elsewhere on the site. */
+const PARSED = [
+  { art: "20354", name: "Jalapeño, hel", qty: "2 pall" },
+  { art: "20205", name: "Servietter 33 cm", qty: "1 D-pak" },
+  { art: "20811", name: "Frityrolje 10 L", qty: "30 kanner" },
 ];
 
 export function BuiltFor() {
@@ -74,99 +73,70 @@ export function BuiltFor() {
             </Reveal>
           </div>
 
-          {/* The proof: trade vocabulary a general assistant would fumble. */}
-          <div>
-            <Reveal delay={0.2}>
-              <p className="font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase">
-                {copy.proofLabel[locale]}
+          {/* The proof, shown rather than listed.
+              This was a 6 / 2 / 0 stat band over a numbered 01-06 list. Both
+              are shapes a generated page reaches for by default, and neither
+              proved anything: a reader cannot check "6 formats", and a
+              numbered list of nouns is just nouns. So the panel does the thing
+              instead. One real line the way a customer types it, and under it
+              the same line resolved against a catalogue. Every term the old
+              list named still appears, doing its job. */}
+          <div className="rounded-2xl border border-line bg-surface/60 p-6 md:p-7">
+            <Reveal delay={0.16}>
+              <p className="font-mono text-[10.5px] tracking-[0.16em] text-fg-3 uppercase">
+                {copy.rawLabel[locale]}
+              </p>
+              <p className="mt-3 text-[1.0625rem] leading-relaxed text-fg">{copy.raw[locale]}</p>
+            </Reveal>
+
+            <Reveal delay={0.24}>
+              <div className="my-6 flex items-center gap-3">
+                <span className="h-px flex-1 bg-line" />
+                <svg viewBox="0 0 16 16" className="h-4 w-4 shrink-0 text-accent" aria-hidden>
+                  <path
+                    d="M8 2v11M4 9l4 4 4-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="h-px flex-1 bg-line" />
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.3}>
+              <p className="font-mono text-[10.5px] tracking-[0.16em] text-fg-3 uppercase">
+                {copy.parsedLabel[locale]}
               </p>
             </Reveal>
-            {/* Zapier leads a claim like this with figures, then the detail
-                underneath. The numbers here are capability facts about how the
-                system is built, not measured customer results: six formats it
-                reads, two languages it speaks, zero orders it approves itself. */}
-            <div className="mt-6 grid grid-cols-3 gap-4 border-y border-line py-6">
-              {[
-                { n: 6, unit: "", label: { no: "Formater inn", en: "Inbound formats" } },
-                { n: 2, unit: "", label: { no: "Språk", en: "Languages" } },
-                { n: 0, unit: "", label: { no: "Auto-godkjent", en: "Auto-approved" } },
-              ].map((f, i) => (
-                <div key={i}>
-                  <CountUp
-                    to={f.n}
-                    suffix={f.unit}
-                    duration={1.1 + i * 0.15}
-                    className="display block text-[clamp(1.75rem,3.2vw,2.5rem)] text-accent"
-                  />
-                  <p className="mt-1.5 font-mono text-[10px] leading-[1.4] tracking-[0.14em] text-fg-4 uppercase">
-                    {f.label[locale]}
-                  </p>
-                </div>
-              ))}
-            </div>
 
-            <dl className="mt-2">
-              {proof.map((item, i) => (
-                <Reveal key={item.no} delay={0.2 + i * 0.05}>
-                  <div className="group grid grid-cols-[auto_1fr] items-baseline gap-x-5 border-b border-line py-4">
-                    <dt className="font-mono text-[10.5px] tracking-[0.16em] text-fg-4 tabular-nums uppercase">
-                      {String(i + 1).padStart(2, "0")}
-                    </dt>
-                    <dd className="flex items-baseline justify-between gap-4">
-                      <span className="text-[0.9375rem] text-fg">{item[locale]}</span>
-                      <motion.span
-                        aria-hidden
-                        className="font-mono text-[10.5px] tracking-[0.16em] text-fg-4 uppercase transition-colors duration-300 group-hover:text-accent"
-                        initial={{ opacity: 0, x: -6 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: 0.3 + i * 0.05, ease: EASE }}
-                      >
-                        {locale === "no" ? "Innebygd" : "Built in"}
-                      </motion.span>
-                    </dd>
+            <div className="mt-3">
+              {PARSED.map((row, i) => (
+                <Reveal key={row.art} delay={0.34 + i * 0.06}>
+                  <div className="flex items-baseline gap-4 border-t border-line py-2.5">
+                    <span className="w-14 shrink-0 font-mono text-[11.5px] text-fg-4 tabular-nums">
+                      {row.art}
+                    </span>
+                    <span className="min-w-0 flex-1 text-[0.9375rem] text-fg">{row.name}</span>
+                    <span className="shrink-0 font-mono text-[12px] whitespace-nowrap text-accent">
+                      {row.qty}
+                    </span>
                   </div>
                 </Reveal>
               ))}
-            </dl>
+            </div>
+
             <Reveal delay={0.56}>
-              <p className="mt-5 font-mono text-[11px] tracking-tight text-fg-4">
-                {locale === "no"
-                  ? `${brand.name} snakker grossist. Ikke chatbot.`
-                  : `${brand.name} speaks wholesale. Not chatbot.`}
+              <p className="mt-6 border-t border-line pt-5 text-[0.875rem] leading-relaxed text-fg-2">
+                {copy.terms[locale]}
               </p>
             </Reveal>
           </div>
         </div>
       </Container>
 
-      {/* The same argument, continued: how the order gets here. */}
-      <div id="kanaler" className="scroll-mt-24 pt-32 md:pt-40 lg:pt-48">
-        <Container>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-start lg:gap-16">
-            <div>
-              <Reveal>
-                <Eyebrow>{channels.eyebrow[locale]}</Eyebrow>
-              </Reveal>
-              <Reveal delay={0.06}>
-                <p className="display mt-6 text-[clamp(1.5rem,3.2vw,2.35rem)] text-fg">
-                  {copy.channelsLine[locale]}
-                </p>
-              </Reveal>
-            </div>
-            <Reveal delay={0.12}>
-              <p className="lede text-[0.9375rem] leading-relaxed text-fg-2 lg:pt-9">
-                {channels.body[locale]}
-              </p>
-            </Reveal>
-          </div>
-        </Container>
-
-        <ChannelPhone />
-
-        {/* Excel is not one of the formats — it is the thing being replaced. */}
-        <ExcelSwap />
-      </div>
     </Section>
   );
 }

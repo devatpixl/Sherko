@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Container, Reveal, Section, SectionHead } from "@/components/ui";
-import { ProductVideo } from "@/components/ui/ProductVideo";
+import { LiveModule } from "@/components/ui/LiveModule";
 import { useLocale, type Bi } from "@/lib/i18n";
 
 /* Real screen recordings of the running admin, tabbed the way cursor.com steps
@@ -15,64 +15,64 @@ import { useLocale, type Bi } from "@/lib/i18n";
 
 const copy = {
   eyebrow: { no: "Systemet", en: "The system" } as Bi,
-  title: { no: "Hele driften, i ett bilde.", en: "The whole operation, in one place." } as Bi,
+  title: { no: "Ordre, lager, kunder og innkjøp i ett system.", en: "Orders, stock, customers and purchasing in one system." } as Bi,
   body: {
-    no: "Ordre, lager, kunder, innkjøp og katalog i samme portal. Tallene under er fra demoinstansen, ikke fra en kunde.",
+    no: "Dette er den faktiske portalen, ikke en skisse. Klikk deg gjennom fanene og se ordrehåndtering, varelager, kundeoversikt og innkjøp. Tallene er fra demoinstansen.",
     en: "Orders, stock, customers, purchasing and catalogue in one portal. The figures below are from the demo instance, not from a client.",
   } as Bi,
 };
 
-type Tab = { id: string; label: Bi; note: Bi; src: string; url: string };
+type Tab = { id: string; label: Bi; note: Bi; url: string; route: string };
 
 const TABS: Tab[] = [
   {
     id: "rapporter",
     label: { no: "Rapporter", en: "Reports" },
     note: { no: "Omsetning, salg per produktgruppe, snittordre", en: "Revenue, sales per product group, average order" },
-    src: "/video/rapporter.mp4",
-    url: "sherko-demo.pixlmedia.no/dashboard/rapporter",
+    url: "sherko-demo.pixlmedia.no/dashboard/reports",
+    route: "/demo/dashboard/reports",
   },
   {
     id: "ordre",
     label: { no: "Ordre", en: "Orders" },
     note: { no: "Alle statuser, kanal og beløp i én liste", en: "Every status, channel and amount in one list" },
-    src: "/video/ordre.mp4",
     url: "sherko-demo.pixlmedia.no/dashboard/orders",
+    route: "/demo/dashboard/orders",
   },
   {
     id: "lager",
     label: { no: "Lager", en: "Stock" },
     note: { no: "Beholdning, bevegelser og bestillingspunkter", en: "Balances, movements and reorder points" },
-    src: "/video/lager.mp4",
-    url: "sherko-demo.pixlmedia.no/dashboard/inventory/lager",
+    url: "sherko-demo.pixlmedia.no/dashboard/inventory",
+    route: "/demo/dashboard/inventory",
   },
   {
     id: "kunder",
     label: { no: "Kunder", en: "Customers" },
     note: { no: "Kundekort, prisavtaler og kundegrupper", en: "Customer records, price agreements and groups" },
-    src: "/video/kunder.mp4",
     url: "sherko-demo.pixlmedia.no/dashboard/customers",
+    route: "/demo/dashboard/customers",
   },
   {
     id: "innkjop",
     label: { no: "Innkjøp", en: "Purchasing" },
     note: { no: "Innkjøpsordre mot leverandør, med status", en: "Purchase orders to suppliers, with status" },
-    src: "/video/innkjop.mp4",
     url: "sherko-demo.pixlmedia.no/dashboard/purchase-orders",
+    route: "/demo/dashboard/purchase-orders",
   },
   {
     id: "brukere",
     label: { no: "Brukere", en: "Users" },
     note: { no: "Roller og tilgang per ansatt", en: "Roles and access per employee" },
-    src: "/video/brukere.mp4",
     url: "sherko-demo.pixlmedia.no/dashboard/staff",
+    route: "/demo/dashboard/staff",
   },
   {
     id: "katalog",
     label: { no: "Katalog", en: "Catalogue" },
     note: { no: "Varer, kategorier, merker og MVA", en: "Products, categories, brands and VAT" },
-    src: "/video/katalog.mp4",
     url: "sherko-demo.pixlmedia.no/dashboard/products",
+    route: "/demo/dashboard/products",
   },
 ];
 
@@ -135,9 +135,10 @@ export function DashboardPreview() {
 
         <Reveal delay={0.14}>
           <motion.div key={tab.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
-            <ProductVideo
-              src={tab.src}
+            <LiveModule
+              route={tab.route}
               label={tab.url}
+              priority={tab.id === TABS[0].id}
               className="mt-7 shadow-[0_40px_120px_-45px_rgba(0,0,0,0.9)]"
             />
             <p className="mt-4 font-mono text-[11px] tracking-[0.12em] text-fg-4 uppercase">

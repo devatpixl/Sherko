@@ -2,15 +2,21 @@
 
 import { motion } from "motion/react";
 import { Container, Reveal } from "@/components/ui";
-import { SpreadsheetMark } from "@/components/ui/SpreadsheetMark";
+import { Mark } from "@/components/site/Wordmark";
 import { useLocale, type Bi } from "@/lib/i18n";
+import { useAnimGate } from "@/lib/useAnimGate";
 
-/* The core claim of the whole site, so it is staged like cursor.com stages
-   theirs: one centred sentence, two actions, then a single large window that
-   shows the product doing the thing. No icon row, no three-step diagram.
-
-   The left side carries Microsoft's own Excel mark with an orange blade cut
-   through it; the record that replaces it is live on the right. */
+/* The core claim of the site: the spreadsheet goes, the system arrives.
+ *
+ * Structure taken from the earlier version of this page, which said it in
+ * three steps rather than in one wide before/after window. The window forced
+ * two tables of near-identical rows side by side and the eye had to hunt for
+ * what changed. Three steps say it in one read: the sheet, the thing that
+ * reads it, the order sitting in the system.
+ *
+ * The marks advance one at a time, and it loops for as long as the section is
+ * on screen, so it is never a still picture you happened to arrive after.
+ */
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -23,133 +29,151 @@ const copy = {
     no: "Skreddersydd for grossister. Sherko tar over det manuelle arbeidet, ordrene, lageret og oversikten, og legger det i ett system i stedet for i Excel.",
     en: "Built for wholesalers. Sherko takes over the manual work, the orders, the stock and the overview, and puts it in one system instead of in Excel.",
   } as Bi,
-  before: { no: "Regnearket", en: "The spreadsheet" } as Bi,
-  beforeNote: { no: "Manuelt · til nå", en: "Manual · until now" } as Bi,
-  after: { no: "Sherko", en: "Sherko" } as Bi,
-  afterNote: { no: "Søkbart · sporbart", en: "Searchable · traceable" } as Bi,
-  win: { no: "Lager", en: "Stock" } as Bi,
 };
 
-/* Rows on both sides say the same thing, so the eye reads it as one record
-   moving across rather than two unrelated tables. */
-const ROWS: { art: string; name: Bi; qty: string }[] = [
-  { art: "20354", name: { no: "Revet ost 70/30, 2 kg", en: "Grated cheese 70/30, 2 kg" }, qty: "612" },
-  { art: "20205", name: { no: "Frityrolje 10 L", en: "Frying oil 10 L" }, qty: "31" },
-  { art: "10877", name: { no: "Kavli mysost 500 g", en: "Kavli brown cheese 500 g" }, qty: "148" },
-  { art: "30112", name: { no: "Laksefilet 1,2 kg", en: "Salmon fillet 1.2 kg" }, qty: "24" },
+type Step = { key: string; title: Bi; note: Bi; body: Bi };
+
+const STEPS: Step[] = [
+  {
+    key: "sheet",
+    title: { no: "Regnearket", en: "The spreadsheet" },
+    note: { no: "Manuelt · til nå", en: "Manual · until now" },
+    body: {
+      no: "Én fil, én person som kan den, og ingen historikk på hvem som endret hva.",
+      en: "One file, one person who knows it, and no record of who changed what.",
+    },
+  },
+  {
+    key: "sherko",
+    title: { no: "Sherko", en: "Sherko" },
+    note: { no: "Leser og forstår", en: "Reads and understands" },
+    body: {
+      no: "Leser ordren i formatet den kom i, slår opp varenummer og pris, og lager et utkast.",
+      en: "Reads the order in whatever format it arrived, looks up article number and price, and drafts it.",
+    },
+  },
+  {
+    key: "system",
+    title: { no: "Ordren i systemet", en: "The order in the system" },
+    note: { no: "Søkbar · sporbar", en: "Searchable · traceable" },
+    body: {
+      no: "Du godkjenner. Da ligger ordren i lageret, på kundekortet og i rapportene med én gang.",
+      en: "You approve. The order is then in stock, on the customer record and in the reports at once.",
+    },
+  },
 ];
+
+/* Excel's own mark with a blade through it: this is the step being retired. */
+function SheetMark() {
+  return (
+    <span className="relative grid h-12 w-12 place-items-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logos/apps/excel.svg" alt="" aria-hidden className="h-10 w-10 object-contain opacity-70" />
+      <span className="absolute inset-x-[-2px] top-1/2 h-[2px] -translate-y-1/2 rotate-[-32deg] rounded-full bg-accent" />
+    </span>
+  );
+}
+
+function SystemMark() {
+  return (
+    <span className="grid h-12 w-12 place-items-center text-accent">
+      <svg viewBox="0 0 24 24" className="h-8 w-8" aria-hidden>
+        <ellipse cx="12" cy="6" rx="7.5" ry="3.2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M4.5 6v6c0 1.8 3.4 3.2 7.5 3.2s7.5-1.4 7.5-3.2V6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M4.5 12v6c0 1.8 3.4 3.2 7.5 3.2s7.5-1.4 7.5-3.2v-6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    </span>
+  );
+}
+
+const MARKS = [<SheetMark key="a" />, <Mark key="b" className="h-9 w-9 text-accent" />, <SystemMark key="c" />];
+
+/** The travelling pulse between two cards. */
+function Connector({ index }: { index: number }) {
+  return (
+    <div aria-hidden className="relative hidden h-px w-full min-w-[2rem] max-w-[5rem] flex-1 self-center bg-line md:block">
+      {/* An arrow head, not a dot: a dot travelling a line says "loading",
+          an arrow head says which way the work moves. */}
+      <motion.span
+        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 text-accent"
+        initial={{ left: "0%", opacity: 0 }}
+        animate={{ left: ["0%", "100%"], opacity: [0, 1, 1, 0] }}
+        transition={{
+          duration: 1.1,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatDelay: 2.2,
+          delay: index * 1.1,
+        }}
+      >
+        <svg viewBox="0 0 12 12" className="block h-3 w-3 fill-current" aria-hidden>
+          <path d="M1.5 1.2 10.5 6 1.5 10.8 3.2 6z" />
+        </svg>
+      </motion.span>
+    </div>
+  );
+}
 
 export function ExcelSwap() {
   const { locale } = useLocale();
+  const gate = useAnimGate<HTMLDivElement>();
 
   return (
-    <div className="pt-32 md:pt-40 lg:pt-48">
+    <div ref={gate} className="pt-32 md:pt-40 lg:pt-48">
       <Container>
-        {/* ── the claim ── */}
+        {/* Left aligned, like every other section on the page. It used to be
+            centred, which made the page swing between two alignments. */}
         <Reveal>
-          <h2 className="display mx-auto max-w-[18ch] text-center text-[clamp(2rem,4.6vw,3.6rem)] text-fg">
+          <h2 className="display max-w-[20ch] text-[clamp(2rem,4.6vw,3.6rem)] text-fg">
             {copy.title[locale]}
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
-          <p className="lede mx-auto mt-6 max-w-[58ch] text-center text-[1.0625rem] leading-relaxed text-fg-2">
+          <p className="lede mt-6 max-w-[58ch] text-[1.0625rem] leading-relaxed text-fg-2">
             {copy.sub[locale]}
           </p>
         </Reveal>
-        {/* ── one window, the swap happening inside it ── */}
-        <Reveal delay={0.2}>
-          <div className="mt-14 overflow-hidden rounded-2xl border border-line bg-surface md:mt-20">
-            {/* window chrome */}
-            <div className="flex items-center gap-[7px] border-b border-line px-4 py-3">
-              {/* macOS traffic lights, in their real colours */}
-              <span className="h-[11px] w-[11px] rounded-full bg-[#FF5F57]" />
-              <span className="h-[11px] w-[11px] rounded-full bg-[#FEBC2E]" />
-              <span className="h-[11px] w-[11px] rounded-full bg-[#28C840]" />
-              <span className="ml-3 font-mono text-[10.5px] tracking-[0.16em] text-fg-3 uppercase">
-                {copy.win[locale]}
-              </span>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr]">
-              {/* left: the sheet, retired */}
-              <div className="p-6 md:p-8">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center">
-                    <SpreadsheetMark className="h-9 w-9" cut />
+        <div className="mt-12 flex flex-col items-stretch gap-4 md:mt-16 md:flex-row md:items-stretch md:gap-0">
+          {STEPS.map((step, i) => (
+            <Fragmentish key={step.key}>
+              {i > 0 && <Connector index={i - 1} />}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ margin: "-10% 0px" }}
+                transition={{ duration: 0.6, delay: i * 0.12, ease: EASE }}
+                className={`card flex flex-1 flex-col gap-4 p-7 ${
+                  i === 2 ? "border-accent/45" : ""
+                }`}
+              >
+                {MARKS[i]}
+                <span>
+                  <span
+                    className={`display block text-[1.125rem] ${
+                      i === 0 ? "text-fg-3 line-through decoration-accent/60 decoration-2" : "text-fg"
+                    }`}
+                  >
+                    {step.title[locale]}
                   </span>
-                  <span>
-                    <span className="block text-[0.9375rem] font-medium text-fg-3 line-through decoration-fg-4 decoration-1">
-                      {copy.before[locale]}
-                    </span>
-                    <span className="mt-0.5 block font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">
-                      {copy.beforeNote[locale]}
-                    </span>
+                  <span className="mt-1.5 block font-mono text-[10.5px] tracking-[0.16em] text-fg-3 uppercase">
+                    {step.note[locale]}
                   </span>
-                </div>
-
-                <div className="mt-6 space-y-px opacity-45">
-                  {ROWS.map((r) => (
-                    <div
-                      key={r.art}
-                      className="grid grid-cols-[3.4rem_1fr_2.6rem] items-center gap-3 border-b border-line/60 py-2.5 font-mono text-[11.5px] text-fg-3"
-                    >
-                      <span className="text-fg-4">{r.art}</span>
-                      <span className="truncate">{r.name[locale]}</span>
-                      <span className="text-right">{r.qty}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* the hand-off */}
-              <div className="relative flex items-center justify-center px-6 py-2 md:px-0 md:py-8">
-                <span className="hidden h-full w-px bg-line md:block" />
-                <span className="absolute grid h-9 w-9 place-items-center rounded-full border border-line bg-elev text-accent">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 rotate-90 md:rotate-0" fill="none" aria-hidden>
-                    <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <span className="mt-3.5 block text-[0.9375rem] leading-relaxed text-fg-2">
+                    {step.body[locale]}
+                  </span>
                 </span>
-              </div>
-
-              {/* right: the same stock, now a live record */}
-              <div className="border-t border-line p-6 md:border-t-0 md:p-8">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-accent/40 text-accent">
-                    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-                      <ellipse cx="12" cy="6" rx="7.5" ry="3" />
-                      <path d="M4.5 6v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V6" />
-                      <path d="M4.5 12v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6" />
-                    </svg>
-                  </span>
-                  <span>
-                    <span className="block text-[0.9375rem] font-medium text-fg">{copy.after[locale]}</span>
-                    <span className="mt-0.5 block font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">
-                      {copy.afterNote[locale]}
-                    </span>
-                  </span>
-                </div>
-
-                <div className="mt-6 space-y-px">
-                  {ROWS.map((r, i) => (
-                    <motion.div
-                      key={r.art}
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.5 + i * 0.07, ease: EASE }}
-                      className="grid grid-cols-[3.4rem_1fr_2.6rem] items-center gap-3 border-b border-line py-2.5 font-mono text-[11.5px] text-fg-2"
-                    >
-                      <span className="text-fg-3">{r.art}</span>
-                      <span className="truncate text-fg">{r.name[locale]}</span>
-                      <span className="text-right text-accent">{r.qty}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Reveal>
+              </motion.div>
+            </Fragmentish>
+          ))}
+        </div>
       </Container>
     </div>
   );
+}
+
+/* Named rather than inline so the connector and the card stay siblings inside
+   the flex row instead of being wrapped in a box that breaks the layout. */
+function Fragmentish({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

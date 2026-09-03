@@ -58,8 +58,8 @@ export const hero = {
     l2: { no: "grossister faktisk trenger.", en: "wholesalers actually need." },
   },
   lede: {
-    no: "Skreddersydd for driften din, ikke en generell pakke. Sherko erstatter det manuelle arbeidet og regnearket, og samler ordre, lager og oversikt i ett system.",
-    en: "Built around how you actually run, not a generic package. Sherko replaces the manual work and the spreadsheet, and puts orders, stock and overview in one system.",
+    no: "Sherko er et skreddersydd lagersystem for grossister. Du får ordrehåndtering, varelager, innkjøp og kunder i ett system, og slipper å taste ordre fra WhatsApp, e-post og PDF inn i Excel.",
+    en: "Sherko is a warehouse system built for wholesalers. Order handling, stock, purchasing and customers in one system, so nobody retypes orders from WhatsApp, email and PDF into Excel.",
   },
   ledeEmphasis: { no: "Du godkjenner.", en: "You approve." },
 };
@@ -73,8 +73,8 @@ export const channels = {
     en: "The order arrives however the customer wants to send it",
   },
   body: {
-    no: "Grossistkunder bestiller ikke i et skjema. De sender en melding klokka 22, videresender en e-post fra kjøkkensjefen, eller knipser et bilde av lappen på oppslagstavla. Sherko tar imot alt sammen.",
-    en: "Wholesale customers do not order through a form. They fire off a message at 10pm, forward an email from the head chef, or snap a photo of the note on the noticeboard. Sherko takes all of it.",
+    no: "Kundene dine bestiller på WhatsApp, e-post, SMS, Excel, PDF og bilde av en håndskrevet lapp. Du trenger ikke be dem endre vane. Sherko leser ordren i formatet den kommer i.",
+    en: "Your customers order on WhatsApp, email, SMS, Excel, PDF and photos of handwritten notes. You do not have to ask them to change. Sherko reads the order in whatever format it arrives.",
   },
   items: [
     {
@@ -115,12 +115,12 @@ export const channels = {
 export const problem = {
   eyebrow: { no: "Problemet", en: "The problem" },
   title: {
-    no: "Ordren er allerede skrevet. Noen skriver den bare inn på nytt.",
-    en: "The order is already written. Someone just types it in again.",
+    no: "Hver ordre tastes inn to ganger.",
+    en: "Every order gets typed in twice.",
   },
   body: {
-    no: "Ingen grossist mangler bestillinger. De mangler timene det tar å flytte dem fra en melding til et system, og de tåler ikke feilene som oppstår underveis.",
-    en: "No wholesaler is short of orders. They are short of the hours it takes to move them from a message into a system, and they cannot afford the mistakes made on the way.",
+    no: "Kunden skriver ordren på WhatsApp eller e-post. Så skriver noen hos dere den inn i regnearket en gang til. Det koster timer hver uke, og en tastefeil koster en feilsendt pall.",
+    en: "The customer writes the order on WhatsApp or in an email. Then somebody at your end types it into the spreadsheet all over again. That is hours every week, and one typo is a pallet sent to the wrong place.",
   },
   before: {
     label: { no: "I dag", en: "Today" },
@@ -157,8 +157,8 @@ export const control = {
     en: "Sherko never approves an order",
   },
   body: {
-    no: "Det er ikke en innstilling du kan skru av. Det er slik systemet er bygget, fordi en feilsendt pall koster mer enn de minuttene den skulle spare.",
-    en: "That is not a setting you can switch off. It is how the system is built, because one pallet sent to the wrong place costs more than the minutes it was meant to save.",
+    no: "Et menneske godkjenner hver eneste ordre før noe skjer. Det er ikke en innstilling du kan skru av, det er slik systemet er bygget.",
+    en: "A person approves every single order before anything happens. It is not a setting you can switch off, it is how the system is built.",
   },
   guarantees: [
     {

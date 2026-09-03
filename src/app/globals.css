@@ -265,7 +265,15 @@ select:focus-visible {
   color: var(--color-fg-3);
 }
 
-.lede { text-wrap: pretty; }
+/* Left aligned and justified, with hyphenation on so justification does not
+   open rivers of white space in Norwegian, which has long words. */
+.lede,
+.prose-justify {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  text-wrap: pretty;
+}
 
 /* ── Atmosphere ───────────────────────────────────────────────────── */
 
@@ -317,6 +325,19 @@ select:focus-visible {
 [data-anim="paused"] *::after {
   animation-play-state: paused !important;
 }
+
+@keyframes flow-arrow {
+  0%, 100% { transform: translateX(-3px); opacity: 0.4; }
+  50%      { transform: translateX(3px);  opacity: 1; }
+}
+.flow-arrow { animation: flow-arrow 1.8s ease-in-out infinite; }
+/* The stacked layout turns the arrow down, so the nudge has to follow it. */
+@keyframes flow-arrow-down {
+  0%, 100% { transform: rotate(90deg) translateX(-3px); opacity: 0.4; }
+  50%      { transform: rotate(90deg) translateX(3px);  opacity: 1; }
+}
+.flow-arrow { animation-name: flow-arrow-down; }
+@media (min-width: 80rem) { .flow-arrow { animation-name: flow-arrow; } }
 
 .card {
   position: relative;
