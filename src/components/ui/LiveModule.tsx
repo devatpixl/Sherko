@@ -79,6 +79,77 @@ export function LiveModule({
   /* Bumped to force a fresh <iframe> when the first attempt comes up empty. */
   const [attempt, setAttempt] = useState(0);
 
+  /**
+   * Makes the framed portal read-only, and does it at the network layer.
+   *
+   * Hiding buttons is not a guarantee: the application navigates and submits
+   * from its own handlers, so anything short of stopping the request itself
+   * can be worked around by accident. Every request the frame makes is checked
+   * instead, and anything that is not a GET or a HEAD is refused before it
+   * leaves the browser. Reading, filtering, sorting, paging and moving between
+   * pages all still work, because those are reads.
+   *
+   * Server Actions are POSTs, so they are covered by the same rule. Form
+   * submissions are cancelled outright so the application does not sit
+   * waiting on a request that was never sent.
+   *
+   * This is same-origin only because the demo is proxied onto our own origin.
+   * On a cross-origin frame none of it would be reachable, and no promise
+   * about writes could be made at all.
+   */
+  const lockDown = useCallback((frame: HTMLIFrameElement | null) => {
+    try {
+      /* The frame is its own realm, so it carries its own Response and
+         XMLHttpRequest. Those are the ones that must be wrapped, not ours. */
+      const win = frame?.contentWindow as
+        | (Window &
+            typeof globalThis & {
+              __sherkoReadOnly?: boolean;
+            })
+        | null;
+      const doc = frame?.contentDocument;
+      if (!win || !doc || win.__sherkoReadOnly) return;
+      win.__sherkoReadOnly = true;
+
+      const allowed = (m: string) => /^(GET|HEAD)$/i.test(m);
+      const refuse = () =>
+        new win.Response('{"error":"read-only demo"}', {
+          status: 403,
+          headers: { "content-type": "application/json" },
+        });
+
+      const realFetch = win.fetch.bind(win);
+      win.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
+        const method =
+          init?.method ?? (typeof input === "object" && "method" in input ? input.method : "GET");
+        return allowed(method ?? "GET")
+          ? realFetch(input as RequestInfo, init)
+          : Promise.resolve(refuse());
+      }) as typeof win.fetch;
+
+      const xhr = win.XMLHttpRequest.prototype as XMLHttpRequest & {
+        __blocked?: boolean;
+      };
+      const realOpen = xhr.open;
+      xhr.open = function (this: typeof xhr, method: string, ...rest: unknown[]) {
+        this.__blocked = !allowed(method);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return realOpen.apply(this, [method, ...rest] as any);
+      };
+      const realSend = xhr.send;
+      xhr.send = function (this: typeof xhr, ...args: unknown[]) {
+        if (this.__blocked) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return realSend.apply(this, args as any);
+      };
+
+      /* Nothing is posted, so a form that submits would only hang. */
+      doc.addEventListener("submit", (e) => e.preventDefault(), true);
+    } catch {
+      /* frame not ready yet: the interval tries again */
+    }
+  }, []);
+
   /* Same-origin, so we can reach in and set the app up for being embedded.
      Re-applied on a short interval as well as on load: the framed app is a
      Next client app and swaps its own DOM around after hydration. */
@@ -109,6 +180,7 @@ export function LiveModule({
   useEffect(() => {
     if (!mount) return;
     const tick = () => {
+      lockDown(frameRef.current);
       dress(frameRef.current);
       try {
         const body = frameRef.current?.contentDocument?.body;
@@ -124,7 +196,7 @@ export function LiveModule({
       /* Released along with the frame, so the still comes back on return. */
       setPainted(false);
     };
-  }, [mount, dress]);
+  }, [mount, dress, lockDown]);
 
   /* Fit the fixed-width frame to whatever width the card actually has. */
   useEffect(() => {
@@ -199,7 +271,7 @@ export function LiveModule({
           which runs on its own database with invented figures for a fictional
           wholesaler, so nothing done in here reaches a real customer. */}
       <p className="border-b border-line bg-accent/8 px-3.5 py-1.5 text-center font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
-        Interaktiv demo · eksempeldata
+        Interaktiv demo · eksempeldata · skrivebeskyttet
       </p>
 
       <div
@@ -237,7 +309,10 @@ export function LiveModule({
             ref={frameRef}
             src={route}
             title={label}
-            onLoad={() => dress(frameRef.current)}
+            onLoad={() => {
+              lockDown(frameRef.current);
+              dress(frameRef.current);
+            }}
             className="absolute top-0 left-0 z-10 border-0"
             style={{
               width: DESIGN_W,
