@@ -44,7 +44,7 @@ export function Footer() {
                       <li key={link.label.no}>
                         <a
                           href={link.href}
-                          className="-my-1 inline-block py-2 text-[0.9375rem] text-fg-2 transition-colors hover:text-fg"
+                          className="-my-1.5 inline-block py-3 text-[0.9375rem] text-fg-2 transition-colors hover:text-fg"
                         >
                           {link.label[locale]}
                         </a>

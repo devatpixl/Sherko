@@ -364,6 +364,52 @@ select:focus-visible {
 .flow-arrow { animation-name: flow-arrow-down; }
 @media (min-width: 80rem) { .flow-arrow { animation-name: flow-arrow; } }
 
+/* Nav elevation. Written with color-mix off the foreground token so the same
+   rule reads correctly on the light ground and the dark one, rather than a
+   hardcoded black that only suited one of them. */
+.nav-raised {
+  box-shadow:
+    0 1px 2px -1px color-mix(in oklab, var(--color-fg) 20%, transparent),
+    0 4px 10px -4px color-mix(in oklab, var(--color-fg) 22%, transparent),
+    0 18px 44px -18px color-mix(in oklab, var(--color-fg) 34%, transparent);
+}
+.nav-raised-lg {
+  box-shadow:
+    0 1px 2px -1px color-mix(in oklab, var(--color-fg) 24%, transparent),
+    0 6px 14px -5px color-mix(in oklab, var(--color-fg) 28%, transparent),
+    0 26px 60px -20px color-mix(in oklab, var(--color-fg) 42%, transparent);
+}
+
+/* Scroll reveal. Only opacity and translate move, so this stays off the main
+   thread; the class is toggled by the single observer in lib/reveal.ts. */
+.reveal {
+  opacity: 0;
+  translate: 0 var(--reveal-y, 22px);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    translate 0.55s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+}
+.reveal.is-in {
+  opacity: 1;
+  translate: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-in {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}
+
+/* A section the reader has not reached is skipped for layout and paint. On a
+   10 500px page that is most of the document on any given frame, and it is
+   the single biggest reason the scroll stopped stuttering. */
+.section-shell {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 .card {
   position: relative;
   background: var(--color-surface);

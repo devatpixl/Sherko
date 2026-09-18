@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useInView } from "motion/react";
-import { useRef, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { useAnimGate } from "@/lib/useAnimGate";
+import { useReveal } from "@/lib/reveal";
 
 /* ── Layout ───────────────────────────────────────────────────────── */
 
@@ -27,7 +27,7 @@ export function Section({
 }) {
   const ref = useAnimGate<HTMLElement>();
   return (
-    <section ref={ref} id={id} className={`relative scroll-mt-28 py-16 md:py-20 lg:py-24 ${className}`}>
+    <section ref={ref} id={id} className={`section-shell relative scroll-mt-28 py-16 md:py-20 lg:py-24 ${className}`}>
       {children}
     </section>
   );
@@ -46,22 +46,19 @@ export function Reveal({
   y?: number;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  /* Deliberately not `once`. The block resets when it leaves the viewport and
-     plays again on the way back, so nothing on the page needs a reload to be
-     seen a second time. The -12% margin keeps it from resetting under
-     something you are still reading. */
-  const inView = useInView(ref, { margin: "-12% 0px -12% 0px" });
+  /* Same props and same behaviour as before, but the work is now a CSS
+     transition driven by one shared observer. See lib/reveal.ts. */
+  const ref = useReveal<HTMLDivElement>();
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={className}
+      className={`reveal ${className}`}
+      style={
+        { "--reveal-delay": `${Math.round(delay * 1000)}ms`, "--reveal-y": `${y}px` } as CSSProperties
+      }
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 

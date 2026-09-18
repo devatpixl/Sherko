@@ -174,23 +174,42 @@ export function LiveModule({
     }
   }, []);
 
-  /* Keeps the embed styling applied, and notices when the application has
-     actually rendered. Both are polled rather than driven off the load event,
-     which on a warm cache can fire before React has attached a handler. */
+  /* Applies the embed styling and the read only lock, then stops.
+   *
+   * Two things were wrong with the old version. It polled twice a second for
+   * the life of the page, and the readiness check used innerText, which forces
+   * a full layout of the framed dashboard every time it runs. That is a forced
+   * reflow of a large DOM, twice a second, competing with the scroll for as
+   * long as the tab was open.
+   *
+   * textContent reads the same thing without laying anything out, and the
+   * whole loop shuts down as soon as the frame is dressed and painted. */
   useEffect(() => {
     if (!mount) return;
+    let t = 0;
+    let tries = 0;
+
     const tick = () => {
       lockDown(frameRef.current);
       dress(frameRef.current);
+      let up = false;
       try {
-        const body = frameRef.current?.contentDocument?.body;
-        if (body && body.innerText.trim().length > 40) setPainted(true);
+        const doc = frameRef.current?.contentDocument;
+        /* textContent, not innerText: no layout. */
+        up = (doc?.body?.textContent?.trim().length ?? 0) > 40;
       } catch {
         /* frame not ready yet */
       }
+      if (up) setPainted(true);
+      /* Done once it is up, and given up on after ~20s either way. */
+      if (up || ++tries > 40) {
+        window.clearInterval(t);
+        return;
+      }
     };
+
     tick();
-    const t = window.setInterval(tick, 500);
+    t = window.setInterval(tick, 500);
     return () => {
       window.clearInterval(t);
       /* Released along with the frame, so the still comes back on return. */
@@ -220,7 +239,7 @@ export function LiveModule({
     const t = window.setTimeout(() => {
       try {
         const body = frameRef.current?.contentDocument?.body;
-        if (!body || body.innerText.trim().length < 40) setAttempt(1);
+        if ((body?.textContent?.trim().length ?? 0) < 40) setAttempt(1);
       } catch {
         setAttempt(1);
       }
@@ -228,23 +247,56 @@ export function LiveModule({
     return () => window.clearTimeout(t);
   }, [mount, attempt]);
 
-  /* Mounts on approach and unmounts once well past. A framed application keeps
-     running scripts, timers and layout for as long as it exists, so leaving one
-     alive while the reader is three sections away was costing frames on every
-     scroll. It comes straight back on return. */
+  /* Boots once, at a quiet moment, and then stays.
+   *
+   * The frame is same origin, which is what lets us make it read only, but it
+   * also means the framed application shares this page's main thread. Booting
+   * a whole second Next app is a long task, and the previous version mounted
+   * and unmounted on every pass, so scrolling back up paid for that boot
+   * again. That was the stutter: not the frame sitting there, the frame
+   * starting over.
+   *
+   * So it waits until the card is near, waits for a gap in the scrolling, then
+   * boots and stays booted. An application that has finished starting costs
+   * almost nothing while it sits still. */
   useEffect(() => {
     const el = hostRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => setMount(e.isIntersecting), {
-      /* Enough warning to start loading before the card is on screen, but not
-         so much that two applications are alive at once: 1200px kept the hero
-         and the tour mounted together and the scroll collapsed to 100% dropped
-         frames. */
-      rootMargin: "600px 0px",
-    });
+    if (!el || mount) return;
+
+    let near = priority;
+    let idle = 0;
+    let done = false;
+
+    const stop = () => {
+      window.clearTimeout(idle);
+      io.disconnect();
+      window.removeEventListener("scroll", arm);
+    };
+    const arm = () => {
+      if (done) return;
+      window.clearTimeout(idle);
+      /* Boots only once the scroll has actually settled. */
+      idle = window.setTimeout(() => {
+        if (!near) return;
+        done = true;
+        stop();
+        setMount(true);
+      }, 260);
+    };
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        near = e.isIntersecting;
+        if (near) arm();
+      },
+      { rootMargin: "700px 0px" },
+    );
     io.observe(el);
-    return () => io.disconnect();
-  }, []);
+    window.addEventListener("scroll", arm, { passive: true });
+    if (priority) arm();
+
+    return stop;
+  }, [mount, priority]);
 
   return (
     <div

@@ -127,7 +127,7 @@ export function DashboardPreview() {
                   role="tab"
                   aria-selected={on}
                   onClick={() => setActive(t.id)}
-                  className={`cursor-pointer rounded-full border px-4 py-2 text-[0.875rem] tracking-tight transition-colors duration-200 ${
+                  className={`min-h-11 cursor-pointer rounded-full border px-4 py-2 text-[0.875rem] tracking-tight transition-colors duration-200 lg:min-h-0 ${
                     on
                       ? "border-fg bg-fg text-canvas"
                       : "border-line text-fg-2 hover:border-line-2 hover:text-fg"

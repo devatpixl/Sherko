@@ -48,7 +48,7 @@ function LocaleToggle() {
           type="button"
           onClick={() => setLocale(l)}
           aria-pressed={locale === l}
-          className={`relative rounded-full px-2.5 py-1 font-mono text-[10.5px] font-medium tracking-[0.12em] uppercase transition-colors duration-300 ${
+          className={`relative grid min-h-11 place-items-center rounded-full px-3 font-mono text-[11px] font-medium tracking-[0.12em] uppercase transition-colors duration-300 lg:min-h-0 lg:py-1 ${
             locale === l ? "text-canvas" : "text-fg-3 hover:text-fg-2"
           }`}
         >
@@ -116,9 +116,14 @@ export function Nav() {
           <nav
             aria-label="Primary"
             className={`pointer-events-auto flex items-center gap-3 rounded-full border py-2 pr-2 pl-4 transition-[background-color,border-color,box-shadow] duration-500 md:pl-5 ${
+              /* At the top the pill used to be bg-canvas/45 with a hairline,
+                 which on the light theme is white on white: you could barely
+                 see it was there. It now sits on its own elevation, the same
+                 shadow scale the cards and the demo window use, so it reads as
+                 a floating bar from the first frame. */
               scrolled
-                ? "nav-blur border-line-2/80 bg-canvas/80 shadow-[0_16px_40px_-14px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
-                : "nav-blur border-line/70 bg-canvas/45 backdrop-blur-xl"
+                ? "nav-blur nav-raised-lg border-line-2 bg-canvas/92 backdrop-blur-2xl"
+                : "nav-blur nav-raised border-line-2/90 bg-canvas/88 backdrop-blur-xl"
             }`}
           >
             <Wordmark />
@@ -190,7 +195,7 @@ export function Nav() {
                 onClick={() => setOpen((v) => !v)}
                 aria-label={open ? "Close menu" : "Open menu"}
                 aria-expanded={open}
-                className="grid h-9 w-9 place-items-center rounded-full border border-line-2 text-fg-2 transition-colors hover:text-fg lg:hidden"
+                className="grid h-11 w-11 place-items-center rounded-full border border-line-2 text-fg-2 transition-colors hover:text-fg lg:hidden"
               >
                 <span className="relative block h-[10px] w-[16px]">
                   <span className={`absolute inset-x-0 top-0 h-[1.5px] rounded bg-current transition-transform duration-300 ${open ? "translate-y-[4.5px] rotate-45" : ""}`} />
